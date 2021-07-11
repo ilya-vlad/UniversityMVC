@@ -3,11 +3,15 @@ using System;
 
 public class UnitOfWork : IDisposable
 {
-    private UniversityContext db = new UniversityContext();
+    private UniversityContext db;
     private CourseRepository courseRepository;
     private GroupRepository groupRepository;
     private StudentRepository studentRepository;
 
+    public UnitOfWork(UniversityContext context)
+    {
+        this.db = context;
+    }
     public CourseRepository Courses
     {
         get

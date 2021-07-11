@@ -11,10 +11,12 @@ namespace MVC.Controllers
 {
     public class HomeController : Controller
     {
+        UniversityContext db;
         UnitOfWork unitOfWork;
-        public HomeController()
+        public HomeController(UniversityContext context)
         {
-            unitOfWork = new UnitOfWork();
+            this.db = context;
+            unitOfWork = new UnitOfWork(db);
         }
 
 
@@ -31,7 +33,7 @@ namespace MVC.Controllers
         public IActionResult Courses()
         {
             var courses = unitOfWork.Courses.GetAll();
-            return View();
+            return View(courses);
         }
 
         public IActionResult Editor()
@@ -42,15 +44,15 @@ namespace MVC.Controllers
         public IActionResult Groups(int? id)
         {
             if (id == null) return RedirectToAction("Courses");
-            ViewBag.CourseId = id;          
-            return View(new UnitOfWork());
+            ViewBag.CourseId = id;            
+            return View(unitOfWork);
         }
 
         public IActionResult Students(int? id)
         {
             if (id == null) return RedirectToAction("Courses");
             ViewBag.GroupId = id;           
-            return View(new UnitOfWork());
+            return View(unitOfWork);
         }
 
     }
