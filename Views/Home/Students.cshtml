@@ -1,0 +1,36 @@
+﻿@model UnitOfWork
+@{
+    ViewData["Title"] = "Список студентов";
+    int i = 1;    
+    var group = Model.Groups.Get(ViewBag.GroupId);
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Студенты</title>
+</head>
+<body>
+    <h3>Студенты группы @group.Name</h3>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Имя</th>
+                <th>Фамилия</th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model.Students.GetAll().Where(x => x.GroupId == group.Id))
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@student.FirstName</td>
+                    <td>@student.LastName</td>                   
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</body>
+</html>

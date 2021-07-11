@@ -1,0 +1,37 @@
+﻿@model UnitOfWork
+@{
+    ViewData["Title"] = "Список групп";
+    int i = 1;    
+    var course = Model.Courses.Get(ViewBag.CourseId);
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Группы</title>
+    
+</head>
+<body>
+    <h3>Группы курса @course.Name</h3>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Название</th>                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model.Groups.GetAll().Where( x => x.CourseId == course.Id))
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@group.Name</td>                                        
+                    <td><a href="~/Home/Students/@group.Id" class="btn btn-dark" role="button" aria-pressed="true">Выбрать</a></td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</body>
+</html>

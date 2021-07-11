@@ -11,27 +11,47 @@ namespace MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        UnitOfWork unitOfWork;
+        public HomeController()
         {
-            _logger = logger;
+            unitOfWork = new UnitOfWork();
         }
 
-        public IActionResult Index()
+
+        //private GeneralModel GetGeneralModel()
+        //{
+        //    var model = new GeneralModel();
+        //    model.Courses = db.Courses.ToList();
+        //    model.Groups = db.Groups.ToList();
+        //    model.Students = db.Students.ToList();
+        //    return model;
+        //}
+
+
+        public IActionResult Courses()
         {
+            var courses = unitOfWork.Courses.GetAll();
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Editor()
         {
             return View();
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        
+        public IActionResult Groups(int? id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (id == null) return RedirectToAction("Courses");
+            ViewBag.CourseId = id;          
+            return View(new UnitOfWork());
         }
+
+        public IActionResult Students(int? id)
+        {
+            if (id == null) return RedirectToAction("Courses");
+            ViewBag.GroupId = id;           
+            return View(new UnitOfWork());
+        }
+
     }
 }

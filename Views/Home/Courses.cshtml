@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Course>
+@{
+    ViewData["Title"] = "Список курсов";
+    int i = 1;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Курсы</title>
+    @*<link rel="stylesheet" href="~/css/indexPage.css" />*@
+</head>
+<body>
+    <h3>Курсы</h3>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@course.Name</td>
+                    <td>@course.Description</td>
+                    @*<td><button type="button" class="btn btn-dark" href="#@course.Id">Выбрать</button></td>*@
+                    <td><a href="~/Home/Groups/@course.Id" class="btn btn-dark" role="button" aria-pressed="true">Выбрать</a></td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</body>
+</html>
