@@ -12,24 +12,24 @@
 </head>
 <body>
     <h3>Курсы</h3>
-    <table class="table table-hover">
+    <table class="table table-hover table-sm">
         <thead class="thead-dark">
             <tr>
-                <th>#</th>
-                <th>Название</th>
-                <th>Описание</th>
-                <th></th>
+                <th class="align-middle text-center" scope="col">#</th>
+                <th class="align-middle" scope="col">Название</th>
+                <th class="align-middle" scope="col">Описание</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var course in Model)
             {
                 <tr>
-                    <td>@i</td>
-                    <td>@course.Name</td>
-                    <td>@course.Description</td>
+                    <td class="align-middle text-center font-weight-bold">@i</td>
+                    <td class="align-middle">@course.Name</td>
+                    <td class="align-middle">@course.Description</td>
                     @*<td><button type="button" class="btn btn-dark" href="#@course.Id">Выбрать</button></td>*@
-                    <td><a href="~/Home/Groups/@course.Id" class="btn btn-dark" role="button" aria-pressed="true">Выбрать</a></td>
+                    <td class="align-middle text-center"><a href="~/Home/Groups/@course.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">Выбрать</a></td>
                 </tr>
                 i++;
             }

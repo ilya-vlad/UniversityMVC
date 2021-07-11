@@ -13,11 +13,11 @@
 </head>
 <body>
     <h3>Группы курса @course.Name</h3>
-    <table class="table table-hover">
+    <table class="table table-hover table-sm">
         <thead class="thead-dark">
             <tr>
-                <th>#</th>
-                <th>Название</th>                
+                <th class="align-middle text-center">#</th>
+                <th class="align-middle">Название</th>                
                 <th></th>
             </tr>
         </thead>
@@ -25,9 +25,9 @@
             @foreach (var group in Model.Groups.GetAll().Where( x => x.CourseId == course.Id))
             {
                 <tr>
-                    <td>@i</td>
-                    <td>@group.Name</td>                                        
-                    <td><a href="~/Home/Students/@group.Id" class="btn btn-dark" role="button" aria-pressed="true">Выбрать</a></td>
+                    <td class="align-middle text-center font-weight-bold">@i</td>
+                    <td class="align-middle">@group.Name</td>                                        
+                    <td class="align-middle"><a href="~/Home/Students/@group.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">Выбрать</a></td>
                 </tr>
                 i++;
             }

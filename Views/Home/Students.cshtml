@@ -12,21 +12,21 @@
 </head>
 <body>
     <h3>Студенты группы @group.Name</h3>
-    <table class="table table-hover">
+    <table class="table table-hover table-sm">
         <thead class="thead-dark">
             <tr>
-                <th>#</th>
-                <th>Имя</th>
-                <th>Фамилия</th>                
+                <th class="align-middle text-center">#</th>
+                <th class="align-middle">Имя</th>
+                <th class="align-middle">Фамилия</th>                
             </tr>
         </thead>
         <tbody>
             @foreach (var student in Model.Students.GetAll().Where(x => x.GroupId == group.Id))
             {
                 <tr>
-                    <td>@i</td>
-                    <td>@student.FirstName</td>
-                    <td>@student.LastName</td>                   
+                    <td class="align-middle text-center font-weight-bold">@i</td>
+                    <td class="align-middle">@student.FirstName</td>
+                    <td class="align-middle">@student.LastName</td>                   
                 </tr>
                 i++;
             }

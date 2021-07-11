@@ -36,11 +36,6 @@ namespace MVC.Controllers
             return View(courses);
         }
 
-        public IActionResult Editor()
-        {
-            return View();
-        }
-        
         public IActionResult Groups(int? id)
         {
             if (id == null) return RedirectToAction("Courses");
@@ -55,5 +50,31 @@ namespace MVC.Controllers
             return View(unitOfWork);
         }
 
+        [HttpGet]
+        public IActionResult EditorGroup()
+        {
+            var groups = unitOfWork.Groups.GetAll();
+            return View(groups);
+        }
+
+        [HttpPost]
+        public IActionResult EditorGroup(int id, string name)
+        {
+            var group = unitOfWork.Groups.Get(id);
+            group.Name = name;
+            unitOfWork.Save();
+            var groups = unitOfWork.Groups.GetAll();
+            return View(groups);
+        }
+
+        //[HttpPost]
+        //public IActionResult SaveGroup(int id, string name)
+        //{
+        //    var group = unitOfWork.Groups.Get(id);
+        //    group.Name = name;
+        //    unitOfWork.Save();
+        //    var groups = unitOfWork.Groups.GetAll();
+        //    return View();
+        //}
     }
 }

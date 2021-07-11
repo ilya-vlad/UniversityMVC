@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Group>
+@{
+    ViewData["Title"] = "EditorGroup";
+    int i = 1;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>EditorGroup</title>    
+</head>
+<body>
+    <h3>Группы</h3>
+    <table class="table table-hover table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th class="align-middle text-center">#</th>
+                <th class="align-middle text-center">Название</th>
+                <th class="align-middle text-center"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model)
+            {
+                <tr>
+                    <td class="align-middle text-center font-weight-bold">@i</td>
+                    <form method="post">
+                        <td class="align-middle"><input name="name" class="form-control input-sm" type="text" value="@group.Name"></td>
+                        <td class="align-middle">
+                            <button type="submit" name="save" class="btn btn-sm btn-success">Сохранить</button>
+                            <button type="submit" name="remove" class="btn btn-sm btn-danger">Удалить</button>
+                        </td>
+                        <input name="id" class="form-control form-control-lg" type="hidden" value="@group.Id">
+                    </form>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>    
+</body>
+</html>
