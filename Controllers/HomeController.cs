@@ -50,31 +50,73 @@ namespace MVC.Controllers
             return View(unitOfWork);
         }
 
-        [HttpGet]
-        public IActionResult EditorGroup()
+        public IActionResult AllGroup()
         {
             var groups = unitOfWork.Groups.GetAll();
             return View(groups);
+        }
+
+        public IActionResult EditGroup(int? id)
+        {
+            if (id != null)
+            {
+                Group group = unitOfWork.Groups.Get(id.Value);
+                if (group != null)
+                    return View(group);
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public IActionResult EditGroup(Group group)
+        {
+            unitOfWork.Groups.Update(group);
+            unitOfWork.Save();
+            var response = new Response();
+            response.Message = $"Group {group.Name} updated!";
+            response.PathBack = $"Groups/{group.CourseId}";
+            return RedirectToAction("ResponseUpdate", "Home", response);
+            
+        }
+
+        public IActionResult ResponseUpdate(Response response)
+        {
+            return View(response);
+        }
+        [HttpGet]
+        public IActionResult RemoveGroup(int? id)
+        {
+            if (id != null)
+            {
+                Group group = unitOfWork.Groups.Get(id.Value);
+                if (group != null)
+                    //return RedirectToAction("RemoveGroup", group);
+                    return RemoveGroup(group);
+            }
+            return NotFound();
         }
 
         [HttpPost]
-        public IActionResult EditorGroup(int id, string name)
+        public IActionResult RemoveGroup(Group group)
         {
-            var group = unitOfWork.Groups.Get(id);
-            group.Name = name;
-            unitOfWork.Save();
-            var groups = unitOfWork.Groups.GetAll();
-            return View(groups);
+            var studentsGroup = unitOfWork.Students.GetAll().Where(x => x.GroupId == group.Id);
+            var response = new Response();
+            response.PathBack = $"Groups/{group.CourseId}";
+            if (studentsGroup.Count() != 0)
+            {
+                response.Message = $"Group {group.Name} contains students!";
+            }
+            else
+            {                
+                unitOfWork.Groups.Delete(group.Id);
+                unitOfWork.Save();
+                response.Message = $"Group {group.Name} deleted!";
+            }          
+            return RedirectToAction("ResponseRemove", "Home", response);
         }
 
-        //[HttpPost]
-        //public IActionResult SaveGroup(int id, string name)
-        //{
-        //    var group = unitOfWork.Groups.Get(id);
-        //    group.Name = name;
-        //    unitOfWork.Save();
-        //    var groups = unitOfWork.Groups.GetAll();
-        //    return View();
-        //}
+        public IActionResult ResponseRemove(Response response)
+        {
+            return View(response);
+        }
     }
 }

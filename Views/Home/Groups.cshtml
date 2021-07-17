@@ -18,17 +18,21 @@
             <tr>
                 <th class="align-middle text-center">#</th>
                 <th class="align-middle">Название</th>                
-                <th></th>
+                <th></th>               
             </tr>
         </thead>
         <tbody>
             @foreach (var group in Model.Groups.GetAll().Where( x => x.CourseId == course.Id))
             {
-                <tr>
-                    <td class="align-middle text-center font-weight-bold">@i</td>
-                    <td class="align-middle">@group.Name</td>                                        
-                    <td class="align-middle"><a href="~/Home/Students/@group.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">Выбрать</a></td>
-                </tr>
+            <tr>
+                <td class="align-middle text-center font-weight-bold">@i</td>
+                <td class="align-middle">@group.Name</td>
+                <td class="align-middle">
+                    <a asp-action="Students" asp-controller="Home" asp-route-id="@group.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">Students</a>                    
+                    <a asp-action="EditGroup" asp-controller="Home" asp-route-id="@group.Id" class="btn btn-sm btn-success" role="button" aria-pressed="true">Edit</a>               
+                    <a asp-action="RemoveGroup" asp-controller="Home" asp-route-id="@group.Id" class="btn btn-sm btn-danger" role="button" aria-pressed="true">Remove</a>
+                </td>
+            </tr>
                 i++;
             }
         </tbody>

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Group>
 @{
-    ViewData["Title"] = "EditorGroup";
+    ViewData["Title"] = "AllGroup";
     int i = 1;
 }
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>EditorGroup</title>    
+    <title>AllGroup</title>    
 </head>
 <body>
     <h3>Группы</h3>
@@ -27,8 +27,8 @@
                     <form method="post">
                         <td class="align-middle"><input name="name" class="form-control input-sm" type="text" value="@group.Name"></td>
                         <td class="align-middle">
-                            <button type="submit" name="save" class="btn btn-sm btn-success">Сохранить</button>
-                            <button type="submit" name="remove" class="btn btn-sm btn-danger">Удалить</button>
+                            <button type="submit" name="save" class="btn btn-sm btn-success">Edit</button>
+                            <button type="submit" name="remove" class="btn btn-sm btn-danger">Remove</button>
                         </td>
                         <input name="id" class="form-control form-control-lg" type="hidden" value="@group.Id">
                     </form>

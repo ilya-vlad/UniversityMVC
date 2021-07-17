@@ -69,4 +69,8 @@ D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\runtimes\win\lib\
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\Groups.cshtml.g.cs
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\Courses.cshtml.g.cs
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\Students.cshtml.g.cs
-D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\EditorGroup.cshtml.g.cs
+D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\EditGroup.cshtml.g.cs
+D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\AllGroup.cshtml.g.cs
+D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\RemoveGroup.cshtml.g.cs
+D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\ResponseRemove.cshtml.g.cs
+D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Home\ResponseUpdate.cshtml.g.cs

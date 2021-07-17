@@ -7,11 +7,11 @@
 
 <html>
 <head>
-    <title>Курсы</title>
+    <title>Courses</title>
     @*<link rel="stylesheet" href="~/css/indexPage.css" />*@
 </head>
 <body>
-    <h3>Курсы</h3>
+    <h3>Courses</h3>
     <table class="table table-hover table-sm">
         <thead class="thead-dark">
             <tr>
@@ -27,9 +27,8 @@
                 <tr>
                     <td class="align-middle text-center font-weight-bold">@i</td>
                     <td class="align-middle">@course.Name</td>
-                    <td class="align-middle">@course.Description</td>
-                    @*<td><button type="button" class="btn btn-dark" href="#@course.Id">Выбрать</button></td>*@
-                    <td class="align-middle text-center"><a href="~/Home/Groups/@course.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">Выбрать</a></td>
+                    <td class="align-middle">@course.Description</td>                    
+                    <td class="align-middle text-center"><a href="~/Home/Groups/@course.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">Groups</a></td>
                 </tr>
                 i++;
             }
