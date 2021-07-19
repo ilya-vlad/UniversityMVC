@@ -11,8 +11,6 @@ D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\MVC.Views.dll
 D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\MVC.Views.pdb
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\MVC.csproj.AssemblyReference.cache
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\MVC.GeneratedMSBuildEditorConfig.editorconfig
-D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\MVC.AssemblyInfoInputs.cache
-D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\MVC.AssemblyInfo.cs
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\MVC.csproj.CoreCompileInputs.cache
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\MVC.MvcApplicationPartsAssemblyInfo.cache
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\MVC.RazorAssemblyInfo.cache
@@ -72,3 +70,12 @@ D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Cours
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Courses\Students.cshtml.g.cs
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Courses\EditStudent.cshtml.g.cs
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Courses\Response.cshtml.g.cs
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\TestMVC\obj\project.assets.json
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\TestMVC\obj\TestMVC.csproj.nuget.dgspec.json
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\NUnit3.TestAdapter.dll
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\NUnit3.TestAdapter.pdb
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\nunit.engine.dll
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\nunit.engine.api.dll
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\nunit.engine.core.dll
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\testcentric.engine.metadata.dll
+D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\nunit.framework.dll
