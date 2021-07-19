@@ -26,7 +26,7 @@ public class CourseRepository : IRepository<Course>
     }
 
     public Course Get(int id)
-    {
+    {Update
         return db.Courses.Find(id);
     }
 
