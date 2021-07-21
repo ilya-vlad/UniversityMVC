@@ -12,12 +12,10 @@ namespace MVC.Controllers
     [Route("[controller]")]       
     public class CoursesController : Controller
     {
-        UniversityContext db;
-        UnitOfWork unitOfWork;
+        private UnitOfWork unitOfWork;
         public CoursesController(UniversityContext context)
         {
-            this.db = context;
-            unitOfWork = new UnitOfWork(db);
+            unitOfWork = new UnitOfWork(context);
         }
 
         [HttpGet]
