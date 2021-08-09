@@ -15,7 +15,7 @@ namespace MVC.Controllers
         private UnitOfWork unitOfWork;
         public CoursesController(UniversityContext context)
         {
-            unitOfWork = new UnitOfWork(context);
+            unitOfWork = new UnitOfWork(context);            
         }
 
         [HttpGet]
@@ -30,7 +30,7 @@ namespace MVC.Controllers
         [HttpGet("{id}/groups")]
         public IActionResult GetGroups(int id)
         {
-            Course course = unitOfWork.Courses.Get(id);
+            Course course = unitOfWork.Courses.GetById(id);
             if (course == null)
                 return NotFound();            
             ViewBag.CourseId = id;
@@ -41,8 +41,8 @@ namespace MVC.Controllers
         
         public IActionResult GetEditGroup(int idCourse, int idGroup)
         {
-            Course course = unitOfWork.Courses.Get(idCourse);
-            Group group = unitOfWork.Groups.Get(idGroup);
+            Course course = unitOfWork.Courses.GetById(idCourse);
+            Group group = unitOfWork.Groups.GetById(idGroup);
             if (course == null || course.Id != group.CourseId)
                 return NotFound();            
             return View("EditGroup", group);
@@ -64,8 +64,8 @@ namespace MVC.Controllers
         [HttpGet("{idCourse}/groups/delete/{idGroup}")]
         public IActionResult DeleteGroup(int idCourse, int idGroup)
         {
-            Course course = unitOfWork.Courses.Get(idCourse);
-            Group group = unitOfWork.Groups.Get(idGroup);
+            Course course = unitOfWork.Courses.GetById(idCourse);
+            Group group = unitOfWork.Groups.GetById(idGroup);
             if (course == null || course.Id != group.CourseId)
                 return NotFound();
             int studentsCount = unitOfWork.Students.GetAll().Where(x => x.GroupId == group.Id).Count();
@@ -77,7 +77,7 @@ namespace MVC.Controllers
             }
             else
             {
-                unitOfWork.Groups.Delete(group.Id);
+                unitOfWork.Groups.Remove(group.Id);
                 unitOfWork.Save();
                 response.Message = $"Group {group.Name} deleted!";
             }
@@ -88,8 +88,8 @@ namespace MVC.Controllers
         [HttpGet("{idCourse}/groups/{idGroup}")]
         public IActionResult GetStudents(int idCourse, int idGroup)
         {
-            Course course = unitOfWork.Courses.Get(idCourse);
-            Group group = unitOfWork.Groups.Get(idGroup);
+            Course course = unitOfWork.Courses.GetById(idCourse);
+            Group group = unitOfWork.Groups.GetById(idGroup);
             if (course == null || course.Id != group.CourseId)
                 return NotFound();
             ViewBag.GroupId = idGroup;
@@ -99,9 +99,9 @@ namespace MVC.Controllers
         [HttpGet("{idCourse}/groups/{idGroup}/students/edit/{idStudent}")]
         public IActionResult GetOptionsStudent(int idCourse, int idGroup, int idStudent)
         {
-            Course course = unitOfWork.Courses.Get(idCourse);
-            Group group = unitOfWork.Groups.Get(idGroup);
-            Student student = unitOfWork.Students.Get(idStudent);
+            Course course = unitOfWork.Courses.GetById(idCourse);
+            Group group = unitOfWork.Groups.GetById(idGroup);
+            Student student = unitOfWork.Students.GetById(idStudent);
             if (course == null || course.Id != group.CourseId || student.GroupId != group.Id)
                 return NotFound();
             return View("EditStudent", student);
@@ -112,7 +112,7 @@ namespace MVC.Controllers
         {
             unitOfWork.Students.Update(student);
             unitOfWork.Save();
-            var group = unitOfWork.Groups.Get(student.GroupId);
+            var group = unitOfWork.Groups.GetById(student.GroupId);
             var response = new Response();
             response.Message = $"Student {student.FirstName} {student.LastName} updated!";
             response.PathBack = $"{group.CourseId}/groups/{student.GroupId}";
@@ -122,13 +122,13 @@ namespace MVC.Controllers
         [HttpGet("{idCourse}/groups/{idGroup}/students/delete/{idStudent}")]
         public IActionResult DeleteStudent(int idCourse, int idGroup, int idStudent)
         {
-            Course course = unitOfWork.Courses.Get(idCourse);
-            Group group = unitOfWork.Groups.Get(idGroup);
-            Student student = unitOfWork.Students.Get(idStudent);
+            Course course = unitOfWork.Courses.GetById(idCourse);
+            Group group = unitOfWork.Groups.GetById(idGroup);
+            Student student = unitOfWork.Students.GetById(idStudent);
             if (course == null || course.Id != group.CourseId || student.GroupId != group.Id)
                 return NotFound();           
             var response = new Response();                
-            unitOfWork.Students.Delete(student.Id);
+            unitOfWork.Students.Remove(student.Id);
             unitOfWork.Save();
             response.Message = $"Student {student.FirstName} {student.LastName} deleted!";
             response.PathBack = $"{group.CourseId}/groups/{student.GroupId}";

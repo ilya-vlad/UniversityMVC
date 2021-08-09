@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Список групп";
     int i = 1;    
-    var course = Model.Courses.Get(ViewBag.CourseId);
+    var course = Model.Courses.GetById(ViewBag.CourseId);
 }
 <!DOCTYPE html>
 

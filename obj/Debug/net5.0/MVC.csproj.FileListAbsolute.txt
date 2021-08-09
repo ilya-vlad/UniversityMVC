@@ -70,8 +70,6 @@ D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Cours
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Courses\Students.cshtml.g.cs
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Courses\EditStudent.cshtml.g.cs
 D:\Универ\Универ\C#\Foxminded\MVC\obj\Debug\net5.0\Razor\Views\Courses\Response.cshtml.g.cs
-D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\TestMVC\obj\project.assets.json
-D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\TestMVC\obj\TestMVC.csproj.nuget.dgspec.json
 D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\NUnit3.TestAdapter.dll
 D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\NUnit3.TestAdapter.pdb
 D:\Универ\Универ\C#\Foxminded\MVC\bin\Debug\net5.0\nunit.engine.dll
