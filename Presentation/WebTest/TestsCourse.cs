@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using System;
+using System.IO;
 using System.Threading;
 
 namespace MVCTest
@@ -17,17 +18,19 @@ namespace MVCTest
         [SetUp]
         public void Setup()
         {
-            string dir_chromedriver = Environment.CurrentDirectory + @"\chromedriver";
+            //chromedriver для версии 92. Проверено на 92.0.4515.131.
+            string dir_chromedriver = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\")) 
+                + "chromedriver";
             driver = new OpenQA.Selenium.Chrome.ChromeDriver(dir_chromedriver);
             driver.Navigate().GoToUrl($"https://localhost:44376/");
             driver.Manage().Window.Maximize();            
         }
 
         [Test]
-        public void SelectionGroup()
+        public void OpenGroup()
         {
-            string expectedUrl = $"https://localhost:44376/courses/{idCourse}/groups/{idGroup}";
-            var urls = Environment.GetEnvironmentVariable("ASPNETCORE_URLS").Split(";");
+            string expectedUrl = $"https://localhost:44376/courses/{idCourse}/groups/{idGroup}";       
+            
             var groups = driver.FindElement(groupsButton);
             groups.Click();
             Thread.Sleep(500);
