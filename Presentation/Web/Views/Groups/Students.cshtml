@@ -41,8 +41,8 @@
             {
                 <tr id="@student.Id">
                     <td class="align-middle text-center font-weight-bold">@i</td>
-                    <td class="align-middle">@student.FirstName</td>
-                    <td class="align-middle">@student.LastName</td>
+                    <td name="FirstName" class="align-middle">@student.FirstName</td>
+                    <td name="LastName" class="align-middle">@student.LastName</td>
                     <td class="align-middle text-right">
                         <a href="@student.GroupId/students/edit/@student.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">Edit</a>
                         <a href="@student.GroupId/students/delete/@student.Id/" class="btn btn-sm btn-danger" role="button" aria-pressed="true">Remove</a>

@@ -39,7 +39,7 @@
                 int countStudents = Model.Students.GetAll().Where(x => x.GroupId == group.Id).Count();
                 <tr id="@group.Id">
                     <td class="align-middle text-center font-weight-bold">@i</td>
-                    <td class="align-middle">@group.Name</td>
+                    <td name="nameGroup" class="align-middle">@group.Name</td>
                     <td class="align-middle text-center">@countStudents</td>
                     <td class="align-middle text-right">
                         <a href="groups/@group.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">Students</a>
