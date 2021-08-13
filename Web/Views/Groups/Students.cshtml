@@ -1,0 +1,56 @@
+﻿@using MVC.DataAccess;
+@model UnitOfWork
+@{
+    ViewData["Title"] = "Список студентов";
+    int i = 1;
+    var group = Model.Groups.GetById(ViewBag.GroupId);
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Студенты</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <a href="~/courses/@group.CourseId/groups" class="btn btn-sm btn-dark" role="button" aria-pressed="true">&#8249;&#8249;&#8249;</a>
+                <a href="~/courses/@group.CourseId/groups/edit/@group.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">Edit</a>
+                <a href="~/courses/@group.CourseId/groups/delete/@group.Id/" class="btn btn-sm btn-danger" role="button" aria-pressed="true">Remove</a>
+            </div>
+            <div class="col">
+                <h3>Group @group.Name</h3>
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table table-hover table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th class="align-middle text-center">#</th>
+                <th class="align-middle">Имя</th>
+                <th class="align-middle">Фамилия</th>
+                <th class="align-middle"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model.Students.GetAll().Where(x => x.GroupId == group.Id))
+            {
+                <tr id="@student.Id">
+                    <td class="align-middle text-center font-weight-bold">@i</td>
+                    <td name="FirstName" class="align-middle">@student.FirstName</td>
+                    <td name="LastName" class="align-middle">@student.LastName</td>
+                    <td class="align-middle text-right">
+                        <a href="@student.GroupId/students/edit/@student.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">Edit</a>
+                        <a href="@student.GroupId/students/delete/@student.Id/" class="btn btn-sm btn-danger" role="button" aria-pressed="true">Remove</a>
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</body>
+</html>
