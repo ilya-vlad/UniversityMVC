@@ -14,6 +14,16 @@ namespace MVC.Web.Controllers
             unitOfWork = new UnitOfWork(context);
         }
 
+        [HttpGet("/courses/{idCourse}/groups/{idGroup}")]
+        public IActionResult GetStudents(int idCourse, int idGroup)
+        {
+            Course course = unitOfWork.Courses.GetById(idCourse);
+            Group group = unitOfWork.Groups.GetById(idGroup);
+            if (course == null || course.Id != group.CourseId)
+                return NotFound();
+            ViewBag.GroupId = idGroup;
+            return View("Students", unitOfWork);
+        }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/edit/{idStudent}")]
         public IActionResult GetOptionsStudent(int idCourse, int idGroup, int idStudent)
@@ -51,6 +61,27 @@ namespace MVC.Web.Controllers
             unitOfWork.Students.Remove(student.Id);
             unitOfWork.Save();
             response.Message = $"Student {student.FirstName} {student.LastName} deleted!";
+            response.PathBack = $"{group.CourseId}/groups/{student.GroupId}";
+            return View("Response", response);
+        }
+
+        [HttpGet]
+        [Route("/students/create")]
+        public IActionResult Create()
+        {
+            ViewData["Groups"] = unitOfWork.Groups.GetAll();
+            return View("Create");
+        }
+
+        [HttpPost]
+        [Route("/students/create")]
+        public IActionResult Create(Student student)
+        {
+            unitOfWork.Students.Create(student);
+            unitOfWork.Save();
+            var group = unitOfWork.Groups.GetById(student.GroupId);
+            var response = new Response();
+            response.Message = $"Student {student.FirstName} {student.LastName} created!";
             response.PathBack = $"{group.CourseId}/groups/{student.GroupId}";
             return View("Response", response);
         }

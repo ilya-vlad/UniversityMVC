@@ -15,22 +15,11 @@ namespace MVC.Web.Controllers
             unitOfWork = new UnitOfWork(context);
         }
 
-        [HttpGet]
-        [Route("")]
+        [HttpGet]       
         public IActionResult Courses()
         {
             var courses = unitOfWork.Courses.GetAll();
             return View("Courses", courses);
-        }
-
-        [HttpGet("{id}/groups")]
-        public IActionResult GetGroups(int id)
-        {
-            Course course = unitOfWork.Courses.GetById(id);
-            if (course == null)
-                return NotFound();
-            ViewBag.CourseId = id;
-            return View("Groups", unitOfWork);
         }
     }
 }

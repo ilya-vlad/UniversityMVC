@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.Common;
 using MVC.DataAccess;
 using System.Linq;
@@ -14,19 +15,17 @@ namespace MVC.Web.Controllers
             unitOfWork = new UnitOfWork(context);
         }
 
-        [HttpGet("/courses/{idCourse}/groups/{idGroup}")]
-        public IActionResult GetStudents(int idCourse, int idGroup)
+        [HttpGet("/courses/{id}/groups")]
+        public IActionResult GetGroups(int id)
         {
-            Course course = unitOfWork.Courses.GetById(idCourse);
-            Group group = unitOfWork.Groups.GetById(idGroup);
-            if (course == null || course.Id != group.CourseId)
+            Course course = unitOfWork.Courses.GetById(id);
+            if (course == null)
                 return NotFound();
-            ViewBag.GroupId = idGroup;
-            return View("Students", unitOfWork);
-        }
+            ViewBag.CourseId = id;
+            return View("Groups", unitOfWork);
+        }        
 
         [HttpGet("/courses/{idCourse}/groups/edit/{idGroup}")]
-
         public IActionResult GetEditGroup(int idCourse, int idGroup)
         {
             Course course = unitOfWork.Courses.GetById(idCourse);
@@ -68,6 +67,26 @@ namespace MVC.Web.Controllers
                 unitOfWork.Save();
                 response.Message = $"Group {group.Name} deleted!";
             }
+            return View("Response", response);
+        }
+
+        [HttpGet]
+        [Route("/groups/create")]
+        public IActionResult Create()
+        {
+            ViewData["Courses"] = unitOfWork.Courses.GetAll();
+            return View("Create");
+        }
+
+        [HttpPost]
+        [Route("/groups/create")]
+        public IActionResult Create(Group group)
+        {
+            unitOfWork.Groups.Create(group);
+            unitOfWork.Save();
+            var response = new Response();
+            response.Message = $"Group {group.Name} created!";
+            response.PathBack = $"{group.CourseId}/groups";
             return View("Response", response);
         }
     }
