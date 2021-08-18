@@ -1,23 +1,62 @@
-﻿@using MVC.Common;
+﻿@using MVC.Common
+@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization
+@inject IViewLocalizer Localizer
 @model IEnumerable<Course>
 @{
-    ViewData["Title"] = "Список курсов";
+    ViewData["Title"] = Localizer["Courses"];
     int i = 1;
+    var alert = TempData["AlertMessage"];
+    string typeAlert = string.Empty;
+    if (TempData["AlertStatus"] != null && (bool)TempData["AlertStatus"])
+        typeAlert = "alert-success";
+    else
+        typeAlert = "alert-danger";
+
 }
 <!DOCTYPE html>
 
-<html>
+<html lang="@CultureInfo.CurrentCulture"
+      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl">
+</text>}
 <head>
-    <title>Courses</title>    
+    <title>@Localizer["Courses"]</title>
 </head>
 <body>
-    <h3>Courses</h3>
+    @if (alert != null)
+    {
+        <text>
+            <div class="alert @typeAlert" role="alert">
+                @alert
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </text>
+    }
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3>@Localizer["Courses"]</h3>
+            </div>
+            <div class="col-1">
+                <a href="~/courses/create" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
     <table class="table table-hover table-sm">
         <thead class="thead-dark">
             <tr>
                 <th class="align-middle text-center" scope="col">#</th>
-                <th class="align-middle" scope="col">Название</th>
-                <th class="align-middle" scope="col">Описание</th>
+                <th class="align-middle" scope="col">@Localizer["NameCourse"]</th>
+                <th class="align-middle" scope="col">@Localizer["Description"]</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -28,11 +67,14 @@
                     <td class="align-middle text-center font-weight-bold">@i</td>
                     <td class="align-middle">@course.Name</td>
                     <td class="align-middle">@course.Description</td>
-                    <td class="align-middle text-right"><a href="~/courses/@course.Id/groups" class="btn btn-sm btn-dark" role="button" aria-pressed="true">Groups</a></td>                    
+                    <td class="align-middle text-right"><a href="~/courses/@course.Id/groups" class="btn btn-sm btn-dark" role="button" aria-pressed="true">@Localizer["Groups"]</a></td>
                 </tr>
                 i++;
             }
         </tbody>
     </table>
+
+
+
 </body>
 </html>

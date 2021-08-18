@@ -1,14 +1,13 @@
 ﻿@using MVC.Common
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-@model Group
+@model Course
 
 @{
-    ViewData["Title"] = Localizer["CreateGroup"];
-    var courses = (IEnumerable<Course>)ViewData["Courses"];
+    ViewData["Title"] = Localizer["CreateCourse"];
 }
 
-<h4>@Localizer["CreateGroup"]</h4>
+<h4>@Localizer["CreateCourse"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,18 +15,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label">@Localizer["Name"]</label>
-                <input asp-for="Name" class="form-control" required/>
+                <input asp-for="Name" class="form-control" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
                 <div class="invalid-feedback">@Localizer["EmptyName"]</div>
             </div>
             <div class="form-group">
-                <label asp-for="CourseId" class="control-label">@Localizer["Course"]</label>
-                <select asp-for="CourseId" class="custom-select" aria-label="Default select example">
-                    @foreach (var c in courses)
-                    {
-                        <option value="@c.Id">@c.Name</option>
-                    }
-                </select>
+                <label asp-for="Description" class="control-label">@Localizer["Description"]</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>                
             </div>
 
             <div class="form-group">
@@ -37,9 +32,7 @@
     </div>
 </div>
 
-
-
 <div>
-    <a href="">@Localizer["Back"]</a>
+    <a asp-action="Courses">@Localizer["Back"]</a>
 </div>
 

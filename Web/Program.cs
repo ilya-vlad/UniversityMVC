@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using MVC.DataAccess;
 using System;
 
-namespace MVC
+namespace MVC.Web
 {
     public class Program
     {

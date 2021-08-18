@@ -1,54 +1,70 @@
-﻿@using MVC.Common
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization
+@inject IViewLocalizer Localizer
+@using MVC.Common
 @model Student
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = Localizer["CreateStudent"];
     var groups = (IEnumerable<Group>)ViewData["Groups"];
 }
 
-<h1>Create</h1>
+<html lang="@CultureInfo.CurrentCulture"
+      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl">
+</text>}
 
-<h4>Student</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GroupId" class="control-label"></label>
-                <select asp-for="GroupId" class="custom-select" aria-label="Default select example">
-                    @foreach (var c in groups)
-                    {
-                        <option value="@c.Id">@c.Name</option>
-                    }
-                </select>
-            </div>
+<body>
+    <h4>@Localizer["CreateStudent"]</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" class="needs-validation" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label">@Localizer["FirstName"]</label>
+                    <input asp-for="FirstName" class="form-control" required />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                    <div class="invalid-feedback">@Localizer["EmptyFirstName"]</div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label">@Localizer["LastName"]</label>
+                    <input asp-for="LastName" class="form-control" required />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                    <div class="invalid-feedback">@Localizer["EmptyLastName"]</div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GroupId" class="control-label">@Localizer["GroupId"]</label>
+                    <select asp-for="GroupId" class="custom-select" aria-label="Default select example">
+                        @foreach (var c in groups)
+                        {
+                            <option value="@c.Id">@c.Name</option>
+                        }
+                    </select>
+                </div>
 
 
-            <div class="form-group">
-                <label asp-for="DateOfBirth" class="control-label"></label>
-                <input asp-for="DateOfBirth" class="form-control" />
-                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ExamScore" class="control-label"></label>
-                <input asp-for="ExamScore" class="form-control" />
-                <span asp-validation-for="ExamScore" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-success" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <label asp-for="DateOfBirth" class="control-label">@Localizer["DateOfBirth"]</label>
+                    <input asp-for="DateOfBirth" class="form-control" required />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    <div class="invalid-feedback">@Localizer["EmptyDateOfBirth"]</div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ExamScore" class="control-label">@Localizer["ExamScore"]</label>
+                    <input asp-for="ExamScore" class="form-control" required />
+                    <span asp-validation-for="ExamScore" class="text-danger"></span>
+                    <div class="invalid-feedback">@Localizer["EmptyExamScore"]</div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="@Localizer["Create"]" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
+    <div>
+        <a asp-action="Students">@Localizer["Back"]</a>
+    </div>
+</body>
+
+</html>

@@ -1,28 +1,57 @@
-﻿@using MVC.Common;
+﻿@using MVC.Common
+@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Globalization
+@inject IViewLocalizer Localizer
 @model Group
 @{
-    ViewData["Title"] = "Edit group";
+    ViewData["Title"] = Localizer["EditGroup"];
+    var courses = new SelectList((IEnumerable<Course>)ViewData["Courses"], "Id", "Name");
 }
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>Edit group</title>
+    <title>@ViewData["Title"]</title>
 
 </head>
 <body>
-    <h3>Edit group @Model.Name</h3>
+    <h3>@ViewData["Title"] @Model.Name</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditGroup" class="needs-validation" novalidate>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">@Localizer["Name"]</label>
+                    <input asp-for="Name" class="form-control" required />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <div class="invalid-feedback">@Localizer["EmptyName"]</div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CourseId" class="control-label">@Localizer["Course"]</label>
+                    @Html.DropDownListFor(m => m.CourseId, courses as IEnumerable<SelectListItem>, new { @class = "custom-select" })
+                </div>
 
-    <form asp-action="EditGroup" asp-controller="groups">
-        <div class="form-group">
-            <label asp-for="Name" class="control-label">Name</label>
-            <input asp-for="Name" class="form-control col-3" />
-            <input type="hidden" asp-for="CourseId" />
-            <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="@Localizer["Save"]" class="btn btn-success" />
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-success" />
-        </div>
-    </form>
+    </div>
+
+
+    <div>
+        <a asp-action="Groups">@Localizer["Back"]</a>
+    </div>
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

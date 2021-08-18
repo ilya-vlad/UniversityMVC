@@ -1,22 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
 using System.Linq;
 
-namespace MVC.Web.Controllers
+namespace Controllers
 {
-    [Route("/courses/{idCourse}/[controller]/")]
+    [Route("/courses/{idCourse}/[controller]/")]    
     public class GroupsController : Controller
     {
         private UnitOfWork unitOfWork;
-        public GroupsController(UniversityContext context)
+        private readonly IStringLocalizer<GroupsController> _localizer;
+        private readonly ILogger<GroupsController> _logger;
+        public GroupsController(UniversityContext context, IStringLocalizer<GroupsController> localizer,
+            ILogger<GroupsController> logger)
         {
             unitOfWork = new UnitOfWork(context);
+            _localizer = localizer;
+            _logger = logger;
         }
 
-        [HttpGet("/courses/{id}/groups")]
-        public IActionResult GetGroups(int id)
+        [HttpGet("/courses/{id}/groups")]     
+        public IActionResult Groups(int id)
         {
             Course course = unitOfWork.Courses.GetById(id);
             if (course == null)
@@ -32,6 +39,7 @@ namespace MVC.Web.Controllers
             Group group = unitOfWork.Groups.GetById(idGroup);
             if (course == null || course.Id != group.CourseId)
                 return NotFound();
+            ViewData["Courses"] = unitOfWork.Courses.GetAll();
             return View("EditGroup", group);
         }
 
@@ -39,12 +47,20 @@ namespace MVC.Web.Controllers
         [Route("/groups/EditGroup")]
         public IActionResult EditGroup(Group group)
         {
-            unitOfWork.Groups.Update(group);
-            unitOfWork.Save();
-            var response = new Response();
-            response.Message = $"Group {group.Name} updated!";
-            response.PathBack = $"{group.CourseId}/groups";
-            return View("Response", response);
+            if (group != null && group.Name != null && group.CourseId != 0)
+            {
+                unitOfWork.Groups.Update(group);
+                unitOfWork.Save();
+                TempData["AlertMessage"] = _localizer["AlertEditSuccess"].Value;
+                TempData["AlertStatus"] = true;
+            }
+            else
+            {
+                TempData["AlertMessage"] = _localizer["AlertEditFail"].Value;
+                TempData["AlertStatus"] = false;
+            }
+
+            return Redirect($"/courses/{group.CourseId}/groups");
         }
 
         [HttpGet("/courses/{idCourse}/groups/delete/{idGroup}")]
@@ -52,22 +68,29 @@ namespace MVC.Web.Controllers
         {
             Course course = unitOfWork.Courses.GetById(idCourse);
             Group group = unitOfWork.Groups.GetById(idGroup);
-            if (course == null || course.Id != group.CourseId)
-                return NotFound();
+
+            if (course == null || group == null || course.Id != group.CourseId)
+            {
+                TempData["AlertMessage"] = _localizer["AlertRemoveNotFound"].Value;
+                TempData["AlertStatus"] = false;
+                return Redirect($"/courses/{group.CourseId}/groups");
+            }
+
             int studentsCount = unitOfWork.Students.GetAll().Where(x => x.GroupId == group.Id).Count();
-            var response = new Response();
-            response.PathBack = $"{group.CourseId}/groups";
             if (studentsCount != 0)
             {
-                response.Message = $"Group {group.Name} contains students! Deletion is not possible!";
+                TempData["AlertMessage"] = _localizer["AlertNotEmptyGroup"].Value;
+                TempData["AlertStatus"] = false;
             }
             else
             {
                 unitOfWork.Groups.Remove(group.Id);
                 unitOfWork.Save();
-                response.Message = $"Group {group.Name} deleted!";
+                TempData["AlertMessage"] = _localizer["AlertRemoveSuccess"].Value;
+                TempData["AlertStatus"] = true;
+
             }
-            return View("Response", response);
+            return Redirect($"/courses/{group.CourseId}/groups");
         }
 
         [HttpGet]
@@ -82,12 +105,20 @@ namespace MVC.Web.Controllers
         [Route("/groups/create")]
         public IActionResult Create(Group group)
         {
-            unitOfWork.Groups.Create(group);
-            unitOfWork.Save();
-            var response = new Response();
-            response.Message = $"Group {group.Name} created!";
-            response.PathBack = $"{group.CourseId}/groups";
-            return View("Response", response);
+            if (group != null && group.Name != null && group.CourseId != 0)
+            {
+                unitOfWork.Groups.Create(group);
+                unitOfWork.Save();
+                TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
+                TempData["AlertStatus"] = true;
+            }
+            else
+            {
+                TempData["AlertMessage"] = _localizer["AlertCreateFail"].Value;
+                TempData["AlertStatus"] = false;
+            }
+
+            return Redirect($"/courses/{group.CourseId}/groups");
         }
     }
 }

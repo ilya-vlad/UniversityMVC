@@ -1,21 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
 using System.Linq;
 
-namespace MVC.Web.Controllers
+namespace Controllers
 {
     [Route("/courses/{idCourse}/groups/{idGroup}")]
     public class StudentsController : Controller
     {
         private UnitOfWork unitOfWork;
-        public StudentsController(UniversityContext context)
+        private readonly IStringLocalizer<StudentsController> _localizer;
+        private readonly ILogger<StudentsController> _logger;
+        public StudentsController(UniversityContext context, IStringLocalizer<StudentsController> localizer,
+            ILogger<StudentsController> logger)
         {
             unitOfWork = new UnitOfWork(context);
+            _localizer = localizer;
+            _logger = logger;
         }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}")]
-        public IActionResult GetStudents(int idCourse, int idGroup)
+        public IActionResult Students(int idCourse, int idGroup)
         {
             Course course = unitOfWork.Courses.GetById(idCourse);
             Group group = unitOfWork.Groups.GetById(idGroup);
@@ -33,6 +40,7 @@ namespace MVC.Web.Controllers
             Student student = unitOfWork.Students.GetById(idStudent);
             if (course == null || course.Id != group.CourseId || student == null || student.GroupId != group.Id)
                 return NotFound();
+            ViewData["Groups"] = unitOfWork.Groups.GetAll();
             return View("EditStudent", student);
         }
 
@@ -40,14 +48,24 @@ namespace MVC.Web.Controllers
         [Route("/students/EditStudent")]
         public IActionResult EditStudent(Student student)
         {
-            unitOfWork.Students.Update(student);
-            unitOfWork.Save();
-            var group = unitOfWork.Groups.GetById(student.GroupId);
-            var response = new Response();
-            response.Message = $"Student {student.FirstName} {student.LastName} updated!";
-            response.PathBack = $"{group.CourseId}/groups/{student.GroupId}";
-            return View("Response", response);
+            if (student != null && student.FirstName != null && student.LastName != null
+                && student.GroupId != 0 && student.ExamScore != 0)
+            {
+                unitOfWork.Students.Update(student);
+                unitOfWork.Save();
+                TempData["AlertMessage"] = _localizer["AlertEditSuccess"].Value;
+                TempData["AlertStatus"] = true;
+            }
+            else
+            {
+                TempData["AlertMessage"] = _localizer["AlertEditFail"].Value;
+                TempData["AlertStatus"] = false;
+            }
+
+            int? courseId = unitOfWork.Groups.GetById(student.GroupId).CourseId;
+            return Redirect($"/courses/{courseId}/groups/{student.GroupId}");
         }
+       
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/delete/{idStudent}")]
         public IActionResult DeleteStudent(int idCourse, int idGroup, int idStudent)
@@ -55,14 +73,22 @@ namespace MVC.Web.Controllers
             Course course = unitOfWork.Courses.GetById(idCourse);
             Group group = unitOfWork.Groups.GetById(idGroup);
             Student student = unitOfWork.Students.GetById(idStudent);
-            if (course == null || course.Id != group.CourseId || student.GroupId != group.Id)
-                return NotFound();
-            var response = new Response();
+
+
+
+            if (course == null || group == null || student == null || course.Id != group.CourseId 
+                || student.GroupId != group.Id)
+            {
+                TempData["AlertMessage"] = _localizer["AlertRemoveNotFound"].Value;
+                TempData["AlertStatus"] = false;
+                return Redirect($"/courses/{idCourse}/groups/{idGroup}");
+            }
+                
             unitOfWork.Students.Remove(student.Id);
             unitOfWork.Save();
-            response.Message = $"Student {student.FirstName} {student.LastName} deleted!";
-            response.PathBack = $"{group.CourseId}/groups/{student.GroupId}";
-            return View("Response", response);
+            TempData["AlertMessage"] = _localizer["AlertRemoveSuccess"].Value;
+            TempData["AlertStatus"] = true;
+            return Redirect($"/courses/{idCourse}/groups/{idGroup}");
         }
 
         [HttpGet]
@@ -77,13 +103,22 @@ namespace MVC.Web.Controllers
         [Route("/students/create")]
         public IActionResult Create(Student student)
         {
-            unitOfWork.Students.Create(student);
-            unitOfWork.Save();
+            if (student != null && student.FirstName != null && student.LastName != null
+               && student.GroupId != 0 && student.ExamScore != 0)
+            {
+                unitOfWork.Students.Create(student);
+                unitOfWork.Save();
+                TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
+                TempData["AlertStatus"] = true;
+            }
+            else
+            {
+                TempData["AlertMessage"] = _localizer["AlertCreateFail"].Value;
+                TempData["AlertStatus"] = false;
+            }
+
             var group = unitOfWork.Groups.GetById(student.GroupId);
-            var response = new Response();
-            response.Message = $"Student {student.FirstName} {student.LastName} created!";
-            response.PathBack = $"{group.CourseId}/groups/{student.GroupId}";
-            return View("Response", response);
+            return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
         }
     }
 }
