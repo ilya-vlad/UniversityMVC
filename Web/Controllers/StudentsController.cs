@@ -3,6 +3,8 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
+using MVC.Web.Models;
+using System;
 using System.Linq;
 
 namespace Controllers
@@ -22,13 +24,67 @@ namespace Controllers
         }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}")]
-        public IActionResult Students(int idCourse, int idGroup)
+        public IActionResult Students(int idCourse, int idGroup, string lastName, int page = 1,
+            StudentSortState sortOrder = StudentSortState.LastNameAsc)
         {
             Course course = unitOfWork.Courses.GetById(idCourse);
             Group group = unitOfWork.Groups.GetById(idGroup);
             if (course == null || course.Id != group.CourseId)
                 return NotFound();
             ViewBag.GroupId = idGroup;
+
+
+
+            int pageSize = 10;
+            IQueryable<Student> students = unitOfWork.Students.GetAll().Where( x => x.GroupId == idGroup);
+
+            if (!String.IsNullOrEmpty(lastName))
+            {
+                students = students.Where(p => p.LastName.Contains(lastName));
+            }
+
+            switch (sortOrder)
+            {
+                case StudentSortState.FirstNameAsc:
+                    students = students.OrderBy(s => s.FirstName);
+                    break;
+                case StudentSortState.FirstNameDesc:
+                    students = students.OrderByDescending(s => s.FirstName);
+                    break;
+                case StudentSortState.LastNameDesc:
+                    students = students.OrderByDescending(s => s.LastName);
+                    break;
+                case StudentSortState.AgeAsc:
+                    students = students.OrderBy(s => s.DateOfBirth);
+                    break;
+                case StudentSortState.AgeDesc:
+                    students = students.OrderByDescending(s => s.DateOfBirth);
+                    break;
+                case StudentSortState.ExamScoreAsc:
+                    students = students.OrderBy(s => s.ExamScore);
+                    break;
+                case StudentSortState.ExamScoreDesc:
+                    students = students.OrderByDescending(s => s.ExamScore);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.LastName);
+                    break;
+            }
+
+            var count = students.Count();
+            var items = students.Skip((page - 1) * pageSize).Take(pageSize);
+
+            StudentIndexViewModel viewModel = new StudentIndexViewModel
+            {
+                PageViewModel = new StudentPageViewModel(count, page, pageSize),
+                SortViewModel = new StudentSortViewModel(sortOrder),
+                FilterViewModel = new StudentFilterViewModel(lastName),
+                Students = items
+            };
+
+            ViewData["test"] = viewModel;
+            ViewData["PageSize"] = pageSize;
+
             return View("Students", unitOfWork);
         }
 

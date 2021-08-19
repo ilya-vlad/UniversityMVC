@@ -18,6 +18,7 @@ namespace Controllers
         private UnitOfWork unitOfWork;
         private readonly IStringLocalizer<CoursesController> _localizer;
         private readonly ILogger<CoursesController> _logger;
+
         public CoursesController(UniversityContext context, IStringLocalizer<CoursesController> localizer,
             ILogger<CoursesController> logger)
         {
@@ -41,9 +42,6 @@ namespace Controllers
                 new CookieOptions { Expires = DateTimeOffset.Now.AddDays(30) });
             return LocalRedirect(returnUrl);
         }
-
-
-
 
         [HttpGet]
         [Route("/courses/create")]

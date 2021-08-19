@@ -150,6 +150,9 @@
   <data name="RemoveStudent?" xml:space="preserve">
     <value>Удалить студента</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
   <data name="Students" xml:space="preserve">
     <value>Студенты</value>
   </data>

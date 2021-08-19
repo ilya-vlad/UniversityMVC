@@ -2,10 +2,8 @@
 
 namespace MVC.Common
 {
-    public class Group
+    public class Group : BaseUniqueEntity
     {
-        public int Id { get; set; }
-
         [Required]        
         public int CourseId { get; set; }
 

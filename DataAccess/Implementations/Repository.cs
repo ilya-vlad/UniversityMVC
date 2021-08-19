@@ -8,7 +8,6 @@ namespace MVC.DataAccess
     {
         private readonly UniversityContext Context;
 
-
         public Repository(UniversityContext context)
         {
             Context = context;
@@ -19,9 +18,9 @@ namespace MVC.DataAccess
             Context.Set<T>().Add(entity);            
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return Context.Set<T>().ToList();
+            return Context.Set<T>();
         }
 
         public T GetById(int id)

@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MVC.Common
 {
-    public class Student
+    public class Student : BaseUniqueEntity
     {
-        public int Id { get; set; }
-
         [Required]        
         public int GroupId { get; set; }
 

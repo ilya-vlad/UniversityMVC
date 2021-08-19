@@ -7,13 +7,8 @@ namespace MVC.DataAccess
         private UniversityContext db;
         private CoursesRepository courseRepository;
         private GroupsRepository groupRepository;
-        private StudentsRepository studentRepository;      
-        
+        private StudentsRepository studentRepository;
 
-        public UnitOfWork(UniversityContext context)
-        {
-            this.db = context;
-        }
         public CoursesRepository Courses
         {
             get
@@ -44,13 +39,17 @@ namespace MVC.DataAccess
             }
         }
 
+        public UnitOfWork(UniversityContext context)
+        {
+            this.db = context;
+        }
+
         public void Save()
         {
             db.SaveChanges();
         }
 
         private bool disposed = false;
-
         public virtual void Dispose(bool disposing)
         {
             if (!this.disposed)

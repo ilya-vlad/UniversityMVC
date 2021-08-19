@@ -7,7 +7,7 @@
 @{
     ViewData["Title"] = Localizer["ListGroups"];
     int i = 1;
-    var course = Model.Courses.GetById(ViewBag.CourseId);
+    Course course = Model.Courses.GetById(ViewBag.CourseId);
     var alert = TempData["AlertMessage"];
     string typeAlert = string.Empty;
     if (TempData["AlertStatus"] != null && (bool)TempData["AlertStatus"])
