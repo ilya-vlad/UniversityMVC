@@ -2,14 +2,13 @@
 @using MVC.Common
 @using Microsoft.AspNetCore.Mvc.Localization
 @using System.Globalization
-@using MVC.Web.Models
+@using MVC.Web.Models.Student
 @inject IViewLocalizer Localizer
-@model UnitOfWork
+@model StudentIndexViewModel
 @{
-    StudentIndexViewModel viewModel = (StudentIndexViewModel)ViewData["test"];
     ViewData["Title"] = Localizer["ListStudents"];
     int i = 1;
-    Group group = Model.Groups.GetById(ViewBag.GroupId);
+    Group group = ViewBag.Group;
     var alert = TempData["AlertMessage"];
     string typeAlert = string.Empty;
     if (TempData["AlertStatus"] != null && (bool)TempData["AlertStatus"])
@@ -29,7 +28,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>@Localizer["RemoveStudent?"] "@student.FirstName @student.LastName"?</p>
+                        <p>@Localizer["RemoveStudent?"] '@student.LastName @student.FirstName'?</p>
                     </div>
                     <div class="modal-footer">
                         <a href="@student.GroupId/students/delete/@student.Id/" class="btn btn-danger" role="button" aria-pressed="true">@Localizer["Remove"]</a>
@@ -43,8 +42,7 @@
 <!DOCTYPE html>
 
 <html lang="@CultureInfo.CurrentCulture"
-      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl">
-</text>}
+      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl"></text>}
 
 <head>
     <title>@Localizer["Students"]</title>
@@ -70,7 +68,7 @@
                 <h3>@Localizer["Group"] @group.Name</h3>
             </div>
             <div class="col-1">
-                <a href="~/students/create" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
+                <a href="~/students/create?idGroup=@group.Id&idCourse=@group.CourseId" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
             </div>
         </div>
     </div>
@@ -78,7 +76,7 @@
     <form method="get">
         <div class="form-inline form-group">
             <label class="control-label">@Localizer["LastName"]&nbsp;</label>
-            <input name="lastName" value="@viewModel.FilterViewModel.SelectedLastName" class="form-control" />
+            <input name="lastName" value="@Model.FilterViewModel.SelectedLastName" class="form-control" />
             &nbsp;
             <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
         </div>
@@ -90,32 +88,32 @@
                 <th class="align-middle text-center">#</th>
                 <th class="align-middle col-2">
                     <a asp-action="Students" class="text-white"
-                       asp-route-sortOrder="@viewModel.SortViewModel.LastNameSort"
-                       asp-route-lastName="@viewModel.FilterViewModel.SelectedLastName">@Localizer["LastName"]</a>
+                       asp-route-sortOrder="@Model.SortViewModel.LastNameSort"
+                       asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["LastName"]</a>
                 </th>
                 <th class="align-middle col-2">
                     <a asp-action="Students" class="text-white"
-                       asp-route-sortOrder="@viewModel.SortViewModel.FirstNameSort"
-                       asp-route-lastName="@viewModel.FilterViewModel.SelectedLastName">@Localizer["FirstName"]</a>
+                       asp-route-sortOrder="@Model.SortViewModel.FirstNameSort"
+                       asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["FirstName"]</a>
                 </th>
                 <th class="align-middle text-center col-2">
                     <a asp-action="Students" class="text-white"
-                       asp-route-sortOrder="@viewModel.SortViewModel.AgeSort"
-                       asp-route-lastName="@viewModel.FilterViewModel.SelectedLastName">@Localizer["DateOfBirth"]</a>
+                       asp-route-sortOrder="@Model.SortViewModel.AgeSort"
+                       asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["DateOfBirth"]</a>
                 </th>
                 <th class="align-middle text-center col-2">
                     <a asp-action="Students" class="text-white"
-                       asp-route-sortOrder="@viewModel.SortViewModel.ExamScoreSort"
-                       asp-route-lastName="@viewModel.FilterViewModel.SelectedLastName">@Localizer["ExamScore"]</a>
+                       asp-route-sortOrder="@Model.SortViewModel.ExamScoreSort"
+                       asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["ExamScore"]</a>
                 </th>
                 <th class="align-middle"></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (Student student in viewModel.Students)
+            @foreach (Student student in Model.Students)
             {
             <tr id="@student.Id">
-                <td class="align-middle text-center font-weight-bold">@((viewModel.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
+                <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
                 <td name="LastName" class="align-middle">@student.LastName</td>
                 <td name="FirstName" class="align-middle">@student.FirstName</td>
                 <td name="DateOfBirt" class="align-middle text-center">@student.DateOfBirth.ToString("d")</td>
@@ -132,93 +130,27 @@
     </table>
 
 
-    @if (viewModel.PageViewModel.HasPreviousPage)
+    @if (Model.PageViewModel.HasPreviousPage)
     {
         <a asp-action="Students"
-           asp-route-page="@(viewModel.PageViewModel.PageNumber - 1)"
-           asp-route-lastName="@viewModel.FilterViewModel.SelectedLastName"
-           asp-route-sortorder="@viewModel.SortViewModel.Current"
+           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+           asp-route-lastName="@Model.FilterViewModel.SelectedLastName"
+           asp-route-sortorder="@Model.SortViewModel.Current"
            class="btn  btn-outline-dark">
             <i class="glyphicon glyphicon-chevron-left"></i>
-            Назад
+            @Localizer["Back"]
         </a>
     }
-    @if (viewModel.PageViewModel.HasNextPage)
+    @if (Model.PageViewModel.HasNextPage)
     {
         <a asp-action="Students"
-           asp-route-page="@(viewModel.PageViewModel.PageNumber + 1)"
-           asp-route-lastName="@viewModel.FilterViewModel.SelectedLastName"          
-           asp-route-sortorder="@viewModel.SortViewModel.Current"
+           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+           asp-route-lastName="@Model.FilterViewModel.SelectedLastName"          
+           asp-route-sortorder="@Model.SortViewModel.Current"
            class="btn btn-outline-dark">
-            Вперед
+            @Localizer["Next"]
             <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @*<table class="table table-hover table-sm">
-        <thead class="thead-dark">
-            <tr>
-                <th class="align-middle text-center">#</th>
-                <th class="align-middle">@Localizer["FirstName"]</th>
-                <th class="align-middle">@Localizer["LastName"]</th>
-                <th class="align-middle">@Localizer["DateOfBirth"]</th>
-                <th class="align-middle">@Localizer["ExamScore"]</th>
-                <th class="align-middle"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var student in Model.Students.GetAll().Where(x => x.GroupId == group.Id))
-            {
-                <tr id="@student.Id">
-                    <td class="align-middle text-center font-weight-bold">@i</td>
-                    <td name="FirstName" class="align-middle">@student.FirstName</td>
-                    <td name="LastName" class="align-middle">@student.LastName</td>
-                    <td name="DateOfBirt" class="align-middle">@student.DateOfBirth.ToString("d")</td>
-                    <td name="ExamScore" class="align-middle">@student.ExamScore</td>
-                    <td class="align-middle text-right">
-                        <a href="@student.GroupId/students/edit/@student.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
-                        <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@student.Id">@Localizer["Remove"]</a>
-                    </td>
-                </tr>
-                i++;
-                RemoveModal(student);
-            }
-        </tbody>
-    </table>*@
 </body>
 </html>

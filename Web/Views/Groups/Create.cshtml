@@ -4,32 +4,26 @@
 @model Group
 
 @{
+    var idCourse = (int)ViewBag.CourseId;
     ViewData["Title"] = Localizer["CreateGroup"];
-    var courses = (IEnumerable<Course>)ViewData["Courses"];
+    var courses = new SelectList((IEnumerable<Course>)ViewData["Courses"], "Id", "Name");
+    courses.Where(x => x.Value == idCourse.ToString()).FirstOrDefault().Selected = true;
 }
 
 <h4>@Localizer["CreateGroup"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" class="needs-validation" novalidate>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label">@Localizer["Name"]</label>
-                <input asp-for="Name" class="form-control" required/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-                <div class="invalid-feedback">@Localizer["EmptyName"]</div>
+        <form asp-action="Create">
+            <div class="form-group">                
+                @Html.LabelFor(m => m.Name, Localizer["Name"].Value, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-                <label asp-for="CourseId" class="control-label">@Localizer["Course"]</label>
-                <select asp-for="CourseId" class="custom-select" aria-label="Default select example">
-                    @foreach (var c in courses)
-                    {
-                        <option value="@c.Id">@c.Name</option>
-                    }
-                </select>
-            </div>
-
+                @Html.LabelFor(m => m.CourseId, Localizer["Course"].Value, new { @class = "control-label" })                
+                @Html.DropDownListFor(m => m.CourseId, courses as IEnumerable<SelectListItem>, new { @class = "custom-select" })
+            </div>            
             <div class="form-group">
                 <input type="submit" value="@Localizer["Create"]" class="btn btn-success" />
             </div>
@@ -40,6 +34,6 @@
 
 
 <div>
-    <a href="">@Localizer["Back"]</a>
+    <a href="/courses/@idCourse/groups">@Localizer["Back"]</a>
 </div>
 

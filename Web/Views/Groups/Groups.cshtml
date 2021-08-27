@@ -7,7 +7,7 @@
 @{
     ViewData["Title"] = Localizer["ListGroups"];
     int i = 1;
-    Course course = Model.Courses.GetById(ViewBag.CourseId);
+    Course course = ViewBag.Course;
     var alert = TempData["AlertMessage"];
     string typeAlert = string.Empty;
     if (TempData["AlertStatus"] != null && (bool)TempData["AlertStatus"])
@@ -41,8 +41,7 @@
 <!DOCTYPE html>
 
 <html lang="@CultureInfo.CurrentCulture"
-      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl">
-</text>}
+      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl"></text>}
 <head>
     <title>@Localizer["Groups"]</title>
 </head>
@@ -69,7 +68,7 @@
                 <h3>@Localizer["Course"] @course.Name</h3>
             </div>
             <div class="col-1">
-                <a href="~/groups/create" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
+                <a href="~/groups/create?idCourse=@course.Id" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
             </div>
         </div>
     </div>

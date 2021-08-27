@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using Microsoft.Extensions.Logging;
 
+
 namespace Controllers
 {
     [Route("")]
@@ -47,26 +48,31 @@ namespace Controllers
         [Route("/courses/create")]
         public IActionResult Create()
         {
-            return View("Create");
+            return View();
         }
 
         [HttpPost]
         [Route("/courses/create")]
         public IActionResult Create(Course course)
         {
-            if(course != null && course.Name != null)
+            ModelState.Clear();
+            if (string.IsNullOrEmpty(course.Name))
+            {
+                ModelState.AddModelError(nameof(course.Name), _localizer["EmptyName"]);
+            }
+
+            if (ModelState.IsValid)
             {
                 unitOfWork.Courses.Create(course);
-                unitOfWork.Save();                                
+                unitOfWork.Save();
                 TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
                 TempData["AlertStatus"] = true;
+                return RedirectToAction("courses", "courses");
             }
             else
-            {
-                TempData["AlertMessage"] = _localizer["AlertCreateFail"].Value;
-                TempData["AlertStatus"] = false;
+            {              
+                return View(course);
             }            
-            return RedirectToAction("courses", "courses");            
         }
     }
 }

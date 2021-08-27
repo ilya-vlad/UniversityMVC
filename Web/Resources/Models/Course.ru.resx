@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AlertCreateFail" xml:space="preserve">
-    <value>Ошибка при создании курса!</value>
+  <data name="Description" xml:space="preserve">
+    <value>Описание курса</value>
   </data>
-  <data name="AlertCreateSuccess" xml:space="preserve">
-    <value>Курс успешно создан!</value>
+  <data name="Name" xml:space="preserve">
+    <value>Название курса</value>
   </data>
-  <data name="EmptyName" xml:space="preserve">
+  <data name="NameRequired" xml:space="preserve">
     <value>Введи название курса</value>
   </data>
 </root>

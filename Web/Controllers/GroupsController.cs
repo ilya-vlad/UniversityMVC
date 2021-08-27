@@ -28,7 +28,7 @@ namespace Controllers
             Course course = unitOfWork.Courses.GetById(id);
             if (course == null)
                 return NotFound();
-            ViewBag.CourseId = id;
+            ViewBag.Course = course;
             return View("Groups", unitOfWork);
         }        
 
@@ -40,6 +40,7 @@ namespace Controllers
             if (course == null || course.Id != group.CourseId)
                 return NotFound();
             ViewData["Courses"] = unitOfWork.Courses.GetAll();
+            ViewBag.CourseId = idCourse;
             return View("EditGroup", group);
         }
 
@@ -47,20 +48,31 @@ namespace Controllers
         [Route("/groups/EditGroup")]
         public IActionResult EditGroup(Group group)
         {
-            if (group != null && group.Name != null && group.CourseId != 0)
+            ModelState.Clear();
+            if (string.IsNullOrEmpty(group.Name))
+            {
+                ModelState.AddModelError(nameof(group.Name), _localizer["EmptyName"]);
+            }
+            if (group.CourseId == 0)
+            {
+                ModelState.AddModelError(nameof(group.CourseId), _localizer["NotSelectedCourse"]);
+            }
+
+
+            if (ModelState.IsValid)
             {
                 unitOfWork.Groups.Update(group);
                 unitOfWork.Save();
                 TempData["AlertMessage"] = _localizer["AlertEditSuccess"].Value;
                 TempData["AlertStatus"] = true;
+                return Redirect($"/courses/{group.CourseId}/groups");
             }
             else
             {
-                TempData["AlertMessage"] = _localizer["AlertEditFail"].Value;
-                TempData["AlertStatus"] = false;
+                ViewData["Courses"] = unitOfWork.Courses.GetAll();
+                ViewBag.CourseId = group.CourseId;
+                return View(group);
             }
-
-            return Redirect($"/courses/{group.CourseId}/groups");
         }
 
         [HttpGet("/courses/{idCourse}/groups/delete/{idGroup}")]
@@ -95,30 +107,41 @@ namespace Controllers
 
         [HttpGet]
         [Route("/groups/create")]
-        public IActionResult Create()
+        public IActionResult Create(int idCourse)
         {
             ViewData["Courses"] = unitOfWork.Courses.GetAll();
-            return View("Create");
+            ViewBag.CourseId = idCourse;
+            return View();
         }
 
         [HttpPost]
         [Route("/groups/create")]
         public IActionResult Create(Group group)
         {
-            if (group != null && group.Name != null && group.CourseId != 0)
+            ModelState.Clear();
+            if (string.IsNullOrEmpty(group.Name))
+            {
+                ModelState.AddModelError(nameof(group.Name), _localizer["EmptyName"]);
+            }
+            if (group.CourseId == 0)
+            {
+                ModelState.AddModelError(nameof(group.CourseId), _localizer["NotSelectedCourse"]);
+            }
+
+            if (ModelState.IsValid)
             {
                 unitOfWork.Groups.Create(group);
                 unitOfWork.Save();
                 TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
                 TempData["AlertStatus"] = true;
+                return Redirect($"/courses/{group.CourseId}/groups");
             }
             else
             {
-                TempData["AlertMessage"] = _localizer["AlertCreateFail"].Value;
-                TempData["AlertStatus"] = false;
+                ViewData["Courses"] = unitOfWork.Courses.GetAll();
+                ViewBag.CourseId = group.CourseId;
+                return View(group);
             }
-
-            return Redirect($"/courses/{group.CourseId}/groups");
         }
     }
 }

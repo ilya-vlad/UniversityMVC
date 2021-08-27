@@ -3,7 +3,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
-using MVC.Web.Models;
+using MVC.Web.Models.Student;
 using System;
 using System.Linq;
 
@@ -27,17 +27,15 @@ namespace Controllers
         public IActionResult Students(int idCourse, int idGroup, string lastName, int page = 1,
             StudentSortState sortOrder = StudentSortState.LastNameAsc)
         {
+            int pageSize = 10;
             Course course = unitOfWork.Courses.GetById(idCourse);
             Group group = unitOfWork.Groups.GetById(idGroup);
             if (course == null || course.Id != group.CourseId)
                 return NotFound();
-            ViewBag.GroupId = idGroup;
 
+            ViewBag.Group = group;
 
-
-            int pageSize = 10;
             IQueryable<Student> students = unitOfWork.Students.GetAll().Where( x => x.GroupId == idGroup);
-
             if (!String.IsNullOrEmpty(lastName))
             {
                 students = students.Where(p => p.LastName.Contains(lastName));
@@ -82,14 +80,13 @@ namespace Controllers
                 Students = items
             };
 
-            ViewData["test"] = viewModel;
             ViewData["PageSize"] = pageSize;
 
-            return View("Students", unitOfWork);
+            return View("Students", viewModel);
         }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/edit/{idStudent}")]
-        public IActionResult GetOptionsStudent(int idCourse, int idGroup, int idStudent)
+        public IActionResult GetEditStudent(int idCourse, int idGroup, int idStudent)
         {
             Course course = unitOfWork.Courses.GetById(idCourse);
             Group group = unitOfWork.Groups.GetById(idGroup);
@@ -97,6 +94,8 @@ namespace Controllers
             if (course == null || course.Id != group.CourseId || student == null || student.GroupId != group.Id)
                 return NotFound();
             ViewData["Groups"] = unitOfWork.Groups.GetAll();
+            ViewBag.GroupId = idGroup;
+            ViewBag.CourseId = idCourse;
             return View("EditStudent", student);
         }
 
@@ -104,22 +103,44 @@ namespace Controllers
         [Route("/students/EditStudent")]
         public IActionResult EditStudent(Student student)
         {
-            if (student != null && student.FirstName != null && student.LastName != null
-                && student.GroupId != 0 && student.ExamScore != 0)
+            ModelState.Clear();
+            if (string.IsNullOrEmpty(student.LastName))
+            {
+                ModelState.AddModelError(nameof(student.LastName), _localizer["EmptyLastName"]);
+            }
+            if (string.IsNullOrEmpty(student.FirstName))
+            {
+                ModelState.AddModelError(nameof(student.FirstName), _localizer["EmptyFirstName"]);
+            }
+            if (student.GroupId == 0)
+            {
+                ModelState.AddModelError(nameof(student.GroupId), _localizer["NotSelectedGroup"]);
+            }
+            if (student.ExamScore == 0)
+            {
+                ModelState.AddModelError(nameof(student.ExamScore), _localizer["EmptyExamScore"]);
+            }
+            if (student.DateOfBirth.Date.Ticks == 0)
+            {
+                ModelState.AddModelError(nameof(student.DateOfBirth), _localizer["EmptyDateOfBirth"]);
+            }
+
+            if (ModelState.IsValid)
             {
                 unitOfWork.Students.Update(student);
                 unitOfWork.Save();
                 TempData["AlertMessage"] = _localizer["AlertEditSuccess"].Value;
                 TempData["AlertStatus"] = true;
+                var group = unitOfWork.Groups.GetById(student.GroupId);
+                return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
             }
             else
             {
-                TempData["AlertMessage"] = _localizer["AlertEditFail"].Value;
-                TempData["AlertStatus"] = false;
+                ViewData["Groups"] = unitOfWork.Groups.GetAll();
+                ViewBag.GroupId = student.GroupId;
+                ViewBag.CourseId = unitOfWork.Groups.GetById(student.GroupId).CourseId;
+                return View(student);
             }
-
-            int? courseId = unitOfWork.Groups.GetById(student.GroupId).CourseId;
-            return Redirect($"/courses/{courseId}/groups/{student.GroupId}");
         }
        
 
@@ -149,9 +170,11 @@ namespace Controllers
 
         [HttpGet]
         [Route("/students/create")]
-        public IActionResult Create()
+        public IActionResult Create(int idGroup, int idCourse)
         {
             ViewData["Groups"] = unitOfWork.Groups.GetAll();
+            ViewBag.GroupId = idGroup;            
+            ViewBag.CourseId = idCourse;            
             return View("Create");
         }
 
@@ -159,22 +182,44 @@ namespace Controllers
         [Route("/students/create")]
         public IActionResult Create(Student student)
         {
-            if (student != null && student.FirstName != null && student.LastName != null
-               && student.GroupId != 0 && student.ExamScore != 0)
+            ModelState.Clear();
+            if (string.IsNullOrEmpty(student.LastName))
+            {
+                ModelState.AddModelError(nameof(student.LastName), _localizer["EmptyLastName"]);
+            }
+            if (string.IsNullOrEmpty(student.FirstName))
+            {
+                ModelState.AddModelError(nameof(student.FirstName), _localizer["EmptyFirstName"]);
+            }
+            if (student.GroupId == 0)
+            {
+                ModelState.AddModelError(nameof(student.GroupId), _localizer["NotSelectedGroup"]);
+            }
+            if (student.ExamScore == 0)
+            {
+                ModelState.AddModelError(nameof(student.ExamScore), _localizer["EmptyExamScore"]);
+            }
+            if (student.DateOfBirth.Date.Ticks == 0)
+            {
+                ModelState.AddModelError(nameof(student.DateOfBirth), _localizer["EmptyDateOfBirth"]);
+            }
+
+            if (ModelState.IsValid)
             {
                 unitOfWork.Students.Create(student);
                 unitOfWork.Save();
                 TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
                 TempData["AlertStatus"] = true;
+                var group = unitOfWork.Groups.GetById(student.GroupId);
+                return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
             }
             else
             {
-                TempData["AlertMessage"] = _localizer["AlertCreateFail"].Value;
-                TempData["AlertStatus"] = false;
+                ViewData["Groups"] = unitOfWork.Groups.GetAll();
+                ViewBag.GroupId = student.GroupId;
+                ViewBag.CourseId = unitOfWork.Groups.GetById(student.GroupId).CourseId; 
+                return View(student);
             }
-
-            var group = unitOfWork.Groups.GetById(student.GroupId);
-            return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
         }
     }
 }
