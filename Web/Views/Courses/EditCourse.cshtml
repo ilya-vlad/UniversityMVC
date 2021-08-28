@@ -1,0 +1,35 @@
+﻿@using MVC.Common
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Course
+
+@{
+    ViewData["Title"] = Localizer["EditCourse"];
+}
+
+<h4>@Localizer["EditCourse"]</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditCourse">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, Localizer["Name"].Value, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Description, Localizer["Description"].Value, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.HiddenFor( m => m.Id)
+                <input type="submit" value="@Localizer["Save"]" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Courses">@Localizer["Back"]</a>
+</div>
+

@@ -44,6 +44,68 @@ namespace Controllers
             return LocalRedirect(returnUrl);
         }
 
+        [HttpGet("/courses/edit/{idCourse}")]
+        public IActionResult GetEditCourse(int idCourse)
+        {
+            Course course = unitOfWork.Courses.GetById(idCourse);            
+            if (course == null) 
+                return NotFound();            
+            return View("EditCourse", course);
+        }
+
+        [HttpPost]
+        [Route("/courses/EditCourse")]
+        public IActionResult EditCourse(Course course)
+        {
+            ModelState.Clear();
+            if (string.IsNullOrEmpty(course.Name))
+            {
+                ModelState.AddModelError(nameof(course.Name), _localizer["EmptyName"]);
+            }
+
+            if (ModelState.IsValid)
+            {
+                unitOfWork.Courses.Update(course);
+                unitOfWork.Save();
+                TempData["AlertMessage"] = _localizer["AlertEditSuccess"].Value;
+                TempData["AlertStatus"] = true;
+                return RedirectToAction("courses", "courses");
+            }
+            else
+            {
+                return View(course);
+            }
+        }
+
+        [HttpGet("/courses/delete/{idCourse}")]
+        public IActionResult DeleteCourse(int idCourse)
+        {
+            Course course = unitOfWork.Courses.GetById(idCourse);
+
+            if (course == null)
+            {
+                TempData["AlertMessage"] = _localizer["AlertRemoveNotFound"].Value;
+                TempData["AlertStatus"] = false;
+            }
+            else
+            {
+                int groupsCount = unitOfWork.Groups.GetAll().Where(x => x.CourseId == course.Id).Count();
+                if(groupsCount != 0)
+                {
+                    TempData["AlertMessage"] = _localizer["AlertNotEmptyCourse"].Value;
+                    TempData["AlertStatus"] = false;
+                }
+                else
+                {
+                    unitOfWork.Courses.Remove(course.Id);
+                    unitOfWork.Save();
+                    TempData["AlertMessage"] = _localizer["AlertRemoveSuccess"].Value;
+                    TempData["AlertStatus"] = true;
+                }                
+            }    
+            return Redirect($"/courses");
+        }
+
         [HttpGet]
         [Route("/courses/create")]
         public IActionResult Create()

@@ -116,7 +116,7 @@
                 <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
                 <td name="LastName" class="align-middle">@student.LastName</td>
                 <td name="FirstName" class="align-middle">@student.FirstName</td>
-                <td name="DateOfBirt" class="align-middle text-center">@student.DateOfBirth.ToString("d")</td>
+                <td name="DateOfBirt" class="align-middle text-center">@student.DateOfBirth.Value.ToString("d")</td>
                 <td name="ExamScore" class="align-middle text-center">@student.ExamScore</td>
                 <td class="align-middle text-right">
                     <a href="@student.GroupId/students/edit/@student.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>

@@ -120,9 +120,9 @@ namespace Controllers
             {
                 ModelState.AddModelError(nameof(student.ExamScore), _localizer["EmptyExamScore"]);
             }
-            if (student.DateOfBirth.Date.Ticks == 0)
+            if (student.DateOfBirth == null)
             {
-                ModelState.AddModelError(nameof(student.DateOfBirth), _localizer["EmptyDateOfBirth"]);
+                ModelState.AddModelError(nameof(student.DateOfBirth), _localizer["EmptyDateOfBirth"]);                
             }
 
             if (ModelState.IsValid)
@@ -199,9 +199,9 @@ namespace Controllers
             {
                 ModelState.AddModelError(nameof(student.ExamScore), _localizer["EmptyExamScore"]);
             }
-            if (student.DateOfBirth.Date.Ticks == 0)
+            if (student.DateOfBirth == null)
             {
-                ModelState.AddModelError(nameof(student.DateOfBirth), _localizer["EmptyDateOfBirth"]);
+                ModelState.AddModelError(nameof(student.DateOfBirth), _localizer["EmptyDateOfBirth"]);                
             }
 
             if (ModelState.IsValid)

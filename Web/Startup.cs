@@ -46,28 +46,7 @@ namespace MVC.Web
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<UniversityContext>(options => options.UseSqlServer(connection));
 
-            //services.AddControllersWithViews()
-            //    .AddDataAnnotationsLocalization(options => {
-            //        options.DataAnnotationLocalizerProvider = (type, factory) =>
-            //            factory.Create(typeof(SharedResource));
-            //    })
-            //    .AddViewLocalization();
-
-            //services.Configure<RequestLocalizationOptions>(options =>
-            //{
-            //    var supportedCultures = new[]
-            //    {
-            //        new CultureInfo("en"),
-            //        new CultureInfo("de"),
-            //        new CultureInfo("ru")
-            //    };
-
-            //    options.DefaultRequestCulture = new RequestCulture("ru");
-            //    options.SupportedCultures = supportedCultures;
-            //    options.SupportedUICultures = supportedCultures;
-            //});
-
-            //services.AddControllers();
+           
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<IGroupsRepository, GroupsRepository>();
@@ -77,16 +56,28 @@ namespace MVC.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //app.UseStatusCodePages();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+                //app.UseExceptionHandler("/courses/Error");
+                
+                //app.UseHsts();
             }
+
+            //app.Use(async (context, next) =>
+            //{
+            //    await next();
+            //    if (context.Response.StatusCode == 404)
+            //    {
+            //        context.Request.Path = "/courses/Error";
+            //        await next();
+            //    }
+            //});
 
             app.UseRequestLocalization();
 
@@ -103,22 +94,10 @@ namespace MVC.Web
                 app.ApplicationServices.
                 GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
-
-            //var supportedCultures = new[] { "ru", "en",  "de" };
-            //var localisationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
-            //    .AddSupportedCultures(supportedCultures)
-            //    .AddSupportedUICultures(supportedCultures);
-
-            //app.UseRequestLocalization(localisationOptions);
-                  
-
-
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    //pattern: "{controller=Home}/{action=Courses}/{id?}");
+                    name: "default",                    
                     pattern: "{controller=courses}/{action=courses}");
                 endpoints.MapControllers();
             });

@@ -84,23 +84,23 @@ namespace Controllers
             if (course == null || group == null || course.Id != group.CourseId)
             {
                 TempData["AlertMessage"] = _localizer["AlertRemoveNotFound"].Value;
-                TempData["AlertStatus"] = false;
-                return Redirect($"/courses/{group.CourseId}/groups");
-            }
-
-            int studentsCount = unitOfWork.Students.GetAll().Where(x => x.GroupId == group.Id).Count();
-            if (studentsCount != 0)
-            {
-                TempData["AlertMessage"] = _localizer["AlertNotEmptyGroup"].Value;
-                TempData["AlertStatus"] = false;
+                TempData["AlertStatus"] = false;                
             }
             else
             {
-                unitOfWork.Groups.Remove(group.Id);
-                unitOfWork.Save();
-                TempData["AlertMessage"] = _localizer["AlertRemoveSuccess"].Value;
-                TempData["AlertStatus"] = true;
-
+                int studentsCount = unitOfWork.Students.GetAll().Where(x => x.GroupId == group.Id).Count();
+                if (studentsCount != 0)
+                {
+                    TempData["AlertMessage"] = _localizer["AlertNotEmptyGroup"].Value;
+                    TempData["AlertStatus"] = false;
+                }
+                else
+                {
+                    unitOfWork.Groups.Remove(group.Id);
+                    unitOfWork.Save();
+                    TempData["AlertMessage"] = _localizer["AlertRemoveSuccess"].Value;
+                    TempData["AlertStatus"] = true;
+                }
             }
             return Redirect($"/courses/{group.CourseId}/groups");
         }

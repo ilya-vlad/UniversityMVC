@@ -14,8 +14,9 @@ namespace MVC.Common
         [Required]        
         public string LastName { get; set; }
 
-        [Required]        
-        public DateTime DateOfBirth { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime? DateOfBirth { get; set; }
 
         [Required]        
         public float ExamScore { get; set; }
