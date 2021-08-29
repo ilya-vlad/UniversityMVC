@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AlertMessageFail" xml:space="preserve">
-    <value>Course creation error!</value>
+  <data name="AlertCreateFail" xml:space="preserve">
+    <value>Error while creating a course!</value>
   </data>
-  <data name="AlertMessageSuccess" xml:space="preserve">
-    <value>The course was created successfully!</value>
+  <data name="AlertCreateSuccess" xml:space="preserve">
+    <value>The course has been successfully created!</value>
+  </data>
+  <data name="AlertEditSuccess" xml:space="preserve">
+    <value>Course changed successfully!</value>
+  </data>
+  <data name="AlertNotEmptyCourse" xml:space="preserve">
+    <value>This course contains groups. Removal is not possible!</value>
+  </data>
+  <data name="AlertRemoveNotFound" xml:space="preserve">
+    <value>Course not found!</value>
+  </data>
+  <data name="AlertRemoveSuccess" xml:space="preserve">
+    <value>Course deleted successfully!</value>
+  </data>
+  <data name="EmptyName" xml:space="preserve">
+    <value>Enter the name of the course</value>
   </data>
 </root>

@@ -1,9 +1,8 @@
-﻿@using MVC.DataAccess
-@using MVC.Common
+﻿@using MVC.Common
 @using Microsoft.AspNetCore.Mvc.Localization
-@using System.Globalization
+@using MVC.Web.Models.Group
 @inject IViewLocalizer Localizer
-@model UnitOfWork
+@model GroupIndexViewModel
 @{
     ViewData["Title"] = Localizer["ListGroups"];
     int i = 1;
@@ -38,14 +37,6 @@
         </div>
     }
 }
-<!DOCTYPE html>
-
-<html lang="@CultureInfo.CurrentCulture"
-      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl"></text>}
-<head>
-    <title>@Localizer["Groups"]</title>
-</head>
-<body>
 
     @if (alert != null)
     {
@@ -59,40 +50,56 @@
         </text>
     }
 
-    <div class="container">
-        <div class="row">
-            <div class="col-3">
-                <a href="~/courses" class="btn btn-sm btn-dark" role="button" aria-pressed="true">&#8249;&#8249;&#8249;</a>
-            </div>
-            <div class="col">
-                <h3>@Localizer["Course"] @course.Name</h3>
-            </div>
-            <div class="col-1">
-                <a href="~/groups/create?idCourse=@course.Id" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-1">
+            <a href="~/courses" class="btn btn-sm btn-dark" role="button" aria-pressed="true">&#8249;&#8249;&#8249;</a>
+        </div>
+        <div class="col">
+            <h3>@course.Name</h3>
+        </div>       
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="get">
+                <div class="form-inline form-group">
+                    <label class="control-label">@Localizer["NameGroup"]&nbsp;</label>
+                    <input name="name" value="@Model.FilterViewModel.SelectedName" class="form-control" />
+                    &nbsp;
+                    <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
+                </div>
+            </form>
+        </div>
+        <div>
+            <a href="~/groups/create?idCourse=@course.Id" class="btn btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
         </div>
     </div>
+
+</div>
+
+    
 
     <table class="table table-hover table-sm">
         <thead class="thead-dark">
             <tr>
-                <th class="align-middle text-center">#</th>
-                <th class="align-middle col-2">@Localizer["NameGroup"]</th>
-                <th class="align-middle col-2 text-center">@Localizer["CountStudents"]</th>
-                <th></th>
+                <th class="align-middle text-center" scope="col">#</th>
+                <th class="align-middle col-2">
+                    <a asp-action="Groups" class="text-white"
+                       asp-route-sortOrder="@Model.SortViewModel.NameSort"
+                       asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["NameGroup"]</a>
+                </th>
+                <th class="align-middle"></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var group in Model.Groups.GetAll().Where(x => x.CourseId == course.Id))
+            @foreach (Group group in Model.Groups)
             {
-                int countStudents = Model.Students.GetAll().Where(x => x.GroupId == group.Id).Count();
                 <tr id="@group.Id">
-                    <td class="align-middle text-center font-weight-bold">@i</td>
+                    <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
                     <td name="nameGroup" class="align-middle">@group.Name</td>
-                    <td class="align-middle text-center">@countStudents</td>
                     <td class="align-middle text-right">
                         <a href="groups/@group.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">@Localizer["Students"]</a>
-                        <a href="groups/edit/@group.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>                        
+                        <a href="groups/edit/@group.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
                         <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@group.Id">@Localizer["Remove"]</a>
                     </td>
                 </tr>
@@ -101,5 +108,26 @@
             }
         </tbody>
     </table>
-</body>
-</html>
+
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <a asp-action="Groups"
+           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+           asp-route-lastName="@Model.FilterViewModel.SelectedName"
+           asp-route-sortorder="@Model.SortViewModel.Current"
+           class="btn  btn-outline-dark">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            @Localizer["Back"]
+        </a>
+    }
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <a asp-action="Groups"
+           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+           asp-route-lastName="@Model.FilterViewModel.SelectedName"
+           asp-route-sortorder="@Model.SortViewModel.Current"
+           class="btn btn-outline-dark">
+            @Localizer["Next"]
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </a>
+    }

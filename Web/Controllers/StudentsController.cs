@@ -5,6 +5,7 @@ using MVC.Common;
 using MVC.DataAccess;
 using MVC.Web.Models.Student;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Controllers
@@ -147,14 +148,8 @@ namespace Controllers
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/delete/{idStudent}")]
         public IActionResult DeleteStudent(int idCourse, int idGroup, int idStudent)
         {
-            Course course = unitOfWork.Courses.GetById(idCourse);
-            Group group = unitOfWork.Groups.GetById(idGroup);
             Student student = unitOfWork.Students.GetById(idStudent);
-
-
-
-            if (course == null || group == null || student == null || course.Id != group.CourseId 
-                || student.GroupId != group.Id)
+            if (student == null)
             {
                 TempData["AlertMessage"] = _localizer["AlertRemoveNotFound"].Value;
                 TempData["AlertStatus"] = false;
@@ -167,6 +162,40 @@ namespace Controllers
             TempData["AlertStatus"] = true;
             return Redirect($"/courses/{idCourse}/groups/{idGroup}");
         }
+
+        [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/multipleDelete/")]
+        public IActionResult MultipleDelete(int idCourse, int idGroup, string ids)
+        {
+            var idStudents = new List<int>();
+            try
+            {
+                idStudents = ids.Split(',').Select(x => int.Parse(x)).ToList();
+            }
+            catch
+            {
+                TempData["AlertMessage"] = _localizer["AlertFailMultipleDelete"].Value;
+                TempData["AlertStatus"] = false;
+                var group = unitOfWork.Groups.GetById(idGroup);
+                return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
+            }
+
+            foreach(var id in idStudents)
+            {
+                Student student = unitOfWork.Students.GetById(id);
+                if (student == null)
+                {
+                    TempData["AlertMessage"] = _localizer["AlertMultipleRemoveNotFound"].Value;
+                    TempData["AlertStatus"] = false;
+                    return Redirect($"/courses/{idCourse}/groups/{idGroup}");
+                }
+                unitOfWork.Students.Remove(student.Id);
+            }
+            unitOfWork.Save();
+            TempData["AlertMessage"] = _localizer["AlertMultipleRemoveSuccess"].Value;
+            TempData["AlertStatus"] = true;
+            return Redirect($"/courses/{idCourse}/groups/{idGroup}");
+        }
+
 
         [HttpGet]
         [Route("/students/create")]

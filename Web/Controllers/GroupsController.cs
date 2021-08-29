@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
+using MVC.Web.Models.Group;
+using System;
 using System.Linq;
 
 namespace Controllers
@@ -22,14 +23,45 @@ namespace Controllers
             _logger = logger;
         }
 
-        [HttpGet("/courses/{id}/groups")]     
-        public IActionResult Groups(int id)
+        [HttpGet("/courses/{idCourse}/groups")]     
+        public IActionResult Groups(int idCourse, string name, int page = 1, GroupSortState sortOrder = GroupSortState.NameAsc)
         {
-            Course course = unitOfWork.Courses.GetById(id);
+            int pageSize = 5;
+            Course course = unitOfWork.Courses.GetById(idCourse);
             if (course == null)
                 return NotFound();
             ViewBag.Course = course;
-            return View("Groups", unitOfWork);
+
+            IQueryable<Group> groups = unitOfWork.Groups.GetAll().Where(x => x.CourseId == idCourse);
+            if (!String.IsNullOrEmpty(name))
+            {
+                groups = groups.Where(p => p.Name.Contains(name));
+            }
+
+            switch (sortOrder)
+            {
+               case GroupSortState.NameDesc:
+                    groups = groups.OrderByDescending(s => s.Name);
+                    break;               
+                default:
+                    groups = groups.OrderBy(s => s.Name);
+                    break;
+            }
+
+            var count = groups.Count();
+            var items = groups.Skip((page - 1) * pageSize).Take(pageSize);
+
+            GroupIndexViewModel viewModel = new GroupIndexViewModel
+            {
+                PageViewModel = new GroupPageViewModel(count, page, pageSize),
+                SortViewModel = new GroupSortViewModel(sortOrder),
+                FilterViewModel = new GroupFilterViewModel(name),
+                Groups = items
+            };
+
+            ViewData["PageSize"] = pageSize;
+
+            return View("Groups", viewModel);
         }        
 
         [HttpGet("/courses/{idCourse}/groups/edit/{idGroup}")]

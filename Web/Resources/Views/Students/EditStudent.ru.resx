@@ -126,18 +126,6 @@
   <data name="EditStudent" xml:space="preserve">
     <value>Изменить студента</value>
   </data>
-  <data name="EmptyDateOfBirth" xml:space="preserve">
-    <value>Введи день рождения</value>
-  </data>
-  <data name="EmptyExamScore" xml:space="preserve">
-    <value>Введи оценку экзамена</value>
-  </data>
-  <data name="EmptyFirstName" xml:space="preserve">
-    <value>Введи имя студента</value>
-  </data>
-  <data name="EmptyLastName" xml:space="preserve">
-    <value>Введи фамилию студента</value>
-  </data>
   <data name="ExamScore" xml:space="preserve">
     <value>Оценка  экзамена</value>
   </data>

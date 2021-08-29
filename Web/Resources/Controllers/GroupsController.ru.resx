@@ -117,14 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AlertCreateFail" xml:space="preserve">
-    <value>Ошибка при создании группы!</value>
-  </data>
   <data name="AlertCreateSuccess" xml:space="preserve">
     <value>Группа успешно создана!</value>
-  </data>
-  <data name="AlertEditFail" xml:space="preserve">
-    <value>Ошибка при изменении группы!</value>
   </data>
   <data name="AlertEditSuccess" xml:space="preserve">
     <value>Группа успешно изменена!</value>
@@ -140,5 +134,11 @@
   </data>
   <data name="AlertRemoveSuccess" xml:space="preserve">
     <value>Группа успешно удалена!</value>
+  </data>
+  <data name="EmptyName" xml:space="preserve">
+    <value>Введите название группы</value>
+  </data>
+  <data name="NotSelectedCourse" xml:space="preserve">
+    <value>Выберите курс</value>
   </data>
 </root>

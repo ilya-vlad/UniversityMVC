@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Закрыть</value>
-  </data>
-  <data name="CountStudents" xml:space="preserve">
-    <value>Кол-во студентов</value>
   </data>
   <data name="Course" xml:space="preserve">
     <value>Курс</value>
@@ -141,11 +141,17 @@
   <data name="NameGroup" xml:space="preserve">
     <value>Название</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Вперед</value>
+  </data>
   <data name="Remove" xml:space="preserve">
     <value>Удалить</value>
   </data>
   <data name="RemoveGroup?" xml:space="preserve">
-    <value>Удалить группу</value>
+    <value>Вы действительно хотите удалить группу</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
   </data>
   <data name="Students" xml:space="preserve">
     <value>Студенты</value>

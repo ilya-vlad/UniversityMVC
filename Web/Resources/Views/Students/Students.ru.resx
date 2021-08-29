@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Закрыть</value>
   </data>
@@ -144,11 +147,17 @@
   <data name="ListStudents" xml:space="preserve">
     <value>Список студетов</value>
   </data>
+  <data name="MultipleRemoveStudent?" xml:space="preserve">
+    <value>Вы действительно хотите удалить этих студентов?</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Вперед</value>
+  </data>
   <data name="Remove" xml:space="preserve">
     <value>Удалить</value>
   </data>
   <data name="RemoveStudent?" xml:space="preserve">
-    <value>Удалить студента</value>
+    <value>Вы действительно хотите удалить студента</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>

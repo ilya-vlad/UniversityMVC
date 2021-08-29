@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
 using System;
 using Microsoft.Extensions.Logging;
-
+using MVC.Web.Models.Course;
 
 namespace Controllers
 {
@@ -29,10 +29,46 @@ namespace Controllers
         }
 
         [HttpGet]       
-        public IActionResult Courses()
+        public IActionResult Courses(string name, int page = 1, CourseSortState sortOrder = CourseSortState.NameAsc)
         {
-            var courses = unitOfWork.Courses.GetAll();            
-            return View("Courses", courses);
+            int pageSize = 5;
+
+            IQueryable<Course> courses = unitOfWork.Courses.GetAll();
+            if (!String.IsNullOrEmpty(name))
+            {
+                courses = courses.Where(p => p.Name.Contains(name));
+            }
+
+            switch (sortOrder)
+            {
+                case CourseSortState.NameDesc:
+                    courses = courses.OrderByDescending(s => s.Name);
+                    break;
+                case CourseSortState.DescriptionAsc:
+                    courses = courses.OrderBy(s => s.Description);
+                    break;
+                case CourseSortState.DescriptionDesc:
+                    courses = courses.OrderByDescending(s => s.Description);
+                    break;                
+                default:
+                    courses = courses.OrderBy(s => s.Name);
+                    break;
+            }
+
+            var count = courses.Count();
+            var items = courses.Skip((page - 1) * pageSize).Take(pageSize);
+
+            CourseIndexViewModel viewModel = new CourseIndexViewModel
+            {
+                PageViewModel = new CoursePageViewModel(count, page, pageSize),
+                SortViewModel = new CourseSortViewModel(sortOrder),
+                FilterViewModel = new CourseFilterViewModel(name),
+                Courses = items
+            };
+
+            ViewData["PageSize"] = pageSize;
+
+            return View("Courses", viewModel);
         }
 
         [HttpPost]
@@ -67,6 +103,7 @@ namespace Controllers
             {
                 unitOfWork.Courses.Update(course);
                 unitOfWork.Save();
+                _logger.LogInformation($"Edited course {course.Name}");
                 TempData["AlertMessage"] = _localizer["AlertEditSuccess"].Value;
                 TempData["AlertStatus"] = true;
                 return RedirectToAction("courses", "courses");

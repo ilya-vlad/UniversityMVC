@@ -123,7 +123,19 @@
   <data name="AlertCreateSuccess" xml:space="preserve">
     <value>Курс успешно создан!</value>
   </data>
+  <data name="AlertEditSuccess" xml:space="preserve">
+    <value>Курс изменен успешно!</value>
+  </data>
+  <data name="AlertNotEmptyCourse" xml:space="preserve">
+    <value>Курс содержит группы. Удаление невозможно!</value>
+  </data>
+  <data name="AlertRemoveNotFound" xml:space="preserve">
+    <value>Курс не найден!</value>
+  </data>
+  <data name="AlertRemoveSuccess" xml:space="preserve">
+    <value>Курс успешно удален!</value>
+  </data>
   <data name="EmptyName" xml:space="preserve">
-    <value>Введи название курса</value>
+    <value>Введите название курса</value>
   </data>
 </root>

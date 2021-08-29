@@ -1,5 +1,4 @@
-﻿using MVC.Common;
-using System.Linq;
+﻿using System.Linq;
 
 namespace MVC.Web.Models.Student
 {

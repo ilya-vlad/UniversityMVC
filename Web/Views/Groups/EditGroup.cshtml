@@ -1,6 +1,5 @@
 ﻿@using MVC.Common
 @using Microsoft.AspNetCore.Mvc.Localization
-@using System.Globalization
 @inject IViewLocalizer Localizer
 @model Group
 @{
@@ -10,14 +9,8 @@
     courses.Where(x => x.Value == idCourse.ToString()).FirstOrDefault().Selected = true;
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <title>@ViewData["Title"]</title>
 
-</head>
-<body>
     <h3>@ViewData["Title"] @Model.Name</h3>
     <div class="row">
         <div class="col-md-4">
@@ -44,6 +37,3 @@
     <div>
         <a href="/courses/@idCourse/groups">@Localizer["Back"]</a>
     </div>
-
-</body>
-</html>

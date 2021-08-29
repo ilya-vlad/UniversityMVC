@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
   <data name="Courses" xml:space="preserve">
     <value>Курсы</value>
   </data>
@@ -126,10 +132,28 @@
   <data name="Description" xml:space="preserve">
     <value>Описание</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
   <data name="Groups" xml:space="preserve">
     <value>Группы</value>
   </data>
+  <data name="ListCourses" xml:space="preserve">
+    <value>Список курсов</value>
+  </data>
   <data name="NameCourse" xml:space="preserve">
     <value>Название</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Вперед</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="RemoveCourse?" xml:space="preserve">
+    <value>Вы действительно хотите удалить курс</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
   </data>
 </root>

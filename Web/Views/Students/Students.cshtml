@@ -1,7 +1,5 @@
-﻿@using MVC.DataAccess
-@using MVC.Common
+﻿@using MVC.Common
 @using Microsoft.AspNetCore.Mvc.Localization
-@using System.Globalization
 @using MVC.Web.Models.Student
 @inject IViewLocalizer Localizer
 @model StudentIndexViewModel
@@ -38,16 +36,15 @@
             </div>
         </div>
     }
+
+
 }
-<!DOCTYPE html>
-
-<html lang="@CultureInfo.CurrentCulture"
-      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl"></text>}
-
+    
 <head>
-    <title>@Localizer["Students"]</title>
+    <script>
+        windows.groupId = @group.Id;
+    </script>
 </head>
-<body>
     @if (alert != null)
     {
         <text>
@@ -61,30 +58,60 @@
     }
     <div class="container">
         <div class="row">
-            <div class="col-3">
+            <div class="col-1">
                 <a href="~/courses/@group.CourseId/groups" class="btn btn-sm btn-dark" role="button" aria-pressed="true">&#8249;&#8249;&#8249;</a>
             </div>
             <div class="col">
                 <h3>@Localizer["Group"] @group.Name</h3>
             </div>
-            <div class="col-1">
-                <a href="~/students/create?idGroup=@group.Id&idCourse=@group.CourseId" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
+        </div>
+        <div class="row">
+            <div class="col">
+                <form method="get">
+                    <div class="form-inline form-group">
+                        <label class="control-label">@Localizer["LastName"]&nbsp;</label>
+                        <input name="lastName" value="@Model.FilterViewModel.SelectedLastName" class="form-control" />
+                        &nbsp;
+                        <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
+                    </div>
+                </form>
+            </div>
+            <div>
+                <a href="" id="btnMultipleRemove" class="btn btn-danger disabled"
+                   role="button" aria-pressed="true" aria-disabled="true"
+                   data-toggle="modal" data-target="#removeMultipleModel">@Localizer["Remove"]</a>
+
+
+                <div id="removeMultipleModel" class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">@Localizer["Remove"]</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>@Localizer["MultipleRemoveStudent?"] <span id="namesStudents"></span></p>
+                            </div>
+                            <div class="modal-footer">
+                                 <a id="sumbitMultipleRemove" href="" class="btn btn-danger" role="button" aria-pressed="true">@Localizer["Remove"]</a>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="~/students/create?idGroup=@group.Id&idCourse=@group.CourseId" class="btn btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
             </div>
         </div>
     </div>
 
-    <form method="get">
-        <div class="form-inline form-group">
-            <label class="control-label">@Localizer["LastName"]&nbsp;</label>
-            <input name="lastName" value="@Model.FilterViewModel.SelectedLastName" class="form-control" />
-            &nbsp;
-            <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
-        </div>
-    </form>
 
     <table class="table table-hover table-sm">
         <thead class="thead-dark">
             <tr>
+                <th class="align-middle text-center"></th>
                 <th class="align-middle text-center">#</th>
                 <th class="align-middle col-2">
                     <a asp-action="Students" class="text-white"
@@ -112,23 +139,25 @@
         <tbody>
             @foreach (Student student in Model.Students)
             {
-            <tr id="@student.Id">
-                <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
-                <td name="LastName" class="align-middle">@student.LastName</td>
-                <td name="FirstName" class="align-middle">@student.FirstName</td>
-                <td name="DateOfBirt" class="align-middle text-center">@student.DateOfBirth.Value.ToString("d")</td>
-                <td name="ExamScore" class="align-middle text-center">@student.ExamScore</td>
-                <td class="align-middle text-right">
-                    <a href="@student.GroupId/students/edit/@student.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
-                    <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@student.Id">@Localizer["Remove"]</a>
-                </td>
-            </tr>
+                <tr id="tr_@student.Id">
+                    <td class="align-middle text-center">
+                        <input name="checkboxRemove" onclick="ChangeChecked(@group.Id)" class="form-check-input" type="checkbox" id="@student.Id">
+                    </td>
+                    <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
+                    <td name="LastName" class="align-middle">@student.LastName</td>
+                    <td name="FirstName" class="align-middle">@student.FirstName</td>
+                    <td name="DateOfBirt" class="align-middle text-center">@student.DateOfBirth.Value.ToString("d")</td>
+                    <td name="ExamScore" class="align-middle text-center">@student.ExamScore</td>
+                    <td class="align-middle text-right">
+                        <a href="@student.GroupId/students/edit/@student.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
+                        <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@student.Id">@Localizer["Remove"]</a>
+                    </td>
+                </tr>
                 i++;
                 RemoveModal(student);
             }
         </tbody>
     </table>
-
 
     @if (Model.PageViewModel.HasPreviousPage)
     {
@@ -145,12 +174,10 @@
     {
         <a asp-action="Students"
            asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-           asp-route-lastName="@Model.FilterViewModel.SelectedLastName"          
+           asp-route-lastName="@Model.FilterViewModel.SelectedLastName"
            asp-route-sortorder="@Model.SortViewModel.Current"
            class="btn btn-outline-dark">
             @Localizer["Next"]
             <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
     }
-</body>
-</html>

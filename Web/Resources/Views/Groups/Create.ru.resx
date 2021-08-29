@@ -129,13 +129,7 @@
   <data name="CreateGroup" xml:space="preserve">
     <value>Создать группу</value>
   </data>
-  <data name="EmptyName" xml:space="preserve">
-    <value>Введи название группы</value>
-  </data>
   <data name="Name" xml:space="preserve">
     <value>Название группы</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Сохранить</value>
   </data>
 </root>

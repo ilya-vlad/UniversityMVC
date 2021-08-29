@@ -12,11 +12,6 @@
     groups.Where(x => x.Value == idGroup.ToString()).FirstOrDefault().Selected = true;
 }
 
-<html lang="@CultureInfo.CurrentCulture"
-      @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl">
-</text>}
-
-<body>
     <h4>@Localizer["CreateStudent"]</h4>
     <hr />
     <div class="row">
@@ -57,6 +52,3 @@
     <div>
         <a href="/courses/@idCourse/groups/@idGroup">@Localizer["Back"]</a>
     </div>
-</body>
-
-</html>

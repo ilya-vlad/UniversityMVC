@@ -117,19 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Back" xml:space="preserve">
-    <value>Назад</value>
+  <data name="AlertCreateSuccess" xml:space="preserve">
+    <value>The group has been successfully created!</value>
   </data>
-  <data name="Course" xml:space="preserve">
-    <value>Курс</value>
+  <data name="AlertEditSuccess" xml:space="preserve">
+    <value>Group changed successfully!</value>
   </data>
-  <data name="EditGroup" xml:space="preserve">
-    <value>Редактировать группу</value>
+  <data name="AlertNotEmptyGroup" xml:space="preserve">
+    <value>Removal is not possible! There are students in the group!</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>Название группы</value>
+  <data name="AlertRemoveFail" xml:space="preserve">
+    <value>Error while deleting a group!</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Сохранить</value>
+  <data name="AlertRemoveNotFound" xml:space="preserve">
+    <value>Group not found!</value>
+  </data>
+  <data name="AlertRemoveSuccess" xml:space="preserve">
+    <value>Group successfully deleted!</value>
+  </data>
+  <data name="EmptyName" xml:space="preserve">
+    <value>Enter the name of the group</value>
+  </data>
+  <data name="NotSelectedCourse" xml:space="preserve">
+    <value>Choose a course</value>
   </data>
 </root>

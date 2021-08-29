@@ -74,3 +74,8 @@ input.input-validation-error {
     border: 1px solid #e80c4d;
 }
 
+.form-check-input {  
+    margin-top: -0.3rem;
+    margin-left: 0.3rem;
+}
+

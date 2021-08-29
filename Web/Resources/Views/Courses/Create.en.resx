@@ -129,9 +129,6 @@
   <data name="Description" xml:space="preserve">
     <value>Сourse description</value>
   </data>
-  <data name="EmptyDescription" xml:space="preserve">
-    <value>Enter course description</value>
-  </data>
   <data name="EmptyName" xml:space="preserve">
     <value>Enter the name of the course</value>
   </data>

@@ -129,13 +129,7 @@
   <data name="CreateGroup" xml:space="preserve">
     <value>Create group</value>
   </data>
-  <data name="EmptyName" xml:space="preserve">
-    <value>Enter the name of the group</value>
-  </data>
   <data name="Name" xml:space="preserve">
     <value>Group name</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
   </data>
 </root>

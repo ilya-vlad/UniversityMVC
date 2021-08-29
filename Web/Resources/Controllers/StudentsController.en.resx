@@ -117,19 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Back" xml:space="preserve">
-    <value>Назад</value>
+  <data name="AlertCreateSuccess" xml:space="preserve">
+    <value>The student has been successfully created!</value>
   </data>
-  <data name="Course" xml:space="preserve">
-    <value>Курс</value>
+  <data name="AlertEditSuccess" xml:space="preserve">
+    <value>Student changed successfully!</value>
   </data>
-  <data name="EditGroup" xml:space="preserve">
-    <value>Редактировать группу</value>
+  <data name="AlertFailMultipleDelete" xml:space="preserve">
+    <value>Error deleting students!</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>Название группы</value>
+  <data name="AlertMultipleRemoveNotFound" xml:space="preserve">
+    <value>One of the students was not found!</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Сохранить</value>
+  <data name="AlertMultipleRemoveSuccess" xml:space="preserve">
+    <value>Students removed successfully!</value>
+  </data>
+  <data name="AlertRemoveFail" xml:space="preserve">
+    <value>Error while deleting student!</value>
+  </data>
+  <data name="AlertRemoveNotFound" xml:space="preserve">
+    <value>Student not found!</value>
+  </data>
+  <data name="AlertRemoveSuccess" xml:space="preserve">
+    <value>Student deleted successfully!</value>
+  </data>
+  <data name="EmptyDateOfBirth" xml:space="preserve">
+    <value>Enter your date of birth</value>
+  </data>
+  <data name="EmptyExamScore" xml:space="preserve">
+    <value>Enter exam grade</value>
+  </data>
+  <data name="EmptyFirstName" xml:space="preserve">
+    <value>Enter student's name</value>
+  </data>
+  <data name="EmptyLastName" xml:space="preserve">
+    <value>Enter the student's surname</value>
+  </data>
+  <data name="NotSelectedGroup" xml:space="preserve">
+    <value>Choose a group</value>
   </data>
 </root>
