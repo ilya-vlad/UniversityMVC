@@ -10,6 +10,7 @@ using MVC.DataAccess;
 using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
 
 namespace MVC.Web
 {
@@ -29,7 +30,7 @@ namespace MVC.Web
             services.AddMvc()                
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization();
-
+            
             services.Configure<RequestLocalizationOptions>(
                 options =>
                 {
@@ -44,40 +45,28 @@ namespace MVC.Web
                     options.SupportedUICultures = supportedCultures;
                 });
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<UniversityContext>(options => options.UseSqlServer(connection));
-
-           
+            services.AddDbContext<UniversityContext>(options => options.UseSqlServer(connection));          
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<IGroupsRepository, GroupsRepository>();
             services.AddScoped<IStudentsRepository, StudentsRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<UnitOfWorkService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseStatusCodePages();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseStatusCodePagesWithReExecute("/Error/{0}");
-                //app.UseExceptionHandler("/courses/Error");
-                
-                //app.UseHsts();
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");                
             }
-
-            //app.Use(async (context, next) =>
-            //{
-            //    await next();
-            //    if (context.Response.StatusCode == 404)
-            //    {
-            //        context.Request.Path = "/courses/Error";
-            //        await next();
-            //    }
-            //});
+           
 
             app.UseRequestLocalization();
 

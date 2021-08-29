@@ -16,14 +16,18 @@ namespace Controllers
     [Route("[controller]")]
     public class CoursesController : Controller
     {
-        private UnitOfWork unitOfWork;
+        private UnitOfWork _unitOfWork;
+        //private IUnitOfWork _unitOfWork;
         private readonly IStringLocalizer<CoursesController> _localizer;
         private readonly ILogger<CoursesController> _logger;
 
-        public CoursesController(UniversityContext context, IStringLocalizer<CoursesController> localizer,
-            ILogger<CoursesController> logger)
+        public CoursesController(
+            UniversityContext context,
+            //IUnitOfWork uow, 
+            IStringLocalizer<CoursesController> localizer, ILogger<CoursesController> logger)
         {
-            unitOfWork = new UnitOfWork(context);
+            _unitOfWork = new UnitOfWork(context);
+            //_unitOfWork = uow;
             _localizer = localizer;
             _logger = logger;
         }
@@ -33,7 +37,7 @@ namespace Controllers
         {
             int pageSize = 5;
 
-            IQueryable<Course> courses = unitOfWork.Courses.GetAll();
+            IQueryable<Course> courses = _unitOfWork.Courses.GetAll();
             if (!String.IsNullOrEmpty(name))
             {
                 courses = courses.Where(p => p.Name.Contains(name));
@@ -83,7 +87,7 @@ namespace Controllers
         [HttpGet("/courses/edit/{idCourse}")]
         public IActionResult GetEditCourse(int idCourse)
         {
-            Course course = unitOfWork.Courses.GetById(idCourse);            
+            Course course = _unitOfWork.Courses.GetById(idCourse);            
             if (course == null) 
                 return NotFound();            
             return View("EditCourse", course);
@@ -101,8 +105,8 @@ namespace Controllers
 
             if (ModelState.IsValid)
             {
-                unitOfWork.Courses.Update(course);
-                unitOfWork.Save();
+                _unitOfWork.Courses.Update(course);
+                _unitOfWork.Save();
                 _logger.LogInformation($"Edited course {course.Name}");
                 TempData["AlertMessage"] = _localizer["AlertEditSuccess"].Value;
                 TempData["AlertStatus"] = true;
@@ -117,7 +121,7 @@ namespace Controllers
         [HttpGet("/courses/delete/{idCourse}")]
         public IActionResult DeleteCourse(int idCourse)
         {
-            Course course = unitOfWork.Courses.GetById(idCourse);
+            Course course = _unitOfWork.Courses.GetById(idCourse);
 
             if (course == null)
             {
@@ -126,7 +130,7 @@ namespace Controllers
             }
             else
             {
-                int groupsCount = unitOfWork.Groups.GetAll().Where(x => x.CourseId == course.Id).Count();
+                int groupsCount = _unitOfWork.Groups.GetAll().Where(x => x.CourseId == course.Id).Count();
                 if(groupsCount != 0)
                 {
                     TempData["AlertMessage"] = _localizer["AlertNotEmptyCourse"].Value;
@@ -134,8 +138,8 @@ namespace Controllers
                 }
                 else
                 {
-                    unitOfWork.Courses.Remove(course.Id);
-                    unitOfWork.Save();
+                    _unitOfWork.Courses.Remove(course.Id);
+                    _unitOfWork.Save();
                     TempData["AlertMessage"] = _localizer["AlertRemoveSuccess"].Value;
                     TempData["AlertStatus"] = true;
                 }                
@@ -162,8 +166,8 @@ namespace Controllers
 
             if (ModelState.IsValid)
             {
-                unitOfWork.Courses.Create(course);
-                unitOfWork.Save();
+                _unitOfWork.Courses.Create(course);
+                _unitOfWork.Save();
                 TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
                 TempData["AlertStatus"] = true;
                 return RedirectToAction("courses", "courses");

@@ -2,7 +2,7 @@
 
 namespace MVC.DataAccess
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private UniversityContext db;
         private CoursesRepository courseRepository;
