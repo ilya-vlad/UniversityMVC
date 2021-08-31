@@ -50,8 +50,8 @@ namespace MVC.Web
             services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<IGroupsRepository, GroupsRepository>();
             services.AddScoped<IStudentsRepository, StudentsRepository>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<UnitOfWorkService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<UnitOfWorkService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

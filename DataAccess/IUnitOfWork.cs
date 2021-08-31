@@ -4,6 +4,10 @@ namespace MVC.DataAccess
 {
     public interface IUnitOfWork : IDisposable
     {
-        void Save();   
+        public CoursesRepository Courses { get; }
+        public GroupsRepository Groups { get; }
+        public StudentsRepository Students { get; }
+
+        public void Save();   
     }
 }

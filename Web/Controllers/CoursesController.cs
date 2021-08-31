@@ -16,18 +16,13 @@ namespace Controllers
     [Route("[controller]")]
     public class CoursesController : Controller
     {
-        private UnitOfWork _unitOfWork;
-        //private IUnitOfWork _unitOfWork;
+        private IUnitOfWork _unitOfWork;
         private readonly IStringLocalizer<CoursesController> _localizer;
         private readonly ILogger<CoursesController> _logger;
 
-        public CoursesController(
-            UniversityContext context,
-            //IUnitOfWork uow, 
-            IStringLocalizer<CoursesController> localizer, ILogger<CoursesController> logger)
+        public CoursesController(IUnitOfWork unitOfWork, IStringLocalizer<CoursesController> localizer, ILogger<CoursesController> logger)
         {
-            _unitOfWork = new UnitOfWork(context);
-            //_unitOfWork = uow;
+            _unitOfWork = unitOfWork;
             _localizer = localizer;
             _logger = logger;
         }
