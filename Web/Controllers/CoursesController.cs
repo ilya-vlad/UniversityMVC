@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using System;
 using Microsoft.Extensions.Logging;
 using MVC.Web.Models.Course;
+using SmartBreadcrumbs.Attributes;
+using SmartBreadcrumbs.Nodes;
 
 namespace Controllers
 {
@@ -20,16 +22,43 @@ namespace Controllers
         private readonly IStringLocalizer<CoursesController> _localizer;
         private readonly ILogger<CoursesController> _logger;
 
-        public CoursesController(IUnitOfWork unitOfWork, IStringLocalizer<CoursesController> localizer, ILogger<CoursesController> logger)
+        public CoursesController(IUnitOfWork unitOfWork, IStringLocalizer<CoursesController> localizer, 
+            ILogger<CoursesController> logger)
         {
             _unitOfWork = unitOfWork;
             _localizer = localizer;
             _logger = logger;
         }
 
-        [HttpGet]       
+        [HttpGet]
+        [DefaultBreadcrumb("Courses")]
         public IActionResult Courses(string name, int page = 1, CourseSortState sortOrder = CourseSortState.NameAsc)
         {
+            var nodes = new MvcBreadcrumbNode("courses", "courses", "курсы")
+            {
+                Parent = new MvcBreadcrumbNode("courses", "courses", "курсы")
+                {
+                    OverwriteTitleOnExactMatch = false,
+                    RouteValues = new { id = 5, idCourse = 2 },
+                    Parent = new RazorPageBreadcrumbNode("/courses", "courses")
+                    {
+                        Parent = new MvcRouteBreadcrumbNode("/courses/edit/1", "title")
+                        {
+                            OverwriteTitleOnExactMatch = true
+                        }
+                    }
+                }
+
+            };
+
+
+            ViewData["BreadcrumbNode"] = nodes; // Use the last node
+
+
+
+
+
+
             int pageSize = 5;
 
             IQueryable<Course> courses = _unitOfWork.Courses.GetAll();
@@ -80,6 +109,7 @@ namespace Controllers
         }
 
         [HttpGet("/courses/edit/{idCourse}")]
+        [Breadcrumb("Edit")]
         public IActionResult GetEditCourse(int idCourse)
         {
             Course course = _unitOfWork.Courses.GetById(idCourse);            
@@ -144,6 +174,7 @@ namespace Controllers
 
         [HttpGet]
         [Route("/courses/create")]
+        [Breadcrumb("Create")]
         public IActionResult Create()
         {
             return View();

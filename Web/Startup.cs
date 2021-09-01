@@ -11,6 +11,11 @@ using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Localization;
+using SmartBreadcrumbs.Extensions;
+using System.Reflection;
+using System.Linq;
+using System.Text.RegularExpressions;
+using SmartBreadcrumbs;
 
 namespace MVC.Web
 {
@@ -52,6 +57,22 @@ namespace MVC.Web
             services.AddScoped<IStudentsRepository, StudentsRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<UnitOfWorkService>();
+
+            services.AddBreadcrumbs(
+            GetType().Assembly,
+            options =>
+            {
+                options.InferFromAction = false;
+                options.FallbackTitleToMethodName = false;
+                options.TagName = "nav";
+                options.TagClasses = "";
+                options.OlClasses = "breadcrumb";
+                options.LiClasses = "breadcrumb-item";
+                options.ActiveLiClasses = "breadcrumb-item active";
+                // Disable default node:
+                options.DontLookForDefaultNode = true;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

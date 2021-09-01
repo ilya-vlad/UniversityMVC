@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
 using MVC.Web.Models.Student;
+using SmartBreadcrumbs.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,30 +14,31 @@ namespace Controllers
     [Route("/courses/{idCourse}/groups/{idGroup}")]
     public class StudentsController : Controller
     {
-        private UnitOfWork unitOfWork;
+        private IUnitOfWork _unitOfWork;
         private readonly IStringLocalizer<StudentsController> _localizer;
         private readonly ILogger<StudentsController> _logger;
-        public StudentsController(UniversityContext context, IStringLocalizer<StudentsController> localizer,
+        public StudentsController(IUnitOfWork unitOfWork, IStringLocalizer<StudentsController> localizer,
             ILogger<StudentsController> logger)
         {
-            unitOfWork = new UnitOfWork(context);
+            _unitOfWork = unitOfWork;
             _localizer = localizer;
             _logger = logger;
         }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}")]
+        [Breadcrumb("Students", FromController = typeof(GroupsController), FromAction = "Groups")]
         public IActionResult Students(int idCourse, int idGroup, string lastName, int page = 1,
             StudentSortState sortOrder = StudentSortState.LastNameAsc)
         {
             int pageSize = 10;
-            Course course = unitOfWork.Courses.GetById(idCourse);
-            Group group = unitOfWork.Groups.GetById(idGroup);
+            Course course = _unitOfWork.Courses.GetById(idCourse);
+            Group group = _unitOfWork.Groups.GetById(idGroup);
             if (course == null || course.Id != group.CourseId)
                 return NotFound();
 
             ViewBag.Group = group;
 
-            IQueryable<Student> students = unitOfWork.Students.GetAll().Where( x => x.GroupId == idGroup);
+            IQueryable<Student> students = _unitOfWork.Students.GetAll().Where( x => x.GroupId == idGroup);
             if (!String.IsNullOrEmpty(lastName))
             {
                 students = students.Where(p => p.LastName.Contains(lastName));
@@ -89,12 +91,12 @@ namespace Controllers
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/edit/{idStudent}")]
         public IActionResult GetEditStudent(int idCourse, int idGroup, int idStudent)
         {
-            Course course = unitOfWork.Courses.GetById(idCourse);
-            Group group = unitOfWork.Groups.GetById(idGroup);
-            Student student = unitOfWork.Students.GetById(idStudent);
+            Course course = _unitOfWork.Courses.GetById(idCourse);
+            Group group = _unitOfWork.Groups.GetById(idGroup);
+            Student student = _unitOfWork.Students.GetById(idStudent);
             if (course == null || course.Id != group.CourseId || student == null || student.GroupId != group.Id)
                 return NotFound();
-            ViewData["Groups"] = unitOfWork.Groups.GetAll();
+            ViewData["Groups"] = _unitOfWork.Groups.GetAll();
             ViewBag.GroupId = idGroup;
             ViewBag.CourseId = idCourse;
             return View("EditStudent", student);
@@ -128,18 +130,18 @@ namespace Controllers
 
             if (ModelState.IsValid)
             {
-                unitOfWork.Students.Update(student);
-                unitOfWork.Save();
+                _unitOfWork.Students.Update(student);
+                _unitOfWork.Save();
                 TempData["AlertMessage"] = _localizer["AlertEditSuccess"].Value;
                 TempData["AlertStatus"] = true;
-                var group = unitOfWork.Groups.GetById(student.GroupId);
+                var group = _unitOfWork.Groups.GetById(student.GroupId);
                 return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
             }
             else
             {
-                ViewData["Groups"] = unitOfWork.Groups.GetAll();
+                ViewData["Groups"] = _unitOfWork.Groups.GetAll();
                 ViewBag.GroupId = student.GroupId;
-                ViewBag.CourseId = unitOfWork.Groups.GetById(student.GroupId).CourseId;
+                ViewBag.CourseId = _unitOfWork.Groups.GetById(student.GroupId).CourseId;
                 return View(student);
             }
         }
@@ -148,7 +150,7 @@ namespace Controllers
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/delete/{idStudent}")]
         public IActionResult DeleteStudent(int idCourse, int idGroup, int idStudent)
         {
-            Student student = unitOfWork.Students.GetById(idStudent);
+            Student student = _unitOfWork.Students.GetById(idStudent);
             if (student == null)
             {
                 TempData["AlertMessage"] = _localizer["AlertRemoveNotFound"].Value;
@@ -156,8 +158,8 @@ namespace Controllers
                 return Redirect($"/courses/{idCourse}/groups/{idGroup}");
             }
                 
-            unitOfWork.Students.Remove(student.Id);
-            unitOfWork.Save();
+            _unitOfWork.Students.Remove(student.Id);
+            _unitOfWork.Save();
             TempData["AlertMessage"] = _localizer["AlertRemoveSuccess"].Value;
             TempData["AlertStatus"] = true;
             return Redirect($"/courses/{idCourse}/groups/{idGroup}");
@@ -175,22 +177,22 @@ namespace Controllers
             {
                 TempData["AlertMessage"] = _localizer["AlertFailMultipleDelete"].Value;
                 TempData["AlertStatus"] = false;
-                var group = unitOfWork.Groups.GetById(idGroup);
+                var group = _unitOfWork.Groups.GetById(idGroup);
                 return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
             }
 
             foreach(var id in idStudents)
             {
-                Student student = unitOfWork.Students.GetById(id);
+                Student student = _unitOfWork.Students.GetById(id);
                 if (student == null)
                 {
                     TempData["AlertMessage"] = _localizer["AlertMultipleRemoveNotFound"].Value;
                     TempData["AlertStatus"] = false;
                     return Redirect($"/courses/{idCourse}/groups/{idGroup}");
                 }
-                unitOfWork.Students.Remove(student.Id);
+                _unitOfWork.Students.Remove(student.Id);
             }
-            unitOfWork.Save();
+            _unitOfWork.Save();
             TempData["AlertMessage"] = _localizer["AlertMultipleRemoveSuccess"].Value;
             TempData["AlertStatus"] = true;
             return Redirect($"/courses/{idCourse}/groups/{idGroup}");
@@ -201,7 +203,7 @@ namespace Controllers
         [Route("/students/create")]
         public IActionResult Create(int idGroup, int idCourse)
         {
-            ViewData["Groups"] = unitOfWork.Groups.GetAll();
+            ViewData["Groups"] = _unitOfWork.Groups.GetAll();
             ViewBag.GroupId = idGroup;            
             ViewBag.CourseId = idCourse;            
             return View("Create");
@@ -235,18 +237,18 @@ namespace Controllers
 
             if (ModelState.IsValid)
             {
-                unitOfWork.Students.Create(student);
-                unitOfWork.Save();
+                _unitOfWork.Students.Create(student);
+                _unitOfWork.Save();
                 TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
                 TempData["AlertStatus"] = true;
-                var group = unitOfWork.Groups.GetById(student.GroupId);
+                var group = _unitOfWork.Groups.GetById(student.GroupId);
                 return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
             }
             else
             {
-                ViewData["Groups"] = unitOfWork.Groups.GetAll();
+                ViewData["Groups"] = _unitOfWork.Groups.GetAll();
                 ViewBag.GroupId = student.GroupId;
-                ViewBag.CourseId = unitOfWork.Groups.GetById(student.GroupId).CourseId; 
+                ViewBag.CourseId = _unitOfWork.Groups.GetById(student.GroupId).CourseId; 
                 return View(student);
             }
         }

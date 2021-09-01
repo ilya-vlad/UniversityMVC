@@ -24,6 +24,9 @@
 	  <None Remove="TestMVC\**" />
 	  <None Remove="TestsMVC\**" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="SmartBreadcrumbs" Version="3.6.1" />
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
