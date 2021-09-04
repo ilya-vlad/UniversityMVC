@@ -114,22 +114,22 @@
                 <th class="align-middle text-center"></th>
                 <th class="align-middle text-center">#</th>
                 <th class="align-middle col-2">
-                    <a asp-action="Students" class="text-white"
+                    <a asp-action="Index" class="text-white"
                        asp-route-sortOrder="@Model.SortViewModel.LastNameSort"
                        asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["LastName"]</a>
                 </th>
                 <th class="align-middle col-2">
-                    <a asp-action="Students" class="text-white"
+                    <a asp-action="Index" class="text-white"
                        asp-route-sortOrder="@Model.SortViewModel.FirstNameSort"
                        asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["FirstName"]</a>
                 </th>
                 <th class="align-middle text-center col-2">
-                    <a asp-action="Students" class="text-white"
+                    <a asp-action="Index" class="text-white"
                        asp-route-sortOrder="@Model.SortViewModel.AgeSort"
                        asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["DateOfBirth"]</a>
                 </th>
                 <th class="align-middle text-center col-2">
-                    <a asp-action="Students" class="text-white"
+                    <a asp-action="Index" class="text-white"
                        asp-route-sortOrder="@Model.SortViewModel.ExamScoreSort"
                        asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["ExamScore"]</a>
                 </th>
@@ -161,7 +161,7 @@
 
     @if (Model.PageViewModel.HasPreviousPage)
     {
-        <a asp-action="Students"
+        <a asp-action="Index"
            asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
            asp-route-lastName="@Model.FilterViewModel.SelectedLastName"
            asp-route-sortorder="@Model.SortViewModel.Current"
@@ -172,7 +172,7 @@
     }
     @if (Model.PageViewModel.HasNextPage)
     {
-        <a asp-action="Students"
+        <a asp-action="Index"
            asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
            asp-route-lastName="@Model.FilterViewModel.SelectedLastName"
            asp-route-sortorder="@Model.SortViewModel.Current"

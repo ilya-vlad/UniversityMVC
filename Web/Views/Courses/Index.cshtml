@@ -81,12 +81,12 @@
             <tr>
                 <th class="align-middle text-center" scope="col">#</th>
                 <th class="align-middle" scope="col">
-                    <a asp-action="Courses" class="text-white"
+                    <a asp-action="Index" class="text-white"
                        asp-route-sortOrder="@Model.SortViewModel.NameSort"
                        asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["NameCourse"]</a>
                 </th>
                 <th class="align-middle" scope="col">
-                    <a asp-action="Courses" class="text-white"
+                    <a asp-action="Index" class="text-white"
                        asp-route-sortOrder="@Model.SortViewModel.DescriptionSort"
                        asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["Description"]</a>
                 </th>
@@ -114,7 +114,7 @@
 
     @if (Model.PageViewModel.HasPreviousPage)
     {
-        <a asp-action="Courses"
+        <a asp-action="Index"
            asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
            asp-route-name="@Model.FilterViewModel.SelectedName"
            asp-route-sortorder="@Model.SortViewModel.Current"
@@ -125,7 +125,7 @@
     }
     @if (Model.PageViewModel.HasNextPage)
     {
-        <a asp-action="Courses"
+        <a asp-action="Index"
            asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
            asp-route-name="@Model.FilterViewModel.SelectedName"
            asp-route-sortorder="@Model.SortViewModel.Current"

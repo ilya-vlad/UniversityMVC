@@ -25,9 +25,8 @@ namespace Controllers
             _logger = logger;
         }
 
-        [HttpGet("/courses/{idCourse}/groups/{idGroup}")]
-        [Breadcrumb("Students", FromController = typeof(GroupsController), FromAction = "Groups")]
-        public IActionResult Students(int idCourse, int idGroup, string lastName, int page = 1,
+        [HttpGet("/courses/{idCourse}/groups/{idGroup}")]        
+        public IActionResult Index(int idCourse, int idGroup, string lastName, int page = 1,
             StudentSortState sortOrder = StudentSortState.LastNameAsc)
         {
             int pageSize = 10;
@@ -85,11 +84,11 @@ namespace Controllers
 
             ViewData["PageSize"] = pageSize;
 
-            return View("Students", viewModel);
+            return View(viewModel);
         }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/edit/{idStudent}")]
-        public IActionResult GetEditStudent(int idCourse, int idGroup, int idStudent)
+        public IActionResult GetStudent(int idCourse, int idGroup, int idStudent)
         {
             Course course = _unitOfWork.Courses.GetById(idCourse);
             Group group = _unitOfWork.Groups.GetById(idGroup);
@@ -99,12 +98,12 @@ namespace Controllers
             ViewData["Groups"] = _unitOfWork.Groups.GetAll();
             ViewBag.GroupId = idGroup;
             ViewBag.CourseId = idCourse;
-            return View("EditStudent", student);
+            return View("Edit", student);
         }
 
         [HttpPost]
-        [Route("/students/EditStudent")]
-        public IActionResult EditStudent(Student student)
+        [Route("/students/edit")]
+        public IActionResult Edit(Student student)
         {
             ModelState.Clear();
             if (string.IsNullOrEmpty(student.LastName))
@@ -148,7 +147,7 @@ namespace Controllers
        
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/delete/{idStudent}")]
-        public IActionResult DeleteStudent(int idCourse, int idGroup, int idStudent)
+        public IActionResult Delete(int idCourse, int idGroup, int idStudent)
         {
             Student student = _unitOfWork.Students.GetById(idStudent);
             if (student == null)

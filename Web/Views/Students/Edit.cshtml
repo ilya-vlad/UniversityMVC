@@ -14,7 +14,7 @@
     <h4>@Localizer["EditStudent"] @Model.FirstName @Model.LastName</h4>
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="EditStudent">
+            <form asp-action="Edit">
                 <div class="form-group">
                     @Html.LabelFor(m => m.FirstName, Localizer["FirstName"].Value, new { @class = "control-label" })
                     @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })

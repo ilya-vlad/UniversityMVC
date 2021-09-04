@@ -7,7 +7,7 @@ namespace MVC.DataAccess
         public GroupsRepository(UniversityContext context)
             : base(context)
         {
-
+            
         }
     }
 }

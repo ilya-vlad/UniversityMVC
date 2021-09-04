@@ -25,9 +25,8 @@ namespace Controllers
             _logger = logger;
         }
 
-        [HttpGet("/courses/{idCourse}/groups")]
-        [Breadcrumb("Groups")]
-        public IActionResult Groups(int idCourse, string name, int page = 1, GroupSortState sortOrder = GroupSortState.NameAsc)
+        [HttpGet("/courses/{idCourse}/groups")]        
+        public IActionResult Index(int idCourse, string name, int page = 1, GroupSortState sortOrder = GroupSortState.NameAsc)
         {                      
             int pageSize = 5;
             Course course = _unitOfWork.Courses.GetById(idCourse);
@@ -64,12 +63,11 @@ namespace Controllers
 
             ViewData["PageSize"] = pageSize;
 
-            return View("Groups", viewModel);
+            return View(viewModel);
         }        
 
-        [HttpGet("/courses/{idCourse}/groups/edit/{idGroup}")]
-        [Breadcrumb("Edit", FromAction = "Groups")]
-        public IActionResult GetEditGroup(int idCourse, int idGroup)
+        [HttpGet("/courses/{idCourse}/groups/edit/{idGroup}")]        
+        public IActionResult GetGroup(int idCourse, int idGroup)
         {
             Course course = _unitOfWork.Courses.GetById(idCourse);
             Group group = _unitOfWork.Groups.GetById(idGroup);
@@ -77,12 +75,12 @@ namespace Controllers
                 return NotFound();
             ViewData["Courses"] = _unitOfWork.Courses.GetAll();
             ViewBag.CourseId = idCourse;
-            return View("EditGroup", group);
+            return View("Edit", group);
         }
 
         [HttpPost]
-        [Route("/groups/EditGroup")]
-        public IActionResult EditGroup(Group group)
+        [Route("/groups/edit")]
+        public IActionResult Edit(Group group)
         {
             ModelState.Clear();
             if (string.IsNullOrEmpty(group.Name))
@@ -112,7 +110,7 @@ namespace Controllers
         }
 
         [HttpGet("/courses/{idCourse}/groups/delete/{idGroup}")]
-        public IActionResult DeleteGroup(int idCourse, int idGroup)
+        public IActionResult Delete(int idCourse, int idGroup)
         {
             Course course = _unitOfWork.Courses.GetById(idCourse);
             Group group = _unitOfWork.Groups.GetById(idGroup);
@@ -142,8 +140,7 @@ namespace Controllers
         }
 
         [HttpGet]
-        [Route("/groups/create")]
-        [Breadcrumb("Create", FromAction = "Groups")]
+        [Route("/groups/create")]        
         public IActionResult Create(int idCourse)
         {
             ViewData["Courses"] = _unitOfWork.Courses.GetAll();

@@ -84,7 +84,7 @@
             <tr>
                 <th class="align-middle text-center" scope="col">#</th>
                 <th class="align-middle col-2">
-                    <a asp-action="Groups" class="text-white"
+                    <a asp-action="Index" class="text-white"
                        asp-route-sortOrder="@Model.SortViewModel.NameSort"
                        asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["NameGroup"]</a>
                 </th>
@@ -93,7 +93,7 @@
         </thead>
         <tbody>
             @foreach (Group group in Model.Groups)
-            {
+            {                
                 <tr id="@group.Id">
                     <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
                     <td name="nameGroup" class="align-middle">@group.Name</td>
@@ -111,7 +111,7 @@
 
     @if (Model.PageViewModel.HasPreviousPage)
     {
-        <a asp-action="Groups"
+        <a asp-action="Index"
            asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
            asp-route-lastName="@Model.FilterViewModel.SelectedName"
            asp-route-sortorder="@Model.SortViewModel.Current"
@@ -122,7 +122,7 @@
     }
     @if (Model.PageViewModel.HasNextPage)
     {
-        <a asp-action="Groups"
+        <a asp-action="Index"
            asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
            asp-route-lastName="@Model.FilterViewModel.SelectedName"
            asp-route-sortorder="@Model.SortViewModel.Current"

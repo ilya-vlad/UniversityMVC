@@ -30,9 +30,8 @@ namespace Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        [DefaultBreadcrumb("Courses")]
-        public IActionResult Courses(string name, int page = 1, CourseSortState sortOrder = CourseSortState.NameAsc)
+        [HttpGet]        
+        public IActionResult Index(string name, int page = 1, CourseSortState sortOrder = CourseSortState.NameAsc)
         {
             var nodes = new MvcBreadcrumbNode("courses", "courses", "курсы")
             {
@@ -53,10 +52,6 @@ namespace Controllers
 
 
             ViewData["BreadcrumbNode"] = nodes; // Use the last node
-
-
-
-
 
 
             int pageSize = 5;
@@ -96,7 +91,7 @@ namespace Controllers
 
             ViewData["PageSize"] = pageSize;
 
-            return View("Courses", viewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -109,18 +104,17 @@ namespace Controllers
         }
 
         [HttpGet("/courses/edit/{idCourse}")]
-        [Breadcrumb("Edit")]
-        public IActionResult GetEditCourse(int idCourse)
+        public IActionResult GetCourse(int idCourse)
         {
-            Course course = _unitOfWork.Courses.GetById(idCourse);            
-            if (course == null) 
-                return NotFound();            
-            return View("EditCourse", course);
+            Course course = _unitOfWork.Courses.GetById(idCourse);
+            if (course == null)
+                return NotFound();
+            return View("Edit", course);
         }
 
         [HttpPost]
-        [Route("/courses/EditCourse")]
-        public IActionResult EditCourse(Course course)
+        [Route("/courses/edit")]
+        public IActionResult Edit(Course course)
         {
             ModelState.Clear();
             if (string.IsNullOrEmpty(course.Name))
@@ -141,10 +135,10 @@ namespace Controllers
             {
                 return View(course);
             }
-        }
+        }        
 
         [HttpGet("/courses/delete/{idCourse}")]
-        public IActionResult DeleteCourse(int idCourse)
+        public IActionResult Delete(int idCourse)
         {
             Course course = _unitOfWork.Courses.GetById(idCourse);
 
@@ -173,8 +167,7 @@ namespace Controllers
         }
 
         [HttpGet]
-        [Route("/courses/create")]
-        [Breadcrumb("Create")]
+        [Route("/courses/create")]        
         public IActionResult Create()
         {
             return View();

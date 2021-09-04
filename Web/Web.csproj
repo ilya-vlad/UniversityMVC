@@ -53,9 +53,6 @@
     <EmbeddedResource Update="Resources\Controllers\CoursesController.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Models\Course.ru.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
