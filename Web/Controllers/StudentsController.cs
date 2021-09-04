@@ -223,24 +223,11 @@ namespace Controllers
         }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}/students/multipleDelete/")]
-        public IActionResult MultipleDelete(int idCourse, int idGroup, string ids)
-        {
-            var idStudents = new List<int>();
-            try
+        public IActionResult MultipleDelete(int idCourse, int idGroup, int[] id)
+        {    
+            foreach(var _id in id)
             {
-                idStudents = ids.Split(',').Select(x => int.Parse(x)).ToList();
-            }
-            catch
-            {
-                TempData["AlertMessage"] = _localizer["AlertFailMultipleDelete"].Value;
-                TempData["AlertStatus"] = false;
-                var group = _unitOfWork.Groups.GetById(idGroup);
-                return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
-            }
-
-            foreach(var id in idStudents)
-            {
-                Student student = _unitOfWork.Students.GetById(id);
+                Student student = _unitOfWork.Students.GetById(_id);
                 if (student == null)
                 {
                     TempData["AlertMessage"] = _localizer["AlertMultipleRemoveNotFound"].Value;
@@ -249,12 +236,21 @@ namespace Controllers
                 }
                 _unitOfWork.Students.Remove(student.Id);
             }
-            _unitOfWork.Save();
-            TempData["AlertMessage"] = _localizer["AlertMultipleRemoveSuccess"].Value;
-            TempData["AlertStatus"] = true;
-            return Redirect($"/courses/{idCourse}/groups/{idGroup}");
+            if(id.Length > 0)
+            {
+                _unitOfWork.Save();
+                TempData["AlertMessage"] = _localizer["AlertMultipleRemoveSuccess"].Value;
+                TempData["AlertStatus"] = true;
+                return Redirect($"/courses/{idCourse}/groups/{idGroup}");
+            }
+            else
+            {
+                TempData["AlertMessage"] = _localizer["AlertFailMultipleDelete"].Value;
+                TempData["AlertStatus"] = false;
+                var group = _unitOfWork.Groups.GetById(idGroup);
+                return Redirect($"/courses/{group.CourseId}/groups/{group.Id}");
+            }
         }
-
 
         [HttpGet]
         [Route("/students/create")]

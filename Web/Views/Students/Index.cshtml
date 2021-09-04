@@ -122,7 +122,7 @@
             {
                 <tr id="tr_@student.Id">
                     <td class="align-middle text-center">
-                        <input name="checkboxRemove" onclick="ChangeChecked(@group.Id)" class="form-check-input" type="checkbox" id="@student.Id">
+                        <input name="checkboxRemove" onclick="StudentChangeChecked(@group.Id)" class="form-check-input" type="checkbox" id="@student.Id">
                     </td>
                     <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
                     <td name="LastName" class="align-middle">@student.LastName</td>

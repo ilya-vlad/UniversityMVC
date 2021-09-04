@@ -34,24 +34,23 @@
             </div>
         </nav>
     </header>
-    @if (alert != null)
-    {
-        <text>
-            <div class="alert @typeAlert" role="alert">
-                @alert
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </text>
-    }
     <div class="container">
         <breadcrumb></breadcrumb>
+        @if (alert != null)
+        {
+            <text>
+                <div class="alert @typeAlert" role="alert">
+                    @alert
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </text>
+        }
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
-
+    </div>   
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - University

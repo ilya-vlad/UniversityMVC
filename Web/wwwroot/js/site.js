@@ -1,4 +1,4 @@
-﻿function ChangeChecked(groupId) {
+﻿function StudentChangeChecked(groupId) {
     var selected = new Map();     
     var checkBox = document.getElementsByName("checkboxRemove");
     for (i = 0; i < checkBox.length; i++) {
@@ -21,11 +21,11 @@
         btn.addClass("disabled");        
     }
 
-    EditNames(selected);
-    EditUrl(selected, groupId);
+    StudentEditNames(selected);
+    StudentEditUrl(selected, groupId);
 }
 
-function EditNames(selected) {
+function StudentEditNames(selected) {
     var spanNames = $('#namesStudents');
     let names = "";
     for (let n of selected.values()) {
@@ -34,13 +34,13 @@ function EditNames(selected) {
     spanNames.html(names);
 }
 
-function EditUrl(selected, groupId) {
+function StudentEditUrl(selected, groupId) {
     var submit = $('#sumbitMultipleRemove');
     let url = "";
     for (let s of selected.keys()) {
-        url += s + ",";
+        url += "id=" + s + "&";
     }
     url = url.substring(0, url.length - 1);
-    submit.attr("href", groupId + "/students/multipleDelete?ids=" + url);
+    submit.attr("href", groupId + "/students/multipleDelete?" + url);
 }
 
