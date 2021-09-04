@@ -21,7 +21,9 @@ namespace MVC.Web
                 try
                 {
                     var context = services.GetRequiredService<UniversityContext>();
-                    SampleData.Initialize(context);
+
+                    //заполнение тестовыми данными, при пустых таблицах
+                    //SampleData.Initialize(context);
                 }
                 catch (Exception ex)
                 {

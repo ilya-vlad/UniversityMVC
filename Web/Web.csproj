@@ -25,6 +25,10 @@
 	  <None Remove="TestsMVC\**" />
 	</ItemGroup>
 	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	  <PackageReference Include="SmartBreadcrumbs" Version="3.6.1" />
 	</ItemGroup>
 
