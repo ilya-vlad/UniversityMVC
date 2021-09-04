@@ -27,7 +27,7 @@ namespace Controllers
 
         [HttpGet("/courses/{idCourse}/groups")]        
         public IActionResult Index(int idCourse, string name, int page = 1, GroupSortState sortOrder = GroupSortState.NameAsc)
-        {                      
+        {           
             int pageSize = 5;
             Course course = _unitOfWork.Courses.GetById(idCourse);
             if (course == null)
@@ -62,19 +62,42 @@ namespace Controllers
             };
 
             ViewData["PageSize"] = pageSize;
-
+            #region BreadCrumbs
+            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+            var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
+            {
+                RouteValues = new { idCourse },
+                Parent = node1
+            };
+            ViewData["BreadcrumbNode"] = node2;
+            #endregion
             return View(viewModel);
         }        
 
         [HttpGet("/courses/{idCourse}/groups/edit/{idGroup}")]        
         public IActionResult GetGroup(int idCourse, int idGroup)
-        {
+        {            
             Course course = _unitOfWork.Courses.GetById(idCourse);
             Group group = _unitOfWork.Groups.GetById(idGroup);
             if (course == null || course.Id != group.CourseId)
                 return NotFound();
             ViewData["Courses"] = _unitOfWork.Courses.GetAll();
             ViewBag.CourseId = idCourse;
+
+            #region BreadCrumbs            
+            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+            var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
+            {
+                RouteValues = new { idCourse },
+                Parent = node1
+            };
+            var node3 = new MvcBreadcrumbNode("Create", "Groups", group.Name)
+            {                
+                Parent = node2
+            };
+            ViewData["BreadcrumbNode"] = node3;
+            #endregion
+
             return View("Edit", group);
         }
 
@@ -105,6 +128,26 @@ namespace Controllers
             {
                 ViewData["Courses"] = _unitOfWork.Courses.GetAll();
                 ViewBag.CourseId = group.CourseId;
+                Course course = _unitOfWork.Courses.GetById(group.CourseId);
+
+                #region BreadCrumbs            
+                var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+                var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
+                {
+                    RouteValues = new { group.CourseId },
+                    Parent = node1
+                };
+                if (string.IsNullOrEmpty(group.Name))
+                {
+                    group.Name = "";
+                }
+                var node3 = new MvcBreadcrumbNode("Create", "Groups", group.Name)
+                {
+                    Parent = node2
+                };
+                ViewData["BreadcrumbNode"] = node3;
+                #endregion
+
                 return View(group);
             }
         }
@@ -143,6 +186,21 @@ namespace Controllers
         [Route("/groups/create")]        
         public IActionResult Create(int idCourse)
         {
+            #region BreadCrumbs
+            Course course = _unitOfWork.Courses.GetById(idCourse);
+            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+            var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
+            {             
+                RouteValues = new { idCourse },
+                Parent = node1
+            };
+            var node3 = new MvcBreadcrumbNode("Create", "Groups", _localizer["CreateGroup"])
+            {                
+                Parent = node2
+            };
+            ViewData["BreadcrumbNode"] = node3;
+            #endregion
+
             ViewData["Courses"] = _unitOfWork.Courses.GetAll();
             ViewBag.CourseId = idCourse;
             return View();

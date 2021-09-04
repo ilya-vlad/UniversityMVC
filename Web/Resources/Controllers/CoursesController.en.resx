@@ -135,6 +135,12 @@
   <data name="AlertRemoveSuccess" xml:space="preserve">
     <value>Course deleted successfully!</value>
   </data>
+  <data name="AllCourses" xml:space="preserve">
+    <value>All courses</value>
+  </data>
+  <data name="CreateCourse" xml:space="preserve">
+    <value>Create course</value>
+  </data>
   <data name="EmptyName" xml:space="preserve">
     <value>Enter the name of the course</value>
   </data>

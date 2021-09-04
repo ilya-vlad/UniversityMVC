@@ -135,6 +135,12 @@
   <data name="AlertRemoveSuccess" xml:space="preserve">
     <value>Group successfully deleted!</value>
   </data>
+  <data name="AllCourses" xml:space="preserve">
+    <value>All courses</value>
+  </data>
+  <data name="CreateGroup" xml:space="preserve">
+    <value>Create group</value>
+  </data>
   <data name="EmptyName" xml:space="preserve">
     <value>Enter the name of the group</value>
   </data>

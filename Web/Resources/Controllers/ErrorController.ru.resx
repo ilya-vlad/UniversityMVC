@@ -117,49 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AlertCreateSuccess" xml:space="preserve">
-    <value>Студент успешно создан!</value>
-  </data>
-  <data name="AlertEditSuccess" xml:space="preserve">
-    <value>Студент успешно изменен!</value>
-  </data>
-  <data name="AlertFailMultipleDelete" xml:space="preserve">
-    <value>Ошибка удаления студентов!</value>
-  </data>
-  <data name="AlertMultipleRemoveNotFound" xml:space="preserve">
-    <value>Один из студентов не найден!</value>
-  </data>
-  <data name="AlertMultipleRemoveSuccess" xml:space="preserve">
-    <value>Студенты удалены успешно!</value>
-  </data>
-  <data name="AlertRemoveFail" xml:space="preserve">
-    <value>Ошибка при удалении студента!</value>
-  </data>
-  <data name="AlertRemoveNotFound" xml:space="preserve">
-    <value>Студент не найден!</value>
-  </data>
-  <data name="AlertRemoveSuccess" xml:space="preserve">
-    <value>Студент успешно удален!</value>
+  <data name="404" xml:space="preserve">
+    <value>Страница не найдена!</value>
   </data>
   <data name="AllCourses" xml:space="preserve">
     <value>Все курсы</value>
-  </data>
-  <data name="CreateStudent" xml:space="preserve">
-    <value>Создание студента</value>
-  </data>
-  <data name="EmptyDateOfBirth" xml:space="preserve">
-    <value>Введите дату рождения</value>
-  </data>
-  <data name="EmptyExamScore" xml:space="preserve">
-    <value>Введите оценку экзамена</value>
-  </data>
-  <data name="EmptyFirstName" xml:space="preserve">
-    <value>Введите имя студента</value>
-  </data>
-  <data name="EmptyLastName" xml:space="preserve">
-    <value>Введите фамилию студента</value>
-  </data>
-  <data name="NotSelectedGroup" xml:space="preserve">
-    <value>Выберите группу</value>
   </data>
 </root>

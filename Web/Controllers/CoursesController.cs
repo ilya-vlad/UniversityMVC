@@ -33,27 +33,6 @@ namespace Controllers
         [HttpGet]        
         public IActionResult Index(string name, int page = 1, CourseSortState sortOrder = CourseSortState.NameAsc)
         {
-            var nodes = new MvcBreadcrumbNode("courses", "courses", "курсы")
-            {
-                Parent = new MvcBreadcrumbNode("courses", "courses", "курсы")
-                {
-                    OverwriteTitleOnExactMatch = false,
-                    RouteValues = new { id = 5, idCourse = 2 },
-                    Parent = new RazorPageBreadcrumbNode("/courses", "courses")
-                    {
-                        Parent = new MvcRouteBreadcrumbNode("/courses/edit/1", "title")
-                        {
-                            OverwriteTitleOnExactMatch = true
-                        }
-                    }
-                }
-
-            };
-
-
-            ViewData["BreadcrumbNode"] = nodes; // Use the last node
-
-
             int pageSize = 5;
 
             IQueryable<Course> courses = _unitOfWork.Courses.GetAll();
@@ -90,7 +69,10 @@ namespace Controllers
             };
 
             ViewData["PageSize"] = pageSize;
-
+            #region BreadCrumbs
+            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+            ViewData["BreadcrumbNode"] = node1;
+            #endregion
             return View(viewModel);
         }
 
@@ -105,10 +87,20 @@ namespace Controllers
 
         [HttpGet("/courses/edit/{idCourse}")]
         public IActionResult GetCourse(int idCourse)
-        {
+        {            
             Course course = _unitOfWork.Courses.GetById(idCourse);
             if (course == null)
                 return NotFound();
+
+            #region BreadCrumbs
+            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+            var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
+            {               
+                Parent = node1
+            };
+            ViewData["BreadcrumbNode"] = node2;
+            #endregion
+
             return View("Edit", course);
         }
 
@@ -133,6 +125,19 @@ namespace Controllers
             }
             else
             {
+                #region BreadCrumbs
+                var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+                if (string.IsNullOrEmpty(course.Name))
+                {
+                    course.Name = "";
+                }
+                var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
+                {                    
+                    Parent = node1
+                };
+                ViewData["BreadcrumbNode"] = node2;
+                #endregion
+
                 return View(course);
             }
         }        
@@ -170,6 +175,15 @@ namespace Controllers
         [Route("/courses/create")]        
         public IActionResult Create()
         {
+            #region BreadCrumbs
+            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+            var node2 = new MvcBreadcrumbNode("Create", "Groups", _localizer["CreateCourse"])
+            {                
+                Parent = node1
+            };
+            ViewData["BreadcrumbNode"] = node2;
+            #endregion
+
             return View();
         }
 
@@ -192,7 +206,16 @@ namespace Controllers
                 return RedirectToAction("courses", "courses");
             }
             else
-            {              
+            {
+                #region BreadCrumbs
+                var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+                var node2 = new MvcBreadcrumbNode("Create", "Groups", _localizer["CreateCourse"])
+                {
+                    Parent = node1
+                };
+                ViewData["BreadcrumbNode"] = node2;
+                #endregion
+
                 return View(course);
             }            
         }

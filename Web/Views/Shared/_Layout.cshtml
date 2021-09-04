@@ -1,6 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using System.Globalization
 @inject IViewLocalizer Localizer
+
+@{ 
+    var alert = TempData["AlertMessage"];
+    string typeAlert = string.Empty;
+    if (TempData["AlertStatus"] != null && (bool)TempData["AlertStatus"])
+        typeAlert = "alert-success";
+    else
+        typeAlert = "alert-danger";
+}
 <!DOCTYPE html>
 <html lang="@CultureInfo.CurrentCulture" @if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft) { <text> dir="rtl"></text>}
 <head>
@@ -20,19 +29,25 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <!--<ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">-->
-                            @*<a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Courses">@Localizer["Courses"]</a>*@
-                        <!--</li>
-                    </ul>-->
                 </div>
                 <partial name="_Culture">
             </div>
         </nav>
     </header>
+    @if (alert != null)
+    {
+        <text>
+            <div class="alert @typeAlert" role="alert">
+                @alert
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </text>
+    }
     <div class="container">
+        <breadcrumb></breadcrumb>
         <main role="main" class="pb-3">
-            <breadcrumb></breadcrumb>
             @RenderBody()
         </main>
     </div>

@@ -135,6 +135,12 @@
   <data name="AlertRemoveSuccess" xml:space="preserve">
     <value>Курс успешно удален!</value>
   </data>
+  <data name="AllCourses" xml:space="preserve">
+    <value>Все курсы</value>
+  </data>
+  <data name="CreateCourse" xml:space="preserve">
+    <value>Создание курса</value>
+  </data>
   <data name="EmptyName" xml:space="preserve">
     <value>Введите название курса</value>
   </data>

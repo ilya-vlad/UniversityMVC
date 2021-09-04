@@ -5,13 +5,7 @@
 @model CourseIndexViewModel
 @{
     ViewData["Title"] = Localizer["ListCourses"];
-    int i = 1;
-    var alert = TempData["AlertMessage"];
-    string typeAlert = string.Empty;
-    if (TempData["AlertStatus"] != null && (bool)TempData["AlertStatus"])
-        typeAlert = "alert-success";
-    else
-        typeAlert = "alert-danger";
+    int i = 1;    
 
     void RemoveModal(Course course)
     {
@@ -37,18 +31,7 @@
     }
 
 }
-
-    @if (alert != null)
-    {
-        <text>
-            <div class="alert @typeAlert" role="alert">
-                @alert
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </text>
-    }
+   
 
     <div class="container">
         <div class="row">

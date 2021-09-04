@@ -6,13 +6,7 @@
 @{
     ViewData["Title"] = Localizer["ListStudents"];
     int i = 1;
-    Group group = ViewBag.Group;
-    var alert = TempData["AlertMessage"];
-    string typeAlert = string.Empty;
-    if (TempData["AlertStatus"] != null && (bool)TempData["AlertStatus"])
-        typeAlert = "alert-success";
-    else
-        typeAlert = "alert-danger";
+    Group group = ViewBag.Group;   
 
     void RemoveModal(Student student)
     {
@@ -45,24 +39,11 @@
         windows.groupId = @group.Id;
     </script>
 </head>
-    @if (alert != null)
-    {
-        <text>
-            <div class="alert @typeAlert" role="alert">
-                @alert
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </text>
-    }
+  
     <div class="container">
-        <div class="row">
-            <div class="col-1">
-                <a href="~/courses/@group.CourseId/groups" class="btn btn-sm btn-dark" role="button" aria-pressed="true">&#8249;&#8249;&#8249;</a>
-            </div>
+        <div class="row">            
             <div class="col">
-                <h3>@Localizer["Group"] @group.Name</h3>
+                <h3>@Localizer["Group"] - @group.Name</h3>
             </div>
         </div>
         <div class="row">

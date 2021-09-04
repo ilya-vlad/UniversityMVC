@@ -135,6 +135,12 @@
   <data name="AlertRemoveSuccess" xml:space="preserve">
     <value>Группа успешно удалена!</value>
   </data>
+  <data name="AllCourses" xml:space="preserve">
+    <value>Все курсы</value>
+  </data>
+  <data name="CreateGroup" xml:space="preserve">
+    <value>Создание группы</value>
+  </data>
   <data name="EmptyName" xml:space="preserve">
     <value>Введите название группы</value>
   </data>
