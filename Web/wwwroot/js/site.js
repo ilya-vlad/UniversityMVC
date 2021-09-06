@@ -44,3 +44,15 @@ function StudentEditUrl(selected, groupId) {
     submit.attr("href", groupId + "/students/multipleDelete?" + url);
 }
 
+function StudentAllChangeChecked(groupId) {
+    var checkBox = document.getElementsByName("checkboxRemove");
+    for (i = 0; i < checkBox.length; i++) {       
+        if (document.getElementById('generalCheckbox').checked) {
+            checkBox[i].checked = true;
+        }
+        else {
+            checkBox[i].checked = false;
+        }        
+    }
+    StudentChangeChecked(groupId);
+}
