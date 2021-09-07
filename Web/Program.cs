@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,7 +22,7 @@ namespace MVC.Web
                 try
                 {
                     var context = services.GetRequiredService<UniversityContext>();
-
+                    context.Database.Migrate();
                     //заполнение тестовыми данными, при пустых таблицах
                     //SampleData.Initialize(context);
                 }
