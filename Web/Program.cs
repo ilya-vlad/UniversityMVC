@@ -24,7 +24,7 @@ namespace MVC.Web
                     var context = services.GetRequiredService<UniversityContext>();
                     context.Database.Migrate();
                     //заполнение тестовыми данными, при пустых таблицах
-                    //SampleData.Initialize(context);
+                    SampleData.Initialize(context);
                 }
                 catch (Exception ex)
                 {

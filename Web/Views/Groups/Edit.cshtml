@@ -7,33 +7,36 @@
     ViewData["Title"] = Localizer["EditGroup"];
     var courses = new SelectList((IEnumerable<Course>)ViewData["Courses"], "Id", "Name");
     courses.Where(x => x.Value == idCourse.ToString()).FirstOrDefault().Selected = true;
+    string redStart = "<span style=\"color:red\">*</span>";
 }
 
 
 
-    <h3>@ViewData["Title"] - @Model.Name</h3>
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Edit">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Name, Localizer["Name"].Value, new { @class = "control-label" })
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.CourseId, Localizer["Course"].Value, new { @class = "control-label" })
-                    @Html.DropDownListFor(m => m.CourseId, courses as IEnumerable<SelectListItem>, new { @class = "custom-select" })
-                </div>
+<h3>@ViewData["Title"] - @Model.Name</h3>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, Localizer["Name"].Value, new { @class = "control-label" })
+                @Html.Raw(redStart)
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.CourseId, Localizer["Course"].Value, new { @class = "control-label" })
+                @Html.Raw(redStart)
+                @Html.DropDownListFor(m => m.CourseId, courses as IEnumerable<SelectListItem>, new { @class = "custom-select" })
+            </div>
 
-                <div class="form-group">
-                    @Html.HiddenFor(m => m.Id)
-                    <input type="submit" value="@Localizer["Save"]" class="btn btn-success" />
-                </div>
-            </form>
-        </div>
+            <div class="form-group">
+                @Html.HiddenFor(m => m.Id)
+                <input type="submit" value="@Localizer["Save"]" class="btn btn-success" />
+            </div>
+        </form>
     </div>
+</div>
 
 
-    <div>
-        <a href="/courses/@idCourse/groups">@Localizer["Back"]</a>
-    </div>
+<div>
+    <a href="/courses/@idCourse/groups">@Localizer["Back"]</a>
+</div>
