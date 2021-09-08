@@ -5,10 +5,10 @@
 
 @{
     ViewData["Title"] = Localizer["EditCourse"];
-    string redStart = "<span style=\"color:red\">*</span>";
+    string redStart = "<span style=\"color:red\">*</span>";    
 }
 
-<h4>@ViewData["Title"] - @Model.Name</h4>
+<h4>@ViewData["Title"] - @ViewBag.OldName</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -34,4 +34,3 @@
 <div>
     <a asp-action="Courses">@Localizer["Back"]</a>
 </div>
-

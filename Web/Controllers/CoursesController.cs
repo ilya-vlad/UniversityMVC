@@ -69,10 +69,7 @@ namespace Controllers
             };
 
             ViewData["PageSize"] = pageSize;
-            #region BreadCrumbs
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
-            ViewData["BreadcrumbNode"] = node1;
-            #endregion
+            ViewData["BreadcrumbNode"] = GetBreadCrumbs();
             return View(viewModel);
         }
 
@@ -91,16 +88,9 @@ namespace Controllers
             Course course = _unitOfWork.Courses.GetById(idCourse);
             if (course == null)
                 return NotFound();
-
-            #region BreadCrumbs
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
-            var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
-            {               
-                Parent = node1
-            };
-            ViewData["BreadcrumbNode"] = node2;
-            #endregion
-
+            
+            ViewBag.OldName = course.Name;
+            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course.Name);
             return View("Edit", course);
         }
 
@@ -113,8 +103,7 @@ namespace Controllers
             {
                 ModelState.AddModelError(nameof(course.Name), _localizer["EmptyName"]);
             }
-
-            if (_unitOfWork.Courses.GetAll().Where(x => x.Name == course.Name && x.Id != course.Id).Count() > 0)
+            else if (_unitOfWork.Courses.GetAll().Where(x => x.Name == course.Name && x.Id != course.Id).Count() > 0)
             {
                 ModelState.AddModelError(nameof(course.Name), _localizer["AlreadyExistName"]);
             }
@@ -128,23 +117,11 @@ namespace Controllers
                 TempData["AlertStatus"] = true;
                 return RedirectToAction("courses", "courses");
             }
-            else
-            {
-                #region BreadCrumbs
-                var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
-                if (string.IsNullOrEmpty(course.Name))
-                {
-                    course.Name = "";
-                }
-                var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
-                {                    
-                    Parent = node1
-                };
-                ViewData["BreadcrumbNode"] = node2;
-                #endregion
 
-                return View(course);
-            }
+            Course editableCourse = _unitOfWork.Courses.GetById(course.Id);
+            ViewBag.OldName = editableCourse.Name;
+            ViewData["BreadcrumbNode"] = GetBreadCrumbs(editableCourse.Name);
+            return View(course);            
         }        
 
         [HttpGet("/courses/delete/{idCourse}")]
@@ -180,15 +157,7 @@ namespace Controllers
         [Route("/courses/create")]        
         public IActionResult Create()
         {
-            #region BreadCrumbs
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
-            var node2 = new MvcBreadcrumbNode("Create", "Groups", _localizer["CreateCourse"])
-            {                
-                Parent = node1
-            };
-            ViewData["BreadcrumbNode"] = node2;
-            #endregion
-
+            ViewData["BreadcrumbNode"] = GetBreadCrumbs(_localizer["CreateCourse"]);
             return View();
         }
 
@@ -201,7 +170,6 @@ namespace Controllers
             {
                 ModelState.AddModelError(nameof(course.Name), _localizer["EmptyName"]);
             }
-
             if (_unitOfWork.Courses.GetAll().Where( x => x.Name == course.Name).Count() > 0)
             {
                 ModelState.AddModelError(nameof(course.Name), _localizer["AlreadyExistName"]);
@@ -214,20 +182,27 @@ namespace Controllers
                 TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
                 TempData["AlertStatus"] = true;
                 return RedirectToAction("courses", "courses");
-            }
-            else
-            {
-                #region BreadCrumbs
-                var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
-                var node2 = new MvcBreadcrumbNode("Create", "Groups", _localizer["CreateCourse"])
-                {
-                    Parent = node1
-                };
-                ViewData["BreadcrumbNode"] = node2;
-                #endregion
+            }          
+           
+            ViewData["BreadcrumbNode"] = GetBreadCrumbs(_localizer["CreateCourse"]);
+            return View(course);                     
+        }
 
-                return View(course);
-            }            
+        private MvcBreadcrumbNode GetBreadCrumbs(string currentName)
+        {
+            currentName = currentName == null ? string.Empty : currentName;
+            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"]);
+            var node2 = new MvcBreadcrumbNode("", "", currentName)
+            {
+                Parent = node1
+            };
+            return node2;
+        }
+
+        private MvcBreadcrumbNode GetBreadCrumbs()
+        {
+            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"]);           
+            return node1;
         }
     }
 }
