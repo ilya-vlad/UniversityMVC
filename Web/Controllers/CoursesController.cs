@@ -114,6 +114,11 @@ namespace Controllers
                 ModelState.AddModelError(nameof(course.Name), _localizer["EmptyName"]);
             }
 
+            if (_unitOfWork.Courses.GetAll().Where(x => x.Name == course.Name && x.Id != course.Id).Count() > 0)
+            {
+                ModelState.AddModelError(nameof(course.Name), _localizer["AlreadyExistName"]);
+            }
+
             if (ModelState.IsValid)
             {
                 _unitOfWork.Courses.Update(course);
@@ -195,6 +200,11 @@ namespace Controllers
             if (string.IsNullOrEmpty(course.Name))
             {
                 ModelState.AddModelError(nameof(course.Name), _localizer["EmptyName"]);
+            }
+
+            if (_unitOfWork.Courses.GetAll().Where( x => x.Name == course.Name).Count() > 0)
+            {
+                ModelState.AddModelError(nameof(course.Name), _localizer["AlreadyExistName"]);
             }
 
             if (ModelState.IsValid)

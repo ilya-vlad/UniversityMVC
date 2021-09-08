@@ -110,6 +110,10 @@ namespace Controllers
             {
                 ModelState.AddModelError(nameof(group.Name), _localizer["EmptyName"]);
             }
+            if (_unitOfWork.Groups.GetAll().Where(x => x.Name == group.Name && x.Id != group.Id).Count() > 0)
+            {
+                ModelState.AddModelError(nameof(group.Name), _localizer["AlreadyExistName"]);
+            }
             if (group.CourseId == 0)
             {
                 ModelState.AddModelError(nameof(group.CourseId), _localizer["NotSelectedCourse"]);
@@ -215,6 +219,10 @@ namespace Controllers
             {
                 ModelState.AddModelError(nameof(group.Name), _localizer["EmptyName"]);
             }
+            if (_unitOfWork.Groups.GetAll().Where(x => x.Name == group.Name).Count() > 0)
+            {
+                ModelState.AddModelError(nameof(group.Name), _localizer["AlreadyExistName"]);
+            }
             if (group.CourseId == 0)
             {
                 ModelState.AddModelError(nameof(group.CourseId), _localizer["NotSelectedCourse"]);
@@ -231,7 +239,24 @@ namespace Controllers
             else
             {
                 ViewData["Courses"] = _unitOfWork.Courses.GetAll();
-                ViewBag.CourseId = group.CourseId;
+                int idCourse = group.CourseId;
+                ViewBag.CourseId = idCourse;
+
+                #region BreadCrumbs
+                Course course = _unitOfWork.Courses.GetById(idCourse);
+                var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
+                var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
+                {
+                    RouteValues = new { idCourse },
+                    Parent = node1
+                };
+                var node3 = new MvcBreadcrumbNode("Create", "Groups", _localizer["CreateGroup"])
+                {
+                    Parent = node2
+                };
+                ViewData["BreadcrumbNode"] = node3;
+                #endregion
+
                 return View(group);
             }
         }

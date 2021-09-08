@@ -138,6 +138,9 @@
   <data name="AllCourses" xml:space="preserve">
     <value>All courses</value>
   </data>
+  <data name="AlreadyExistName" xml:space="preserve">
+    <value>A course with this name already exists</value>
+  </data>
   <data name="CreateCourse" xml:space="preserve">
     <value>Create course</value>
   </data>

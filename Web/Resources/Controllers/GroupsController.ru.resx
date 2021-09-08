@@ -138,6 +138,9 @@
   <data name="AllCourses" xml:space="preserve">
     <value>Все курсы</value>
   </data>
+  <data name="AlreadyExistName" xml:space="preserve">
+    <value>Группа с таким названием уже существует</value>
+  </data>
   <data name="CreateGroup" xml:space="preserve">
     <value>Создание группы</value>
   </data>
