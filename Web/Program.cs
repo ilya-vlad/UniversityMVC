@@ -22,9 +22,7 @@ namespace MVC.Web
                 try
                 {
                     var context = services.GetRequiredService<UniversityContext>();
-                    context.Database.Migrate();
-                    //заполнение тестовыми данными, при пустых таблицах
-                    SampleData.Initialize(context);
+                    context.Database.Migrate();                   
                 }
                 catch (Exception ex)
                 {
