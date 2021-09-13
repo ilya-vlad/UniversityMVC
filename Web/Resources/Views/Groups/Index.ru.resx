@@ -153,6 +153,12 @@
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
+  <data name="SortAsc" xml:space="preserve">
+    <value>ᐃ</value>
+  </data>
+  <data name="SortDesc" xml:space="preserve">
+    <value>ᐁ</value>
+  </data>
   <data name="Students" xml:space="preserve">
     <value>Студенты</value>
   </data>

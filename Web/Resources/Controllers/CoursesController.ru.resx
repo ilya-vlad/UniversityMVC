@@ -147,4 +147,7 @@
   <data name="EmptyName" xml:space="preserve">
     <value>Введите название курса</value>
   </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Ничего не найдено.</value>
+  </data>
 </root>

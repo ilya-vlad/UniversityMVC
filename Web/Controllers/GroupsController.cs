@@ -12,17 +12,12 @@ using System.Linq;
 namespace Controllers
 {
     [Route("/courses/{idCourse}/[controller]/")]    
-    public class GroupsController : Controller
+    public class GroupsController : BaseController<GroupsController>
     {
-        private IUnitOfWork _unitOfWork;
-        private readonly IStringLocalizer<GroupsController> _localizer;
-        private readonly ILogger<GroupsController> _logger;
         public GroupsController(IUnitOfWork unitOfWork, IStringLocalizer<GroupsController> localizer,
-            ILogger<GroupsController> logger)
+             ILogger<GroupsController> logger) : base(unitOfWork, localizer, logger)
         {
-            _unitOfWork = unitOfWork;
-            _localizer = localizer;
-            _logger = logger;
+
         }
 
         [HttpGet("/courses/{idCourse}/groups")]        
@@ -61,6 +56,12 @@ namespace Controllers
                 Groups = items
             };
 
+            if (items.Count() == 0)
+            {
+                ViewData["NoResults"] = _localizer["NoResults"];
+            }
+
+            ViewBag.SortState = sortOrder;
             ViewData["PageSize"] = pageSize;           
             ViewData["BreadcrumbNode"] = GetBreadCrumbs(course);            
             return View(viewModel);
@@ -85,6 +86,8 @@ namespace Controllers
         [Route("/groups/edit")]
         public IActionResult Edit(Group group)
         {
+            if (string.IsNullOrEmpty(group.Name))
+                group.Name = group.Name.Trim();
             ModelState.Clear();
             if (string.IsNullOrEmpty(group.Name))
             {
@@ -163,6 +166,8 @@ namespace Controllers
         [Route("/groups/create")]
         public IActionResult Create(Group group)
         {
+            if(string.IsNullOrEmpty(group.Name))
+                group.Name = group.Name.Trim();
             ModelState.Clear();
             if (string.IsNullOrEmpty(group.Name))
             {

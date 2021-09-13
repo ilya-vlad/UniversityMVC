@@ -147,4 +147,7 @@
   <data name="EmptyName" xml:space="preserve">
     <value>Enter the name of the course</value>
   </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Nothing found.</value>
+  </data>
 </root>

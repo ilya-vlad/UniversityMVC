@@ -159,6 +159,9 @@
   <data name="EmptyLastName" xml:space="preserve">
     <value>Enter the student's surname</value>
   </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Nothing found.</value>
+  </data>
   <data name="NotSelectedGroup" xml:space="preserve">
     <value>Choose a group</value>
   </data>

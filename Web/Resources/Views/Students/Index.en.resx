@@ -162,6 +162,12 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SortAsc" xml:space="preserve">
+    <value>ᐃ</value>
+  </data>
+  <data name="SortDesc" xml:space="preserve">
+    <value>ᐁ</value>
+  </data>
   <data name="Students" xml:space="preserve">
     <value>Students</value>
   </data>

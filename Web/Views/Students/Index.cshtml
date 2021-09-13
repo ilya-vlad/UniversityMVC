@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = Localizer["ListStudents"];
     int i = 1;
-    Group group = ViewBag.Group;   
+    Group group = ViewBag.Group;
 
     void RemoveModal(Student student)
     {
@@ -33,134 +33,153 @@
 
 
 }
-    
+
 <head>
     <script>
         windows.groupId = @group.Id;
     </script>
 </head>
-  
-    <div class="container">
-        <div class="row">            
-            <div class="col">
-                <h3>@Localizer["Group"] - @group.Name</h3>
-            </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h3>@Localizer["Group"] - @group.Name</h3>
         </div>
-        <div class="row">
-            <div class="col">
-                <form method="get">
-                    <div class="form-inline form-group">
-                        <label class="control-label">@Localizer["LastName"]&nbsp;</label>
-                        <input name="lastName" value="@Model.FilterViewModel.SelectedLastName" class="form-control" />
-                        &nbsp;
-                        <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
-                    </div>
-                </form>
-            </div>
-            <div>
-                <a href="" id="btnMultipleRemove" class="btn btn-danger disabled"
-                   role="button" aria-pressed="true" aria-disabled="true"
-                   data-toggle="modal" data-target="#removeMultipleModel">@Localizer["Remove"]</a>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="get">
+                <div class="form-inline form-group">
+                    <label class="control-label">@Localizer["LastName"]&nbsp;</label>
+                    <input name="lastName" value="@Model.FilterViewModel.SelectedLastName" class="form-control" />
+                    &nbsp;
+                    <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
+                </div>
+            </form>
+        </div>
+        <div>
+            <a href="" id="btnMultipleRemove" class="btn btn-danger disabled"
+               role="button" aria-pressed="true" aria-disabled="true"
+               data-toggle="modal" data-target="#removeMultipleModel">@Localizer["Remove"]</a>
 
 
-                <div id="removeMultipleModel" class="modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">@Localizer["Remove"]</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p>@Localizer["MultipleRemoveStudent?"] <span id="namesStudents"></span></p>
-                            </div>
-                            <div class="modal-footer">
-                                 <a id="sumbitMultipleRemove" href="" class="btn btn-danger" role="button" aria-pressed="true">@Localizer["Remove"]</a>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
-                            </div>
+            <div id="removeMultipleModel" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">@Localizer["Remove"]</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>@Localizer["MultipleRemoveStudent?"] <span id="namesStudents"></span></p>
+                        </div>
+                        <div class="modal-footer">
+                            <a id="sumbitMultipleRemove" href="" class="btn btn-danger" role="button" aria-pressed="true">@Localizer["Remove"]</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
                         </div>
                     </div>
                 </div>
-
-                <a href="~/students/create?idGroup=@group.Id&idCourse=@group.CourseId" class="btn btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
             </div>
+
+            <a href="~/students/create?idGroup=@group.Id&idCourse=@group.CourseId" class="btn btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
         </div>
     </div>
+</div>
 
+@{  string lastNameSort = string.Empty;
+    string firstNameSort = string.Empty;
+    string ageSort = string.Empty;
+    string examSort = string.Empty;
+    switch ((StudentSortState)ViewBag.SortState)
+    {
+        case StudentSortState.LastNameAsc: lastNameSort = Localizer["SortAsc"].Value; break;
+        case StudentSortState.LastNameDesc: lastNameSort = Localizer["SortDesc"].Value; break;
+        case StudentSortState.FirstNameAsc: firstNameSort = Localizer["SortAsc"].Value; break;
+        case StudentSortState.FirstNameDesc: firstNameSort = Localizer["SortDesc"].Value; break;
+        case StudentSortState.AgeAsc: ageSort = Localizer["SortAsc"].Value; break;
+        case StudentSortState.AgeDesc: ageSort = Localizer["SortDesc"].Value; break;
+        case StudentSortState.ExamScoreAsc: examSort = Localizer["SortAsc"].Value; break;
+        case StudentSortState.ExamScoreDesc: examSort = Localizer["SortDesc"].Value; break;
+    }
 
-    <table class="table table-hover table-sm">
-        <thead class="thead-dark">
-            <tr>
-                <th class="align-middle text-center">
-                    <input onclick="StudentAllChangeChecked(@group.Id)" class="form-check-input" type="checkbox" id="generalCheckbox">
-                </th>
-                <th class="align-middle text-center">#</th>
-                <th class="align-middle col-2">
-                    <a asp-action="Index" class="text-white"
-                       asp-route-sortOrder="@Model.SortViewModel.LastNameSort"
-                       asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["LastName"]</a>
-                </th>
-                <th class="align-middle col-2">
-                    <a asp-action="Index" class="text-white"
-                       asp-route-sortOrder="@Model.SortViewModel.FirstNameSort"
-                       asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["FirstName"]</a>
-                </th>
-                <th class="align-middle text-center col-2">
-                    <a asp-action="Index" class="text-white"
-                       asp-route-sortOrder="@Model.SortViewModel.AgeSort"
-                       asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["DateOfBirth"]</a>
-                </th>
-                <th class="align-middle text-center col-2">
-                    <a asp-action="Index" class="text-white"
-                       asp-route-sortOrder="@Model.SortViewModel.ExamScoreSort"
-                       asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["ExamScore"]</a>
-                </th>
-                <th class="align-middle"></th>
+}
+
+<table class="table table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th class="align-middle text-center">
+                <input onclick="StudentAllChangeChecked(@group.Id)" class="form-check-input" type="checkbox" id="generalCheckbox">
+            </th>
+            <th class="align-middle text-center">#</th>
+            <th class="align-middle col-2">
+                <a asp-action="Index" class="text-white"
+                   asp-route-sortOrder="@Model.SortViewModel.LastNameSort"
+                   asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["LastName"] @lastNameSort</a>
+            </th>
+            <th class="align-middle col-2">
+                <a asp-action="Index" class="text-white"
+                   asp-route-sortOrder="@Model.SortViewModel.FirstNameSort"
+                   asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["FirstName"] @firstNameSort</a>
+            </th>
+            <th class="align-middle text-center col-2">
+                <a asp-action="Index" class="text-white"
+                   asp-route-sortOrder="@Model.SortViewModel.AgeSort"
+                   asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["DateOfBirth"] @ageSort</a>
+            </th>
+            <th class="align-middle text-center col-2">
+                <a asp-action="Index" class="text-white"
+                   asp-route-sortOrder="@Model.SortViewModel.ExamScoreSort"
+                   asp-route-lastName="@Model.FilterViewModel.SelectedLastName">@Localizer["ExamScore"] @examSort</a>
+            </th>
+            <th class="align-middle"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Student student in Model.Students)
+        {
+            <tr id="tr_@student.Id">
+                <td class="align-middle text-center">
+                    <input name="checkboxRemove" onclick="StudentChangeChecked(@group.Id)" class="form-check-input" type="checkbox" id="@student.Id">
+                </td>
+                <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
+                <td name="LastName" class="align-middle">@student.LastName</td>
+                <td name="FirstName" class="align-middle">@student.FirstName</td>
+                <td name="DateOfBirt" class="align-middle text-center">@student.DateOfBirth.Value.ToString("d")</td>
+                <td name="ExamScore" class="align-middle text-center">@student.ExamScore</td>
+                <td class="align-middle text-right">
+                    <a href="@student.GroupId/students/edit/@student.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
+                    <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@student.Id">@Localizer["Remove"]</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (Student student in Model.Students)
-            {
-                <tr id="tr_@student.Id">
-                    <td class="align-middle text-center">
-                        <input name="checkboxRemove" onclick="StudentChangeChecked(@group.Id)" class="form-check-input" type="checkbox" id="@student.Id">
-                    </td>
-                    <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
-                    <td name="LastName" class="align-middle">@student.LastName</td>
-                    <td name="FirstName" class="align-middle">@student.FirstName</td>
-                    <td name="DateOfBirt" class="align-middle text-center">@student.DateOfBirth.Value.ToString("d")</td>
-                    <td name="ExamScore" class="align-middle text-center">@student.ExamScore</td>
-                    <td class="align-middle text-right">
-                        <a href="@student.GroupId/students/edit/@student.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
-                        <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@student.Id">@Localizer["Remove"]</a>
-                    </td>
-                </tr>
-                i++;
-                RemoveModal(student);
-            }
-        </tbody>
-    </table>
+            i++;
+            RemoveModal(student);
+        }
+    </tbody>
+</table>
+<b>@ViewData["NoResults"]</b>
 
-    @if (Model.PageViewModel.HasPreviousPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-           asp-route-lastName="@Model.FilterViewModel.SelectedLastName"
-           asp-route-sortorder="@Model.SortViewModel.Current"
-           class="btn  btn-outline-dark">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-            @Localizer["Back"]
-        </a>
-    }
-    @if (Model.PageViewModel.HasNextPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-           asp-route-lastName="@Model.FilterViewModel.SelectedLastName"
-           asp-route-sortorder="@Model.SortViewModel.Current"
-           class="btn btn-outline-dark">
-            @Localizer["Next"]
-            <i class="glyphicon glyphicon-chevron-right"></i>
-        </a>
-    }
+
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       asp-route-lastName="@Model.FilterViewModel.SelectedLastName"
+       asp-route-sortorder="@Model.SortViewModel.Current"
+       class="btn  btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        @Localizer["Back"]
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       asp-route-lastName="@Model.FilterViewModel.SelectedLastName"
+       asp-route-sortorder="@Model.SortViewModel.Current"
+       class="btn btn-outline-dark">
+        @Localizer["Next"]
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}

@@ -55,8 +55,7 @@ namespace MVC.Web
             services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<IGroupsRepository, GroupsRepository>();
             services.AddScoped<IStudentsRepository, StudentsRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<UnitOfWorkService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();           
 
             services.AddBreadcrumbs(
             GetType().Assembly,

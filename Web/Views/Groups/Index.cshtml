@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = Localizer["ListGroups"];
     int i = 1;
-    Course course = ViewBag.Course;   
+    Course course = ViewBag.Course;
 
     void RemoveModal(Group group)
     {
@@ -31,13 +31,13 @@
         </div>
     }
 }
-   
+
 
 <div class="container">
-    <div class="row">        
+    <div class="row">
         <div class="col">
             <h3>@Localizer["Course"] - @course.Name</h3>
-        </div>       
+        </div>
     </div>
     <div class="row">
         <div class="col">
@@ -57,57 +57,63 @@
 
 </div>
 
-    
+@{ string nameSort = string.Empty;
+    switch ((GroupSortState)ViewBag.SortState)
+    {
+        case GroupSortState.NameAsc: nameSort = Localizer["SortAsc"].Value; break;
+        case GroupSortState.NameDesc: nameSort = Localizer["SortDesc"].Value; break;        
+    }
 
-    <table class="table table-hover table-sm">
-        <thead class="thead-dark">
-            <tr>
-                <th class="align-middle text-center" scope="col">#</th>
-                <th class="align-middle col-2">
-                    <a asp-action="Index" class="text-white"
-                       asp-route-sortOrder="@Model.SortViewModel.NameSort"
-                       asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["NameGroup"]</a>
-                </th>
-                <th class="align-middle"></th>
+}
+
+<table class="table table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th class="align-middle text-center" scope="col">#</th>
+            <th class="align-middle col-2">
+                <a asp-action="Index" class="text-white"
+                   asp-route-sortOrder="@Model.SortViewModel.NameSort"
+                   asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["NameGroup"] @nameSort</a>
+            </th>
+            <th class="align-middle"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Group group in Model.Groups)
+        {
+            <tr id="@group.Id">
+                <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
+                <td name="nameGroup" class="align-middle"><a href="groups/@group.Id">@group.Name</a></td>
+                <td class="align-middle text-right">
+                    <a href="groups/edit/@group.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
+                    <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@group.Id">@Localizer["Remove"]</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (Group group in Model.Groups)
-            {                
-                <tr id="@group.Id">
-                    <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
-                    <td name="nameGroup" class="align-middle">@group.Name</td>
-                    <td class="align-middle text-right">
-                        <a href="groups/@group.Id" class="btn btn-sm btn-dark" role="button" aria-pressed="true">@Localizer["Students"]</a>
-                        <a href="groups/edit/@group.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
-                        <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@group.Id">@Localizer["Remove"]</a>
-                    </td>
-                </tr>
-                i++;
-                RemoveModal(group);
-            }
-        </tbody>
-    </table>
-
-    @if (Model.PageViewModel.HasPreviousPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-           asp-route-lastName="@Model.FilterViewModel.SelectedName"
-           asp-route-sortorder="@Model.SortViewModel.Current"
-           class="btn  btn-outline-dark">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-            @Localizer["Back"]
-        </a>
-    }
-    @if (Model.PageViewModel.HasNextPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-           asp-route-lastName="@Model.FilterViewModel.SelectedName"
-           asp-route-sortorder="@Model.SortViewModel.Current"
-           class="btn btn-outline-dark">
-            @Localizer["Next"]
-            <i class="glyphicon glyphicon-chevron-right"></i>
-        </a>
-    }
+            i++;
+            RemoveModal(group);
+        }
+    </tbody>
+</table>
+<b>@ViewData["NoResults"]</b>
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       asp-route-lastName="@Model.FilterViewModel.SelectedName"
+       asp-route-sortorder="@Model.SortViewModel.Current"
+       class="btn  btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        @Localizer["Back"]
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       asp-route-lastName="@Model.FilterViewModel.SelectedName"
+       asp-route-sortorder="@Model.SortViewModel.Current"
+       class="btn btn-outline-dark">
+        @Localizer["Next"]
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}

@@ -16,18 +16,12 @@ namespace Controllers
 {
     [Route("")]
     [Route("[controller]")]
-    public class CoursesController : Controller
+    public class CoursesController : BaseController<CoursesController>
     {
-        private IUnitOfWork _unitOfWork;
-        private readonly IStringLocalizer<CoursesController> _localizer;
-        private readonly ILogger<CoursesController> _logger;
-
-        public CoursesController(IUnitOfWork unitOfWork, IStringLocalizer<CoursesController> localizer, 
-            ILogger<CoursesController> logger)
+        public CoursesController(IUnitOfWork unitOfWork, IStringLocalizer<CoursesController> localizer,
+            ILogger<CoursesController> logger) : base(unitOfWork, localizer, logger)
         {
-            _unitOfWork = unitOfWork;
-            _localizer = localizer;
-            _logger = logger;
+            
         }
 
         [HttpGet]        
@@ -67,7 +61,13 @@ namespace Controllers
                 FilterViewModel = new CourseFilterViewModel(name),
                 Courses = items
             };
+            
+            if(items.Count() == 0)
+            {
+                ViewData["NoResults"] = _localizer["NoResults"];
+            }
 
+            ViewBag.SortState = sortOrder;
             ViewData["PageSize"] = pageSize;
             ViewData["BreadcrumbNode"] = GetBreadCrumbs();
             return View(viewModel);
@@ -98,6 +98,10 @@ namespace Controllers
         [Route("/courses/edit")]
         public IActionResult Edit(Course course)
         {
+            if (!string.IsNullOrEmpty(course.Name))
+                course.Name = course.Name.Trim();
+            if (!string.IsNullOrEmpty(course.Description))
+                course.Description = course.Description.Trim();
             ModelState.Clear();
             if (string.IsNullOrEmpty(course.Name))
             {
@@ -165,6 +169,10 @@ namespace Controllers
         [Route("/courses/create")]
         public IActionResult Create(Course course)
         {
+            if(!string.IsNullOrEmpty(course.Name))
+                course.Name = course.Name.Trim();
+            if(!string.IsNullOrEmpty(course.Description)) 
+                course.Description = course.Description.Trim();
             ModelState.Clear();
             if (string.IsNullOrEmpty(course.Name))
             {

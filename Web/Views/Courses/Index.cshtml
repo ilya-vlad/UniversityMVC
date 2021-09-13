@@ -5,7 +5,7 @@
 @model CourseIndexViewModel
 @{
     ViewData["Title"] = Localizer["ListCourses"];
-    int i = 1;    
+    int i = 1;
 
     void RemoveModal(Course course)
     {
@@ -31,89 +31,98 @@
     }
 
 }
-   
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h3>@Localizer["Courses"]</h3>
-            </div>          
-        </div>
-        <div class="row">
-            <div class="col">
-                <form method="get">
-                    <div class="form-inline form-group">
-                        <label class="control-label">@Localizer["NameCourse"]&nbsp;</label>
-                        <input name="name" value="@Model.FilterViewModel.SelectedName" class="form-control" />
-                        &nbsp;
-                        <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
-                    </div>
-                </form>
-            </div>
-            <div>
-                <a href="~/courses/create" class="btn btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
-            </div>
-            
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h3>@Localizer["Courses"]</h3>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <form method="get">
+                <div class="form-inline form-group">
+                    <label class="control-label">@Localizer["NameCourse"]&nbsp;</label>
+                    <input name="name" value="@Model.FilterViewModel.SelectedName" class="form-control" />
+                    &nbsp;
+                    <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
+                </div>
+            </form>
+        </div>
+        <div>
+            <a href="~/courses/create" class="btn btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
+        </div>
 
-    
+    </div>
+</div>
 
-    <table class="table table-hover table-sm">
-        <thead class="thead-dark">
-            <tr>
-                <th class="align-middle text-center" scope="col">#</th>
-                <th class="align-middle" scope="col">
-                    <a asp-action="Index" class="text-white"
-                       asp-route-sortOrder="@Model.SortViewModel.NameSort"
-                       asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["NameCourse"]</a>
-                </th>
-                <th class="align-middle" scope="col">
-                    <a asp-action="Index" class="text-white"
-                       asp-route-sortOrder="@Model.SortViewModel.DescriptionSort"
-                       asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["Description"]</a>
-                </th>
-                <th class="align-middle"></th>
+@{   string nameSort = string.Empty;
+     string descriptionSort = string.Empty;
+     switch ((CourseSortState)ViewBag.SortState)
+        {
+            case CourseSortState.NameAsc: nameSort = Localizer["SortAsc"].Value; break;
+            case CourseSortState.NameDesc: nameSort = Localizer["SortDesc"].Value; break;
+            case CourseSortState.DescriptionAsc: descriptionSort = Localizer["SortAsc"].Value; break;
+            case CourseSortState.DescriptionDesc: descriptionSort = Localizer["SortDesc"].Value; break;
+        }
+
+}
+<table class="table table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th class="align-middle text-center" scope="col">#</th>
+            <th class="align-middle" scope="col">
+                <a asp-action="Index" class="text-white"
+                   asp-route-sortOrder="@Model.SortViewModel.NameSort"
+                   asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["NameCourse"] @nameSort</a>
+            </th>
+            <th class="align-middle" scope="col">
+                <a asp-action="Index" class="text-white"
+                   asp-route-sortOrder="@Model.SortViewModel.DescriptionSort"
+                   asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["Description"] @descriptionSort</a>
+            </th>
+            <th class="align-middle"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Course course in Model.Courses)
+               {
+            <tr id="@course.Id">
+                <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
+                <td class="align-middle"><a href="/courses/@course.Id/groups">@course.Name</a></td>
+                <td class="align-middle">@course.Description</td>
+                <td class="align-middle text-right">
+                    <a href="/courses/edit/@course.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
+                    <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@course.Id">@Localizer["Remove"]</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (Course course in Model.Courses)
-            {
-                <tr id="@course.Id">
-                    <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
-                    <td class="align-middle">@course.Name</td>
-                    <td class="align-middle">@course.Description</td>
-                    <td class="align-middle text-right">
-                        <a href="/courses/@course.Id/groups" class="btn btn-sm btn-dark" role="button" aria-pressed="true">@Localizer["Groups"]</a>
-                        <a href="/courses/edit/@course.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
-                        <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@course.Id">@Localizer["Remove"]</a>
-                    </td>
-                </tr>
-                i++;
-                RemoveModal(course);
-            }
-        </tbody>
-    </table>
+            i++;
+            RemoveModal(course);
+           }
+    </tbody>
+</table>
 
-    @if (Model.PageViewModel.HasPreviousPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-           asp-route-name="@Model.FilterViewModel.SelectedName"
-           asp-route-sortorder="@Model.SortViewModel.Current"
-           class="btn  btn-outline-dark">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-            @Localizer["Back"]
-        </a>
-    }
-    @if (Model.PageViewModel.HasNextPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-           asp-route-name="@Model.FilterViewModel.SelectedName"
-           asp-route-sortorder="@Model.SortViewModel.Current"
-           class="btn btn-outline-dark">
-            @Localizer["Next"]
-            <i class="glyphicon glyphicon-chevron-right"></i>
-        </a>
-    }
+<b>@ViewData["NoResults"]</b>
+@if (Model.PageViewModel.HasPreviousPage)
+           {
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       asp-route-name="@Model.FilterViewModel.SelectedName"
+       asp-route-sortorder="@Model.SortViewModel.Current"
+       class="btn  btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        @Localizer["Back"]
+    </a>
+}
+       @if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       asp-route-name="@Model.FilterViewModel.SelectedName"
+       asp-route-sortorder="@Model.SortViewModel.Current"
+       class="btn btn-outline-dark">
+        @Localizer["Next"]
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}

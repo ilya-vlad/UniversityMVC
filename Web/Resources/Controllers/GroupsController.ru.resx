@@ -147,6 +147,9 @@
   <data name="EmptyName" xml:space="preserve">
     <value>Введите название группы</value>
   </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Ничего не найдено.</value>
+  </data>
   <data name="NotSelectedCourse" xml:space="preserve">
     <value>Выберите курс</value>
   </data>

@@ -13,17 +13,12 @@ using System.Linq;
 namespace Controllers
 {
     [Route("/courses/{idCourse}/groups/{idGroup}")]
-    public class StudentsController : Controller
+    public class StudentsController : BaseController<StudentsController>
     {
-        private IUnitOfWork _unitOfWork;
-        private readonly IStringLocalizer<StudentsController> _localizer;
-        private readonly ILogger<StudentsController> _logger;
         public StudentsController(IUnitOfWork unitOfWork, IStringLocalizer<StudentsController> localizer,
-            ILogger<StudentsController> logger)
+            ILogger<StudentsController> logger) : base(unitOfWork, localizer, logger)
         {
-            _unitOfWork = unitOfWork;
-            _localizer = localizer;
-            _logger = logger;
+
         }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}")]
@@ -82,6 +77,12 @@ namespace Controllers
                 Students = items
             };
 
+            if (items.Count() == 0)
+            {
+                ViewData["NoResults"] = _localizer["NoResults"];
+            }
+
+            ViewBag.SortState = sortOrder;
             ViewData["PageSize"] = pageSize;
             ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, group);
 
@@ -109,6 +110,10 @@ namespace Controllers
         [Route("/students/edit")]
         public IActionResult Edit(Student student)
         {
+            if (string.IsNullOrEmpty(student.FirstName))               
+                student.FirstName = student.FirstName.Trim();
+            if (string.IsNullOrEmpty(student.LastName))
+                student.LastName = student.LastName.Trim();
             Group group = _unitOfWork.Groups.GetById(student.GroupId);
             ModelState.Clear();
             if (string.IsNullOrEmpty(student.LastName))
@@ -215,6 +220,10 @@ namespace Controllers
         [Route("/students/create")]
         public IActionResult Create(Student student)
         {
+            if (string.IsNullOrEmpty(student.FirstName))
+                student.FirstName = student.FirstName.Trim();
+            if (string.IsNullOrEmpty(student.LastName))
+                student.LastName = student.LastName.Trim();
             Group group = _unitOfWork.Groups.GetById(student.GroupId);
             ModelState.Clear();
             if (string.IsNullOrEmpty(student.LastName))
