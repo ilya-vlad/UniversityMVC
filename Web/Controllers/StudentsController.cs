@@ -74,7 +74,7 @@ namespace Controllers
                 PageViewModel = new StudentPageViewModel(count, page, pageSize),
                 SortViewModel = new StudentSortViewModel(sortOrder),
                 FilterViewModel = new StudentFilterViewModel(lastName),
-                Students = items
+                Items = items
             };
 
             if (items.Count() == 0)

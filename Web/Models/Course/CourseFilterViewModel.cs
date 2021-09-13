@@ -1,14 +1,12 @@
-﻿
+﻿using MVC.Web.Models.Shared;
 
 namespace MVC.Web.Models.Course
 {
-    public class CourseFilterViewModel
+    public class CourseFilterViewModel : GenericFilterViewModel<CourseFilterViewModel>
     {
-        public string SelectedName { get; set; }
-
-        public CourseFilterViewModel(string name)
+        public CourseFilterViewModel(string name) : base(name)
         {
-            SelectedName = name;
-        }        
-    }
+
+        }
+    }    
 }

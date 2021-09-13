@@ -1,12 +1,10 @@
-﻿using System.Linq;
+﻿using MVC.Web.Models.Shared;
 
 namespace MVC.Web.Models.Student
 {
-    public class StudentIndexViewModel
+    public class StudentIndexViewModel 
+        : GenericIndexViewModel<MVC.Common.Student, StudentPageViewModel, StudentFilterViewModel, StudentSortViewModel>
     {
-        public IQueryable<MVC.Common.Student> Students { get; set; }
-        public StudentPageViewModel PageViewModel { get; set; }
-        public StudentFilterViewModel FilterViewModel { get; set; }
-        public StudentSortViewModel SortViewModel { get; set; }
+       
     }
 }

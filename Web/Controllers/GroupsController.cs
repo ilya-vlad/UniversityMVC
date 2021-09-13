@@ -53,7 +53,7 @@ namespace Controllers
                 PageViewModel = new GroupPageViewModel(count, page, pageSize),
                 SortViewModel = new GroupSortViewModel(sortOrder),
                 FilterViewModel = new GroupFilterViewModel(name),
-                Groups = items
+                Items = items
             };
 
             if (items.Count() == 0)

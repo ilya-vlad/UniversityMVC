@@ -59,7 +59,7 @@ namespace Controllers
                 PageViewModel = new CoursePageViewModel(count, page, pageSize),
                 SortViewModel = new CourseSortViewModel(sortOrder),
                 FilterViewModel = new CourseFilterViewModel(name),
-                Courses = items
+                Items = items
             };
             
             if(items.Count() == 0)

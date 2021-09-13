@@ -1,12 +1,10 @@
-﻿using System.Linq;
+﻿using MVC.Web.Models.Shared;
 
 namespace MVC.Web.Models.Group
 {
     public class GroupIndexViewModel
+        : GenericIndexViewModel<MVC.Common.Group, GroupPageViewModel, GroupFilterViewModel, GroupSortViewModel>
     {
-        public IQueryable<MVC.Common.Group> Groups { get; set; }
-        public GroupPageViewModel PageViewModel { get; set; }
-        public GroupFilterViewModel FilterViewModel { get; set; }
-        public GroupSortViewModel SortViewModel { get; set; }
+
     }
 }

@@ -1,32 +1,13 @@
-﻿using System;
+﻿using MVC.Web.Models.Shared;
 
 namespace MVC.Web.Models.Group
 {
-    public class GroupPageViewModel
+    public class GroupPageViewModel : GenericPageViewModel<GroupPageViewModel>
     {
-        public int PageNumber { get; private set; }
-        public int TotalPages { get; private set; }
-
-        public bool HasPreviousPage
-        {
-            get
-            {
-                return (PageNumber > 1);
-            }
-        }
-
-        public bool HasNextPage
-        {
-            get
-            {
-                return (PageNumber < TotalPages);
-            }
-        }
-
         public GroupPageViewModel(int count, int pageNumber, int pageSize)
+             : base(count, pageNumber, pageSize)
         {
-            PageNumber = pageNumber;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-        }       
+
+        }
     }
 }

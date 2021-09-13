@@ -1,14 +1,12 @@
-﻿
+﻿using MVC.Web.Models.Shared;
 
 namespace MVC.Web.Models.Group
 {
-    public class GroupFilterViewModel
+    public class GroupFilterViewModel : GenericFilterViewModel<GroupFilterViewModel>
     {
-        public string SelectedName { get; set; }
-
-        public GroupFilterViewModel(string name)
+        public GroupFilterViewModel(string name) : base(name)
         {
-            SelectedName = name;
-        }        
+
+        }
     }
 }

@@ -44,7 +44,7 @@
             <form method="get">
                 <div class="form-inline form-group">
                     <label class="control-label">@Localizer["NameCourse"]&nbsp;</label>
-                    <input name="name" value="@Model.FilterViewModel.SelectedName" class="form-control" />
+                    <input name="name" value="@Model.FilterViewModel.SearchedName" class="form-control" />
                     &nbsp;
                     <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
                 </div>
@@ -75,18 +75,18 @@
             <th class="align-middle" scope="col">
                 <a asp-action="Index" class="text-white"
                    asp-route-sortOrder="@Model.SortViewModel.NameSort"
-                   asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["NameCourse"] @nameSort</a>
+                   asp-route-name="@Model.FilterViewModel.SearchedName">@Localizer["NameCourse"] @nameSort</a>
             </th>
             <th class="align-middle" scope="col">
                 <a asp-action="Index" class="text-white"
                    asp-route-sortOrder="@Model.SortViewModel.DescriptionSort"
-                   asp-route-name="@Model.FilterViewModel.SelectedName">@Localizer["Description"] @descriptionSort</a>
+                   asp-route-name="@Model.FilterViewModel.SearchedName">@Localizer["Description"] @descriptionSort</a>
             </th>
             <th class="align-middle"></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (Course course in Model.Courses)
+        @foreach (Course course in Model.Items)
                {
             <tr id="@course.Id">
                 <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
@@ -108,7 +108,7 @@
            {
     <a asp-action="Index"
        asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-       asp-route-name="@Model.FilterViewModel.SelectedName"
+       asp-route-name="@Model.FilterViewModel.SearchedName"
        asp-route-sortorder="@Model.SortViewModel.Current"
        class="btn  btn-outline-dark">
         <i class="glyphicon glyphicon-chevron-left"></i>
@@ -119,7 +119,7 @@
 {
     <a asp-action="Index"
        asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-       asp-route-name="@Model.FilterViewModel.SelectedName"
+       asp-route-name="@Model.FilterViewModel.SearchedName"
        asp-route-sortorder="@Model.SortViewModel.Current"
        class="btn btn-outline-dark">
         @Localizer["Next"]

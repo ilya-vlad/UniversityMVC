@@ -1,12 +1,10 @@
-﻿using System.Linq;
+﻿using MVC.Web.Models.Shared;
 
 namespace MVC.Web.Models.Course
 {
     public class CourseIndexViewModel
+        : GenericIndexViewModel<MVC.Common.Course, CoursePageViewModel, CourseFilterViewModel, CourseSortViewModel>
     {
-        public IQueryable<MVC.Common.Course> Courses { get; set; }
-        public CoursePageViewModel PageViewModel { get; set; }
-        public CourseFilterViewModel FilterViewModel { get; set; }
-        public CourseSortViewModel SortViewModel { get; set; }
+
     }
 }
