@@ -44,6 +44,7 @@
             <form method="get">
                 <div class="form-inline form-group">
                     <label class="control-label">@Localizer["NameCourse"]&nbsp;</label>
+                    <input name="pageSize" value="@Model.PageViewModel.PageSize" type="hidden">
                     <input name="name" value="@Model.FilterViewModel.SearchedName" class="form-control" />
                     &nbsp;
                     <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
@@ -57,15 +58,15 @@
     </div>
 </div>
 
-@{   string nameSort = string.Empty;
-     string descriptionSort = string.Empty;
-     switch ((CourseSortState)ViewBag.SortState)
-        {
-            case CourseSortState.NameAsc: nameSort = Localizer["SortAsc"].Value; break;
-            case CourseSortState.NameDesc: nameSort = Localizer["SortDesc"].Value; break;
-            case CourseSortState.DescriptionAsc: descriptionSort = Localizer["SortAsc"].Value; break;
-            case CourseSortState.DescriptionDesc: descriptionSort = Localizer["SortDesc"].Value; break;
-        }
+@{ string nameSort = string.Empty;
+    string descriptionSort = string.Empty;
+    switch ((CourseSortState)ViewBag.SortState)
+    {
+        case CourseSortState.NameAsc: nameSort = Localizer["SortAsc"].Value; break;
+        case CourseSortState.NameDesc: nameSort = Localizer["SortDesc"].Value; break;
+        case CourseSortState.DescriptionAsc: descriptionSort = Localizer["SortAsc"].Value; break;
+        case CourseSortState.DescriptionDesc: descriptionSort = Localizer["SortDesc"].Value; break;
+    }
 
 }
 <table class="table table-hover table-sm">
@@ -87,7 +88,7 @@
     </thead>
     <tbody>
         @foreach (Course course in Model.Items)
-               {
+        {
             <tr id="@course.Id">
                 <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
                 <td class="align-middle"><a href="/courses/@course.Id/groups">@course.Name</a></td>
@@ -99,30 +100,27 @@
             </tr>
             i++;
             RemoveModal(course);
-           }
+        }
     </tbody>
 </table>
 
 <b>@ViewData["NoResults"]</b>
-@if (Model.PageViewModel.HasPreviousPage)
-           {
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-       asp-route-name="@Model.FilterViewModel.SearchedName"
-       asp-route-sortorder="@Model.SortViewModel.Current"
-       class="btn  btn-outline-dark">
-        <i class="glyphicon glyphicon-chevron-left"></i>
-        @Localizer["Back"]
-    </a>
-}
-       @if (Model.PageViewModel.HasNextPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-       asp-route-name="@Model.FilterViewModel.SearchedName"
-       asp-route-sortorder="@Model.SortViewModel.Current"
-       class="btn btn-outline-dark">
-        @Localizer["Next"]
-        <i class="glyphicon glyphicon-chevron-right"></i>
-    </a>
-}
+
+<div class="container">
+    <div class="row">
+        <div class="col-10 justify-content-start d-flex align-items-center">
+            <page-link page-model="Model.PageViewModel" filter-view-model="Model.FilterViewModel" page-action="Index"></page-link>
+        </div>
+        <div class="col-1 justify-content-end d-flex align-items-center">
+            @Localizer["Show"]
+        </div>
+        <div class="col-1 justify-content-start d-flex align-items-center">
+            @Html.DropDownListFor(m => m.PageViewModel.PageSize, (SelectList)ViewData["SelectListPageSizes"],
+             new
+             {
+                 @class = "custom-select",
+                 @onchange = $"document.location.href = '/courses?pagesize=' + this.options[this.selectedIndex].value + '&name={Model.FilterViewModel.SearchedName}'"
+             })
+        </div>
+    </div>
+</div>

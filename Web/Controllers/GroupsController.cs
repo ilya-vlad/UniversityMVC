@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MVC.Common;
@@ -7,6 +8,7 @@ using MVC.Web.Models.Group;
 using SmartBreadcrumbs.Attributes;
 using SmartBreadcrumbs.Nodes;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Controllers
@@ -21,9 +23,11 @@ namespace Controllers
         }
 
         [HttpGet("/courses/{idCourse}/groups")]        
-        public IActionResult Index(int idCourse, string name, int page = 1, GroupSortState sortOrder = GroupSortState.NameAsc)
-        {           
-            int pageSize = 5;
+        public IActionResult Index(int idCourse, string name, int page = 1, int pageSize = 5, 
+            GroupSortState sortOrder = GroupSortState.NameAsc)
+        {
+            var arrayPageSizes = new List<int>() { 5, 10, 20 };
+
             Course course = _unitOfWork.Courses.GetById(idCourse);
             if (course == null)
                 return NotFound();
@@ -63,7 +67,16 @@ namespace Controllers
 
             ViewBag.SortState = sortOrder;
             ViewData["PageSize"] = pageSize;           
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course);            
+            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course);
+
+            var selectItems = arrayPageSizes.Select(i => new SelectListItem
+            {
+                Text = i.ToString(),
+                Value = i.ToString()
+            });
+            var selectPageSizes = new SelectList(selectItems, "Value", "Text");
+            ViewData["SelectListPageSizes"] = selectPageSizes;
+
             return View(viewModel);
         }        
 

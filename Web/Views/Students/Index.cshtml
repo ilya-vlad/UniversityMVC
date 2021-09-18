@@ -4,7 +4,7 @@
 @inject IViewLocalizer Localizer
 @model StudentIndexViewModel
 @{
-    ViewData["Title"] = Localizer["ListStudents"];
+    ViewData["Title"] = Localizer["ListStudents"];       
     int i = 1;
     Group group = ViewBag.Group;
 
@@ -51,7 +51,8 @@
             <form method="get">
                 <div class="form-inline form-group">
                     <label class="control-label">@Localizer["LastName"]&nbsp;</label>
-                    <input name="lastName" value="@Model.FilterViewModel.SearchedName" class="form-control" />
+                    <input name="pageSize" value="@Model.PageViewModel.PageSize" type="hidden">
+                    <input name="name" value="@Model.FilterViewModel.SearchedName" class="form-control" />
                     &nbsp;
                     <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
                 </div>
@@ -88,7 +89,7 @@
     </div>
 </div>
 
-@{  string lastNameSort = string.Empty;
+@{ string lastNameSort = string.Empty;
     string firstNameSort = string.Empty;
     string ageSort = string.Empty;
     string examSort = string.Empty;
@@ -160,26 +161,21 @@
 </table>
 <b>@ViewData["NoResults"]</b>
 
-
-@if (Model.PageViewModel.HasPreviousPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-       asp-route-lastName="@Model.FilterViewModel.SearchedName"
-       asp-route-sortorder="@Model.SortViewModel.Current"
-       class="btn  btn-outline-dark">
-        <i class="glyphicon glyphicon-chevron-left"></i>
-        @Localizer["Back"]
-    </a>
-}
-@if (Model.PageViewModel.HasNextPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-       asp-route-lastName="@Model.FilterViewModel.SearchedName"
-       asp-route-sortorder="@Model.SortViewModel.Current"
-       class="btn btn-outline-dark">
-        @Localizer["Next"]
-        <i class="glyphicon glyphicon-chevron-right"></i>
-    </a>
-}
+<div class="container">
+    <div class="row">
+        <div class="col-10 justify-content-start d-flex align-items-center">
+            <page-link page-model="Model.PageViewModel"  filter-view-model="Model.FilterViewModel" page-action="Index"></page-link>
+        </div>
+        <div class="col-1 justify-content-end d-flex align-items-center">
+            @Localizer["Show"]
+        </div>
+        <div class="col-1 justify-content-start d-flex align-items-center">
+                @Html.DropDownListFor(m => m.PageViewModel.PageSize, (SelectList)ViewData["SelectListPageSizes"],
+                 new
+                 {
+                     @class = "custom-select",
+                     @onchange = $"document.location.href = '/courses/{group.CourseId}/groups/{group.Id}?pagesize=' + this.options[this.selectedIndex].value + '&name={Model.FilterViewModel.SearchedName}'"
+                 })
+        </div>
+    </div>    
+</div>

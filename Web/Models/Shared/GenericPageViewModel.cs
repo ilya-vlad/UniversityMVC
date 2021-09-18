@@ -2,11 +2,11 @@
 
 namespace MVC.Web.Models.Shared
 {
-    public class GenericPageViewModel<T> where T : class
+    public class GenericPageViewModel<T> : IGenericPageViewModel where T : class
     {
-        public int PageNumber { get; private set; }
-        public int TotalPages { get; private set; }
-
+        public int PageNumber { get; set; }
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; }
         public bool HasPreviousPage
         {
             get
@@ -27,6 +27,7 @@ namespace MVC.Web.Models.Shared
         {
             PageNumber = pageNumber;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            PageSize = pageSize;
         }
     }
 }

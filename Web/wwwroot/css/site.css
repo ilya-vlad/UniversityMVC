@@ -79,3 +79,17 @@ input.input-validation-error {
     margin-left: 0.3rem;
 }
 
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #1d2124;
+    border-color: #1d2124;
+}
+
+.page-link {
+    color: #1d2124;
+}
+
+.pagination {
+    margin: 1px;
+}

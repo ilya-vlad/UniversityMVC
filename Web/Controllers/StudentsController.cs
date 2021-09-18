@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MVC.Common;
@@ -22,10 +23,11 @@ namespace Controllers
         }
 
         [HttpGet("/courses/{idCourse}/groups/{idGroup}")]
-        public IActionResult Index(int idCourse, int idGroup, string lastName, int page = 1,
+        public IActionResult Index(int idCourse, int idGroup, string name, int page = 1, int pageSize = 10,
             StudentSortState sortOrder = StudentSortState.LastNameAsc)
         {
-            int pageSize = 10;
+            var arrayPageSizes = new List<int>() { 10, 15, 20, 50 };
+
             Course course = _unitOfWork.Courses.GetById(idCourse);
             Group group = _unitOfWork.Groups.GetById(idGroup);
             if (course == null || group == null || course.Id != group.CourseId)
@@ -33,9 +35,9 @@ namespace Controllers
             ViewBag.Group = group;
 
             IQueryable<Student> students = _unitOfWork.Students.GetAll().Where( x => x.GroupId == idGroup);
-            if (!String.IsNullOrEmpty(lastName))
+            if (!String.IsNullOrEmpty(name))
             {
-                students = students.Where(p => p.LastName.Contains(lastName));
+                students = students.Where(p => p.LastName.Contains(name));
             }
 
             switch (sortOrder)
@@ -73,7 +75,7 @@ namespace Controllers
             {
                 PageViewModel = new StudentPageViewModel(count, page, pageSize),
                 SortViewModel = new StudentSortViewModel(sortOrder),
-                FilterViewModel = new StudentFilterViewModel(lastName),
+                FilterViewModel = new StudentFilterViewModel(name),
                 Items = items
             };
 
@@ -85,6 +87,13 @@ namespace Controllers
             ViewBag.SortState = sortOrder;
             ViewData["PageSize"] = pageSize;
             ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, group);
+
+            var selectItems = arrayPageSizes.Select(i => new SelectListItem {                 
+                Text = i.ToString(),
+                Value = i.ToString()                
+            });            
+            var selectPageSizes = new SelectList(selectItems, "Value" , "Text");
+            ViewData["SelectListPageSizes"] = selectPageSizes;
 
             return View(viewModel);
         }
