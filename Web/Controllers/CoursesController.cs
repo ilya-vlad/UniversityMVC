@@ -29,7 +29,7 @@ namespace Controllers
         [HttpGet]        
         public IActionResult Index(string name, int page = 1, int pageSize = 5, CourseSortState sortOrder = CourseSortState.NameAsc)
         {
-            var arrayPageSizes = new List<int>() { 5, 10, 20 };
+            var listPageSizes = new List<int>() { 5, 10, 20 };
 
             IQueryable<Course> courses = _unitOfWork.Courses.GetAll();
             if (!String.IsNullOrEmpty(name))
@@ -72,14 +72,7 @@ namespace Controllers
             ViewBag.SortState = sortOrder;
             ViewData["PageSize"] = pageSize;
             ViewData["BreadcrumbNode"] = GetBreadCrumbs();
-
-            var selectItems = arrayPageSizes.Select(i => new SelectListItem
-            {
-                Text = i.ToString(),
-                Value = i.ToString()
-            });
-            var selectPageSizes = new SelectList(selectItems, "Value", "Text");
-            ViewData["SelectListPageSizes"] = selectPageSizes;
+            ViewBag.ListPageSizes = listPageSizes;
 
             return View(viewModel);
         }

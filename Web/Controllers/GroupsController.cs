@@ -26,7 +26,7 @@ namespace Controllers
         public IActionResult Index(int idCourse, string name, int page = 1, int pageSize = 5, 
             GroupSortState sortOrder = GroupSortState.NameAsc)
         {
-            var arrayPageSizes = new List<int>() { 5, 10, 20 };
+            var listPageSizes = new List<int>() { 5, 10, 20 };
 
             Course course = _unitOfWork.Courses.GetById(idCourse);
             if (course == null)
@@ -68,14 +68,7 @@ namespace Controllers
             ViewBag.SortState = sortOrder;
             ViewData["PageSize"] = pageSize;           
             ViewData["BreadcrumbNode"] = GetBreadCrumbs(course);
-
-            var selectItems = arrayPageSizes.Select(i => new SelectListItem
-            {
-                Text = i.ToString(),
-                Value = i.ToString()
-            });
-            var selectPageSizes = new SelectList(selectItems, "Value", "Text");
-            ViewData["SelectListPageSizes"] = selectPageSizes;
+            ViewBag.ListPageSizes = listPageSizes;
 
             return View(viewModel);
         }        

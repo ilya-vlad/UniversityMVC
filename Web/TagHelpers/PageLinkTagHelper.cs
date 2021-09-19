@@ -19,6 +19,7 @@ namespace MVC.Web.TagHelpers
         public ViewContext ViewContext { get; set; }
         public IGenericPageViewModel PageModel { get; set; }
         public IGenericFilterViewModel FilterViewModel { get; set; }
+        public IGenericSortViewModel SortViewModel { get; set; }        
         public string PageAction { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -26,37 +27,80 @@ namespace MVC.Web.TagHelpers
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
             
             TagBuilder tag = new TagBuilder("ul");
-            tag.AddCssClass("pagination");            
-            
-            for(int i = 1; i <= PageModel.TotalPages; i++)
+            tag.AddCssClass("pagination");
+                        
+            tag.InnerHtml.AppendHtml(CreateMoveTag("«", PageModel.PageNumber - 1, PageModel.HasPreviousPage, urlHelper));
+
+            TagBuilder currentItem;
+            foreach (var i in PageModel.GetPaginationNumbers())
             {
-                TagBuilder currentItem = CreateTag(i, urlHelper);
+                currentItem = i == null ? CreateEmptyTag() : CreateTag(i.Value, urlHelper);               
                 tag.InnerHtml.AppendHtml(currentItem);
             }
 
+            tag.InnerHtml.AppendHtml(CreateMoveTag("»", PageModel.PageNumber + 1, PageModel.HasNextPage, urlHelper));
             output.Content.AppendHtml(tag);
         }
 
-        TagBuilder CreateTag(int pageNumber, IUrlHelper urlHelper)
+        private TagBuilder CreateTag(int pageNumber, IUrlHelper urlHelper)
         {
             TagBuilder item = new TagBuilder("li");
             TagBuilder link = new TagBuilder("a");
-            if (pageNumber == this.PageModel.PageNumber)
+            if (pageNumber == PageModel.PageNumber)
             {
                 item.AddCssClass("active");                
             }
             else
             {
                 link.Attributes["href"] = urlHelper.Action(PageAction, 
-                    new { 
-                        page = pageNumber, 
-                        pageSize = PageModel.PageSize, 
-                        name = FilterViewModel.SearchedName
+                    new
+                    {
+                        page = pageNumber,
+                        pageSize = PageModel.PageSize,
+                        name = FilterViewModel.SearchedName,
+                        sortOrder = SortViewModel.GetCurrent()
                     });
             }
             item.AddCssClass("page-item");
             link.AddCssClass("page-link");
             link.InnerHtml.Append(pageNumber.ToString());
+            item.InnerHtml.AppendHtml(link);
+            return item;
+        }
+
+        private TagBuilder CreateEmptyTag()
+        {
+            TagBuilder item = new TagBuilder("li");
+            TagBuilder link = new TagBuilder("a");                        
+            item.AddCssClass("page-item disabled");
+            link.AddCssClass("page-link");
+            link.InnerHtml.Append("...");
+            item.InnerHtml.AppendHtml(link);
+            return item;
+        }   
+        
+        private TagBuilder CreateMoveTag(string str, int pageNumber, bool enabled, IUrlHelper urlHelper)
+        {
+            TagBuilder item = new TagBuilder("li");
+            TagBuilder link = new TagBuilder("a");            
+            item.AddCssClass("page-item");
+            if (!enabled)
+            {
+                item.AddCssClass("disabled");
+            }
+            else
+            {
+                link.Attributes["href"] = urlHelper.Action(PageAction,
+                    new
+                    {
+                        page = pageNumber,
+                        pageSize = PageModel.PageSize,
+                        name = FilterViewModel.SearchedName,
+                        sortOrder = SortViewModel.GetCurrent()
+                    });
+            }            
+            link.AddCssClass("page-link");
+            link.InnerHtml.Append(str);
             item.InnerHtml.AppendHtml(link);
             return item;
         }

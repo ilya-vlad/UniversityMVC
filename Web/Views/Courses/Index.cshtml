@@ -1,7 +1,4 @@
-﻿@using MVC.Common
-@using Microsoft.AspNetCore.Mvc.Localization
-@using MVC.Web.Models.Course
-@inject IViewLocalizer Localizer
+﻿@using MVC.Web.Models.Course
 @model CourseIndexViewModel
 @{
     ViewData["Title"] = Localizer["ListCourses"];
@@ -106,21 +103,28 @@
 
 <b>@ViewData["NoResults"]</b>
 
-<div class="container">
-    <div class="row">
-        <div class="col-10 justify-content-start d-flex align-items-center">
-            <page-link page-model="Model.PageViewModel" filter-view-model="Model.FilterViewModel" page-action="Index"></page-link>
-        </div>
-        <div class="col-1 justify-content-end d-flex align-items-center">
-            @Localizer["Show"]
-        </div>
-        <div class="col-1 justify-content-start d-flex align-items-center">
-            @Html.DropDownListFor(m => m.PageViewModel.PageSize, (SelectList)ViewData["SelectListPageSizes"],
-             new
-             {
-                 @class = "custom-select",
-                 @onchange = $"document.location.href = '/courses?pagesize=' + this.options[this.selectedIndex].value + '&name={Model.FilterViewModel.SearchedName}'"
-             })
+@if (Model.Items.Count() != 0)
+{
+
+    <div class="container">
+        <div class="row">
+            <div class="col-10 justify-content-start d-flex align-items-center">
+                <page-link page-model="Model.PageViewModel"
+                           filter-view-model="Model.FilterViewModel"
+                           page-action="Index"
+                           sort-view-model="Model.SortViewModel">
+                </page-link>
+            </div>
+            <div class="col-1 justify-content-end d-flex align-items-center">
+                @Localizer["Show"]
+            </div>
+            <div class="col-1 justify-content-start d-flex align-items-center">
+                <page-size page-model="Model.PageViewModel"
+                           filter-view-model="Model.FilterViewModel"
+                           sort-view-model="Model.SortViewModel"
+                           list-page-sizes="(List<int>)ViewBag.ListPageSizes">
+                </page-size>
+            </div>
         </div>
     </div>
-</div>
+}
