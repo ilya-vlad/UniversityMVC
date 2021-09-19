@@ -1,7 +1,7 @@
 ﻿@using MVC.Web.Models.Student
 @model StudentIndexViewModel
 @{
-    ViewData["Title"] = Localizer["ListStudents"];       
+    ViewData["Title"] = Localizer["ListStudents"];
     int i = 1;
     Group group = ViewBag.Group;
 
@@ -158,27 +158,7 @@
 </table>
 <b>@ViewData["NoResults"]</b>
 
-@if (Model.Items.Count() != 0)
+@if(Model.Items.Count() != 0)
 {
-    <div class="container">
-        <div class="row">
-            <div class="col-10 justify-content-start d-flex align-items-center">
-                <page-link page-model="Model.PageViewModel"
-                           filter-view-model="Model.FilterViewModel" 
-                           page-action="Index"
-                           sort-view-model="Model.SortViewModel">
-                </page-link>
-            </div>
-            <div class="col-1 justify-content-end d-flex align-items-center">
-                @Localizer["Show"]
-            </div>
-            <div class="col-1 justify-content-start d-flex align-items-center">
-                <page-size page-model="Model.PageViewModel"
-                           filter-view-model="Model.FilterViewModel"
-                           sort-view-model="Model.SortViewModel"
-                           list-page-sizes="(List<int>)ViewBag.ListPageSizes">
-                </page-size>
-            </div>
-        </div>    
-    </div>
+    <partial name="_BottomControls"/>
 }
