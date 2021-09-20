@@ -162,9 +162,6 @@
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
-  <data name="Show" xml:space="preserve">
-    <value>Показывать</value>
-  </data>
   <data name="SortAsc" xml:space="preserve">
     <value>ᐃ</value>
   </data>

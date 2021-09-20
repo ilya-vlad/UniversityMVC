@@ -113,9 +113,9 @@ namespace Controllers
         [Route("/students/edit")]
         public IActionResult Edit(Student student)
         {
-            if (string.IsNullOrEmpty(student.FirstName))               
+            if (!string.IsNullOrEmpty(student.FirstName))               
                 student.FirstName = student.FirstName.Trim();
-            if (string.IsNullOrEmpty(student.LastName))
+            if (!string.IsNullOrEmpty(student.LastName))
                 student.LastName = student.LastName.Trim();
             Group group = _unitOfWork.Groups.GetById(student.GroupId);
             ModelState.Clear();
@@ -223,9 +223,9 @@ namespace Controllers
         [Route("/students/create")]
         public IActionResult Create(Student student)
         {
-            if (string.IsNullOrEmpty(student.FirstName))
+            if (!string.IsNullOrEmpty(student.FirstName))
                 student.FirstName = student.FirstName.Trim();
-            if (string.IsNullOrEmpty(student.LastName))
+            if (!string.IsNullOrEmpty(student.LastName))
                 student.LastName = student.LastName.Trim();
             Group group = _unitOfWork.Groups.GetById(student.GroupId);
             ModelState.Clear();

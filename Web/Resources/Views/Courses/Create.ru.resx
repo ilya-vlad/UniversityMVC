@@ -126,16 +126,4 @@
   <data name="CreateCourse" xml:space="preserve">
     <value>Создать курс</value>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>Описание курса</value>
-  </data>
-  <data name="EmptyName" xml:space="preserve">
-    <value>Введи название курса</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Название курса</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Сохранить</value>
-  </data>
 </root>

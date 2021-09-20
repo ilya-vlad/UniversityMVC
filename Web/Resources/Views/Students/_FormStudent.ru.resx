@@ -117,13 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Back" xml:space="preserve">
-    <value>Back</value>
+  <data name="DateOfBirth" xml:space="preserve">
+    <value>День рождения</value>
   </data>
-  <data name="EditGroup" xml:space="preserve">
-    <value>Edit group</value>
+  <data name="ExamScore" xml:space="preserve">
+    <value>Оценка экзамена</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="FirstName" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="GroupId" xml:space="preserve">
+    <value>Группа</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Фамилия</value>
   </data>
 </root>

@@ -120,14 +120,8 @@
   <data name="Back" xml:space="preserve">
     <value>Назад</value>
   </data>
-  <data name="Course" xml:space="preserve">
-    <value>Курс</value>
-  </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Редактировать группу</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Название группы</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>

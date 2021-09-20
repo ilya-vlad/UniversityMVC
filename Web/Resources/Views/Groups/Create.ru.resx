@@ -120,16 +120,10 @@
   <data name="Back" xml:space="preserve">
     <value>Назад</value>
   </data>
-  <data name="Course" xml:space="preserve">
-    <value>Курс</value>
-  </data>
   <data name="Create" xml:space="preserve">
     <value>Создать</value>
   </data>
   <data name="CreateGroup" xml:space="preserve">
     <value>Создать группу</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Название группы</value>
   </data>
 </root>

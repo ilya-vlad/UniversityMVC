@@ -92,7 +92,7 @@ namespace Controllers
         [Route("/groups/edit")]
         public IActionResult Edit(Group group)
         {
-            if (string.IsNullOrEmpty(group.Name))
+            if (!string.IsNullOrEmpty(group.Name))
                 group.Name = group.Name.Trim();
             ModelState.Clear();
             if (string.IsNullOrEmpty(group.Name))
@@ -172,7 +172,7 @@ namespace Controllers
         [Route("/groups/create")]
         public IActionResult Create(Group group)
         {
-            if(string.IsNullOrEmpty(group.Name))
+            if(!string.IsNullOrEmpty(group.Name))
                 group.Name = group.Name.Trim();
             ModelState.Clear();
             if (string.IsNullOrEmpty(group.Name))
