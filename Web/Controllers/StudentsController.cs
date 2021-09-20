@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MVC.Common;
@@ -79,7 +78,7 @@ namespace Controllers
                 Items = items
             };
 
-            if (items.Count() == 0)
+            if (!items.Any())
             {
                 ViewData["NoResults"] = _localizer["NoResults"];
             }

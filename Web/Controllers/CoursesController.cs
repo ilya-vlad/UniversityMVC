@@ -3,7 +3,6 @@ using System.Linq;
 using MVC.Common;
 using MVC.DataAccess;
 using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -12,7 +11,6 @@ using MVC.Web.Models.Course;
 using SmartBreadcrumbs.Attributes;
 using SmartBreadcrumbs.Nodes;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Controllers
 {
@@ -64,7 +62,7 @@ namespace Controllers
                 Items = items
             };
             
-            if(items.Count() == 0)
+            if(!items.Any())
             {
                 ViewData["NoResults"] = _localizer["NoResults"];
             }

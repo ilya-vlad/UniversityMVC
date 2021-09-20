@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
 using MVC.Web.Models.Group;
-using SmartBreadcrumbs.Attributes;
 using SmartBreadcrumbs.Nodes;
 using System;
 using System.Collections.Generic;
@@ -60,7 +58,7 @@ namespace Controllers
                 Items = items
             };
 
-            if (items.Count() == 0)
+            if (!items.Any())
             {
                 ViewData["NoResults"] = _localizer["NoResults"];
             }
@@ -213,7 +211,7 @@ namespace Controllers
             {
                 RouteValues = new { idCourse=course.Id },
                 Parent = node1
-            };
+            }; 
             var node3 = new MvcBreadcrumbNode("", "", currentName)
             {
                 Parent = node2
