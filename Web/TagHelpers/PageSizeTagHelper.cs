@@ -8,26 +8,18 @@ using System.Collections.Generic;
 
 namespace MVC.Web.TagHelpers
 {
-    public class PageSizeTagHelper : TagHelper
+    public class PageSizeTagHelper : BaseTagHelper
     {
-        private IUrlHelperFactory urlHelperFactory;
-        public PageSizeTagHelper(IUrlHelperFactory helperFactory)
-        {
-            urlHelperFactory = helperFactory;
-        }
-
-        [ViewContext]
-        [HtmlAttributeNotBound]
-        public ViewContext ViewContext { get; set; }
-        public IGenericPageViewModel PageModel { get; set; }
-        public IGenericFilterViewModel FilterViewModel { get; set; }
-        public IGenericSortViewModel SortViewModel { get; set; }
         public List<int> ListPageSizes { get; set; }
-        public string PageAction { get; set; }
+
+        public PageSizeTagHelper(IUrlHelperFactory helperFactory) : base (helperFactory)
+        {
+            
+        }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
+            IUrlHelper urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
 
             TagBuilder select = new TagBuilder("select");
             select.AddCssClass("custom-select");

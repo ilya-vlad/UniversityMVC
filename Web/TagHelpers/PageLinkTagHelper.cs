@@ -7,24 +7,16 @@ using MVC.Web.Models.Shared;
 
 namespace MVC.Web.TagHelpers
 {
-    public class PageLinkTagHelper : TagHelper
-    {
-        private IUrlHelperFactory urlHelperFactory;
-        public PageLinkTagHelper(IUrlHelperFactory helperFactory)
+    public class PageLinkTagHelper : BaseTagHelper
+    {        
+        public PageLinkTagHelper(IUrlHelperFactory helperFactory) : base (helperFactory)
         {
-            urlHelperFactory = helperFactory;
-        }
-        [ViewContext]
-        [HtmlAttributeNotBound]
-        public ViewContext ViewContext { get; set; }
-        public IGenericPageViewModel PageModel { get; set; }
-        public IGenericFilterViewModel FilterViewModel { get; set; }
-        public IGenericSortViewModel SortViewModel { get; set; }        
-        public string PageAction { get; set; }
+            
+        }    
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
+            IUrlHelper urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
             
             TagBuilder tag = new TagBuilder("ul");
             tag.AddCssClass("pagination");
