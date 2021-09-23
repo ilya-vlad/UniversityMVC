@@ -1,20 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using SmartBreadcrumbs.Nodes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using MVC.DataAccess;
+using Services.BreadCrumbs;
 
-namespace Web.Controllers
+namespace Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : BaseController<ErrorController>
     {
-        private readonly IStringLocalizer<ErrorController> _localizer;       
+        public ErrorController(IUnitOfWork unitOfWork, IStringLocalizer<ErrorController> localizer,
+            ILogger<ErrorController> logger, IBreadCrumbsCreator breadCrumbsCreator) : base(unitOfWork, localizer, logger, breadCrumbsCreator)
+        {
 
-        public ErrorController(IStringLocalizer<ErrorController> localizer)
-        {           
-            _localizer = localizer;
         }
 
         [Route("Error/{codeError}")]
@@ -24,16 +21,8 @@ namespace Web.Controllers
             {
                 case 404: ViewBag.ErrorMessage = _localizer["404"]; break;
             }
-
-            #region BreadCrumbs
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"], false);
-            var node2 = new MvcBreadcrumbNode("Index", "Courses", "404", false)
-            {
-                Parent = node1
-            };                
-            ViewData["BreadcrumbNode"] = node2;
-            #endregion
-
+            _breadCrumbsCreator.CreateNodes(ViewData, "Error");
+            
             return View("Error");
         }
     }

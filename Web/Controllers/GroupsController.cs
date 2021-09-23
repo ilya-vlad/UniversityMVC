@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
 using MVC.Web.Models.Group;
+using Services.BreadCrumbs;
 using SmartBreadcrumbs.Nodes;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Controllers
     public class GroupsController : BaseController<GroupsController>
     {
         public GroupsController(IUnitOfWork unitOfWork, IStringLocalizer<GroupsController> localizer,
-             ILogger<GroupsController> logger) : base(unitOfWork, localizer, logger)
+             ILogger<GroupsController> logger, IBreadCrumbsCreator breadCrumbsCreator) : base(unitOfWork, localizer, logger, breadCrumbsCreator)
         {
 
         }
@@ -64,9 +65,9 @@ namespace Controllers
             }
 
             ViewBag.SortState = sortOrder;
-            ViewData["PageSize"] = pageSize;           
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course);
+            ViewData["PageSize"] = pageSize;                       
             ViewBag.ListPageSizes = listPageSizes;
+            _breadCrumbsCreator.CreateNodes(ViewData, null, course);
 
             return View(viewModel);
         }        
@@ -81,7 +82,7 @@ namespace Controllers
             ViewData["Courses"] = _unitOfWork.Courses.GetAll();
             ViewBag.CourseId = idCourse;
             ViewBag.OldName = group.Name;
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, group.Name);
+            _breadCrumbsCreator.CreateNodes(ViewData, group.Name, course);
 
             return View("Edit", group);
         }
@@ -120,7 +121,7 @@ namespace Controllers
             Group editableGroup = _unitOfWork.Groups.GetById(group.Id);
             Course course = _unitOfWork.Courses.GetById(group.CourseId);
             ViewBag.OldName = editableGroup.Name;
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, editableGroup.Name);
+            _breadCrumbsCreator.CreateNodes(ViewData, editableGroup.Name, course);
             return View(group);
             
         }
@@ -159,8 +160,8 @@ namespace Controllers
         [Route("/groups/create")]        
         public IActionResult Create(int idCourse)
         {
-            Course course = _unitOfWork.Courses.GetById(idCourse);
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, _localizer["CreateGroup"]);
+            Course course = _unitOfWork.Courses.GetById(idCourse);            
+            _breadCrumbsCreator.CreateNodes(ViewData, _localizer["CreateGroup"], course);
             ViewData["Courses"] = _unitOfWork.Courses.GetAll();
             ViewBag.CourseId = idCourse;
             return View();
@@ -198,35 +199,9 @@ namespace Controllers
             ViewData["Courses"] = _unitOfWork.Courses.GetAll();            
             ViewBag.CourseId = group.CourseId;
             Course course = _unitOfWork.Courses.GetById(group.CourseId);
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, _localizer["CreateGroup"]);            
+            _breadCrumbsCreator.CreateNodes(ViewData, _localizer["CreateGroup"], course);
 
             return View(group);            
-        }
-
-        private MvcBreadcrumbNode GetBreadCrumbs(Course course, string currentName)
-        {
-            currentName = currentName == null ? string.Empty : currentName;            
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"]);
-            var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
-            {
-                RouteValues = new { idCourse=course.Id },
-                Parent = node1
-            }; 
-            var node3 = new MvcBreadcrumbNode("", "", currentName)
-            {
-                Parent = node2
-            };
-            return node3;
-        }
-
-        private MvcBreadcrumbNode GetBreadCrumbs(Course course)
-        {            
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"]);
-            var node2 = new MvcBreadcrumbNode("", "", course.Name)
-            {
-                Parent = node1
-            };
-            return node2;
         }
     }
 }

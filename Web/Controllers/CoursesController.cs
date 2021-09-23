@@ -8,9 +8,8 @@ using Microsoft.AspNetCore.Http;
 using System;
 using Microsoft.Extensions.Logging;
 using MVC.Web.Models.Course;
-using SmartBreadcrumbs.Attributes;
-using SmartBreadcrumbs.Nodes;
 using System.Collections.Generic;
+using Services.BreadCrumbs;
 
 namespace Controllers
 {
@@ -19,7 +18,7 @@ namespace Controllers
     public class CoursesController : BaseController<CoursesController>
     {
         public CoursesController(IUnitOfWork unitOfWork, IStringLocalizer<CoursesController> localizer,
-            ILogger<CoursesController> logger) : base(unitOfWork, localizer, logger)
+            ILogger<CoursesController> logger, IBreadCrumbsCreator breadCrumbsCreator) : base(unitOfWork, localizer, logger, breadCrumbsCreator)
         {
             
         }
@@ -28,7 +27,7 @@ namespace Controllers
         public IActionResult Index(string name, int page = 1, int pageSize = 5, CourseSortState sortOrder = CourseSortState.NameAsc)
         {
             var listPageSizes = new List<int>() { 5, 10, 20 };
-
+            
             IQueryable<Course> courses = _unitOfWork.Courses.GetAll();
             if (!String.IsNullOrEmpty(name))
             {
@@ -68,9 +67,9 @@ namespace Controllers
             }
 
             ViewBag.SortState = sortOrder;
-            ViewData["PageSize"] = pageSize;
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs();
+            ViewData["PageSize"] = pageSize;            
             ViewBag.ListPageSizes = listPageSizes;
+            _breadCrumbsCreator.CreateNodes(ViewData);
 
             return View(viewModel);
         }
@@ -92,7 +91,7 @@ namespace Controllers
                 return NotFound();
             
             ViewBag.OldName = course.Name;
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course.Name);
+            _breadCrumbsCreator.CreateNodes(ViewData, course.Name);
             return View("Edit", course);
         }
 
@@ -126,7 +125,7 @@ namespace Controllers
 
             Course editableCourse = _unitOfWork.Courses.GetById(course.Id);
             ViewBag.OldName = editableCourse.Name;
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(editableCourse.Name);
+            _breadCrumbsCreator.CreateNodes(ViewData, editableCourse.Name);
             return View(course);            
         }        
 
@@ -163,7 +162,7 @@ namespace Controllers
         [Route("/courses/create")]        
         public IActionResult Create()
         {
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(_localizer["CreateCourse"]);
+            _breadCrumbsCreator.CreateNodes(ViewData, _localizer["CreateCourse"]);
             return View();
         }
 
@@ -192,27 +191,10 @@ namespace Controllers
                 TempData["AlertMessage"] = _localizer["AlertCreateSuccess"].Value;
                 TempData["AlertStatus"] = true;
                 return RedirectToAction("courses", "courses");
-            }          
-           
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(_localizer["CreateCourse"]);
+            }
+
+            _breadCrumbsCreator.CreateNodes(ViewData, _localizer["CreateCourse"]);
             return View(course);                     
-        }
-
-        private MvcBreadcrumbNode GetBreadCrumbs(string currentName)
-        {
-            currentName = currentName == null ? string.Empty : currentName;
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"]);
-            var node2 = new MvcBreadcrumbNode("", "", currentName)
-            {
-                Parent = node1
-            };
-            return node2;
-        }
-
-        private MvcBreadcrumbNode GetBreadCrumbs()
-        {
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"]);           
-            return node1;
         }
     }
 }

@@ -10,12 +10,8 @@ using MVC.DataAccess;
 using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Localization;
 using SmartBreadcrumbs.Extensions;
-using System.Reflection;
-using System.Linq;
-using System.Text.RegularExpressions;
-using SmartBreadcrumbs;
+using Services.BreadCrumbs;
 
 namespace MVC.Web
 {
@@ -55,7 +51,8 @@ namespace MVC.Web
             services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<IGroupsRepository, GroupsRepository>();
             services.AddScoped<IStudentsRepository, StudentsRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();           
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IBreadCrumbsCreator, BreadCrumbsCreator>();
 
             services.AddBreadcrumbs(
             GetType().Assembly,

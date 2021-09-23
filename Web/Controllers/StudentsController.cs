@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using MVC.Common;
 using MVC.DataAccess;
 using MVC.Web.Models.Student;
-using SmartBreadcrumbs.Attributes;
+using Services.BreadCrumbs;
 using SmartBreadcrumbs.Nodes;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace Controllers
     public class StudentsController : BaseController<StudentsController>
     {
         public StudentsController(IUnitOfWork unitOfWork, IStringLocalizer<StudentsController> localizer,
-            ILogger<StudentsController> logger) : base(unitOfWork, localizer, logger)
+            ILogger<StudentsController> logger, IBreadCrumbsCreator breadCrumbsCreator) : base(unitOfWork, localizer, logger, breadCrumbsCreator)
         {
 
         }
@@ -29,6 +29,7 @@ namespace Controllers
 
             Course course = _unitOfWork.Courses.GetById(idCourse);
             Group group = _unitOfWork.Groups.GetById(idGroup);
+
             if (course == null || group == null || course.Id != group.CourseId)
                 return NotFound();
             ViewBag.Group = group;
@@ -84,9 +85,9 @@ namespace Controllers
             }
 
             ViewBag.SortState = sortOrder;
-            ViewData["PageSize"] = pageSize;
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, group);
+            ViewData["PageSize"] = pageSize;            
             ViewBag.ListPageSizes = listPageSizes;
+            _breadCrumbsCreator.CreateNodes(ViewData, null, course, group);
 
             return View(viewModel);
         }
@@ -102,8 +103,8 @@ namespace Controllers
             ViewData["Groups"] = _unitOfWork.Groups.GetAll();
             ViewBag.GroupId = idGroup;
             ViewBag.CourseId = idCourse;            
-            ViewBag.OldName = student.LastName + " " + student.FirstName;
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, group, student.LastName + " " + student.FirstName);
+            ViewBag.OldName = student.LastName + " " + student.FirstName;            
+            _breadCrumbsCreator.CreateNodes(ViewData, student.LastName + " " + student.FirstName, course, group);
 
             return View("Edit", student);
         }
@@ -154,7 +155,7 @@ namespace Controllers
             Student editableStudent = _unitOfWork.Students.GetById(student.Id);
             Course course = _unitOfWork.Courses.GetById(group.CourseId);
             ViewBag.OldName = editableStudent.LastName + " " + editableStudent.FirstName;
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, group, editableStudent.LastName + " " + editableStudent.FirstName);
+            _breadCrumbsCreator.CreateNodes(ViewData, editableStudent.LastName + " " + editableStudent.FirstName, course, group);            
             
             return View(student);            
         }
@@ -210,8 +211,8 @@ namespace Controllers
         public IActionResult Create(int idGroup, int idCourse)
         {
             Group group = _unitOfWork.Groups.GetById(idGroup);
-            Course course = _unitOfWork.Courses.GetById(idCourse);
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, group, _localizer["CreateStudent"]);
+            Course course = _unitOfWork.Courses.GetById(idCourse);            
+            _breadCrumbsCreator.CreateNodes(ViewData, _localizer["CreateStudent"], course, group);
             ViewData["Groups"] = _unitOfWork.Groups.GetAll();
             ViewBag.GroupId = idGroup;            
             ViewBag.CourseId = idCourse;            
@@ -262,45 +263,9 @@ namespace Controllers
             ViewBag.GroupId = student.GroupId;
             ViewData["Groups"] = _unitOfWork.Groups.GetAll();
             Course course = _unitOfWork.Courses.GetById(group.CourseId);
-            ViewData["BreadcrumbNode"] = GetBreadCrumbs(course, group, _localizer["CreateStudent"]);
-            
+            _breadCrumbsCreator.CreateNodes(ViewData, _localizer["CreateStudent"], course, group);
+
             return View(student);            
-        }
-
-        private MvcBreadcrumbNode GetBreadCrumbs(Course course, Group group, string currentName)
-        {
-            currentName = currentName == null ? string.Empty : currentName;
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"]);
-            var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
-            {
-                RouteValues = new { idCourse=course.Id },
-                Parent = node1
-            };
-            var node3 = new MvcBreadcrumbNode("Index", "Students", group.Name)
-            {
-                RouteValues = new { idCourse=course.Id, idGroup=group.Id },
-                Parent = node2
-            };
-            var node4 = new MvcBreadcrumbNode("", "", currentName)
-            {
-                Parent = node3
-            };
-            return node4;
-        }
-
-        private MvcBreadcrumbNode GetBreadCrumbs(Course course, Group group)
-        {
-            var node1 = new MvcBreadcrumbNode("Index", "Courses", _localizer["AllCourses"]);
-            var node2 = new MvcBreadcrumbNode("Index", "Groups", course.Name)
-            {
-                RouteValues = new { idCourse = course.Id },
-                Parent = node1
-            };
-            var node3 = new MvcBreadcrumbNode("", "", group.Name)
-            {               
-                Parent = node2
-            };
-            return node3;
         }
     }
 }
