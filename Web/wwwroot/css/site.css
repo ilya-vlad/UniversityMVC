@@ -82,14 +82,19 @@ input.input-validation-error {
 .page-item.active .page-link {
     z-index: 1;
     color: #fff;
-    background-color: #1d2124;
-    border-color: #1d2124;
+    background-color: #343a40;
+    border-color: #343a40;
 }
 
 .page-link {
     color: #1d2124;
+    cursor : pointer;
 }
 
 .pagination {
     margin: 1px;
+}
+
+a:not([href]):not([tabindex]):hover {
+    color: white;    
 }
