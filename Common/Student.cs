@@ -14,6 +14,7 @@ namespace MVC.Common
         [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
 
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:0.0}")]
         public float ExamScore { get; set; }
     }
 }
