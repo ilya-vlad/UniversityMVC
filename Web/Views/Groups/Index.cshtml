@@ -1,0 +1,100 @@
+﻿@using MVC.Web.Models.Group
+@model GroupIndexViewModel
+@{
+    ViewData["Title"] = Localizer["ListGroups"];
+    int i = 1;
+    Course course = ViewBag.Course;
+
+    void RemoveModal(Group group)
+    {
+        <div id="removeModal_@group.Id" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">@Localizer["Remove"]</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>@Localizer["RemoveGroup?"] "@group.Name"?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="groups/delete/@group.Id/" class="btn btn-danger" role="button" aria-pressed="true">@Localizer["Remove"]</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h3>@Localizer["Course"] - @course.Name</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="get">
+                <div class="form-inline form-group">
+                    <label class="control-label">@Localizer["NameGroup"]&nbsp;</label>
+                    <input name="pageSize" value="@Model.PageViewModel.PageSize" type="hidden">
+                    <input name="name" value="@Model.FilterViewModel.SearchedName" class="form-control" />
+                    &nbsp;
+                    <input type="submit" value="@Localizer["Search"]" class="btn btn-outline-dark" />
+                </div>
+            </form>
+        </div>
+        <div>
+            <a href="~/groups/create?idCourse=@course.Id" class="btn btn-success" role="button" aria-pressed="true">@Localizer["Create"]</a>
+        </div>
+    </div>
+
+</div>
+
+@{ string nameSort = string.Empty;
+    switch ((GroupSortState)ViewBag.SortState)
+    {
+        case GroupSortState.NameAsc: nameSort = Localizer["SortAsc"].Value; break;
+        case GroupSortState.NameDesc: nameSort = Localizer["SortDesc"].Value; break;
+    }
+
+}
+
+<table class="table table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th class="align-middle text-center" scope="col">#</th>
+            <th class="align-middle col-2">
+                <a asp-action="Index" class="text-white"
+                   asp-route-sortOrder="@Model.SortViewModel.NameSort"
+                   asp-route-name="@Model.FilterViewModel.SearchedName">@Localizer["NameGroup"] @nameSort</a>
+            </th>
+            <th class="align-middle"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Group group in Model.Items)
+        {
+            <tr id="@group.Id">
+                <td class="align-middle text-center font-weight-bold">@((Model.PageViewModel.PageNumber - 1) * (int)ViewData["PageSize"] + i)</td>
+                <td name="nameGroup" class="align-middle"><a href="groups/@group.Id">@group.Name</a></td>
+                <td class="align-middle text-right">
+                    <a href="groups/edit/@group.Id/" class="btn btn-sm btn-success" role="button" aria-pressed="true">@Localizer["Edit"]</a>
+                    <a href="" class="btn btn-sm btn-danger" role="button" aria-pressed="true" data-toggle="modal" data-target="#removeModal_@group.Id">@Localizer["Remove"]</a>
+                </td>
+            </tr>
+            i++;
+            RemoveModal(group);
+        }
+    </tbody>
+</table>
+<b>@ViewData["NoResults"]</b>
+
+@if (Model.Items.Count() != 0)
+{
+    <partial name="_BottomControls" />
+}

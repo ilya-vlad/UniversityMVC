@@ -1,0 +1,22 @@
+﻿@model Course
+@{
+    ViewData["Title"] = Localizer["EditCourse"];    
+}
+
+<h4>@ViewData["Title"] - @ViewBag.OldName</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            <partial name="_FormCourse" />
+            <div class="form-group">
+                @Html.HiddenFor( m => m.Id)
+                <input type="submit" value="@Localizer["Save"]" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Courses">@Localizer["Back"]</a>
+</div>

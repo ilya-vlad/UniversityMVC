@@ -1,0 +1,17 @@
+﻿@model Group
+@{
+    string redStart = "<span style=\"color:red\">*</span>";
+    var courses = new SelectList((IEnumerable<Course>)ViewData["Courses"], "Id", "Name");
+    courses.Where(x => x.Value == ((int)ViewBag.CourseId).ToString()).FirstOrDefault().Selected = true;
+}
+<div class="form-group">
+    @Html.LabelFor(m => m.Name, Localizer["Name"].Value, new { @class = "control-label" })
+    @Html.Raw(redStart)
+    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.CourseId, Localizer["Course"].Value, new { @class = "control-label" })
+    @Html.Raw(redStart)
+    @Html.DropDownListFor(m => m.CourseId, courses as IEnumerable<SelectListItem>, new { @class = "custom-select" })
+</div>    
